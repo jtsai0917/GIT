@@ -112,7 +112,6 @@ WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.ac
 	$a2=$row[2];
 	$value=$row[0];
 	if($sn==10){
-		echo "SN=10";
 		$query="SELECT          AVG(CAST(UTT_record_spec.Data AS float)) AS A0
 		FROM              istar_default_setting INNER JOIN
 		                            UTT_TAGNO_DATA ON istar_default_setting.name = UTT_TAGNO_DATA.TAG_NO INNER JOIN
