@@ -437,6 +437,8 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 				}
 				}
 				echo "表腹:".$_POST['no1']."糶".'<br>';
+				$_SESSION['dm_no']=$_SESSION['no1']='';
+	
 }//end next2
 elseif(isset($_POST['next2']) and ($_POST['no1']=='' or $_POST['no2']=='')){
 	$_SESSION['pa_no']=$_POST['no2'];
@@ -471,6 +473,7 @@ elseif(isset($_POST['next2']) and ($_POST['no1']=='' or $_POST['no2']=='')){
 				echo "      ".'<input type="submit" name="next3" style="font-size:20px" id="next3" value="挡表" />'.'</br>';
 			}
 			echo "".$_SESSION['QTY']."表 , ЧΘ".$_SESSION['numrow']."表<BR>";
+	$_SESSION['dm_no']=$_SESSION['no1']='';
 }
 
 

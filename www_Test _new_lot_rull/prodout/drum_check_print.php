@@ -107,7 +107,7 @@ FROM              OUT_DECISION AS OD FULL OUTER JOIN
             where OUT_CHECK_DRUM_DETAIL.OTD_NO='".$_GET['id']."' 
             ORDER BY OUT_PRODUCT.OPD_SERIAL_NO ";	
     
-//		echo $query."<BR>";
+		echo $query."<BR>";
  		$y=5;
 		$result = mssql_query($query);
 		while($row = mssql_fetch_array($result))

@@ -69,7 +69,7 @@ while($row = mssql_fetch_array($result)){
 		echo '<tr align="left">';
 		echo '<td align="center">'.$row['OPD_SERIAL_NO'].'</td><td>'.$row['PDD_PROD_NO'].'</td><td>'.get_prod_name($row['PDD_PROD_NO']).'</td><td>'.$row['OAF_PACKAGE'].'</td><td>'.$row['OPD_LOT_NO'].'</td>
 				<td>'.$row['OPD_TERM_DATE'].'</td><td>'.$row['OPD_ACC_UNIT'].'</td><td>'.$row['OPD_QTY_DRUM'].'</td><td>'.$row['OPD_QTY_KG'].'</td><td>'.$row['OPD_QTY_LITER'].'</td>
-				<td>'.$row['OPD_SIGN_RECEIPT'].'</td><td>'.$row['OPD_COA_RECEIPT'].'</td><td>'.$row['OPD_MEMO'].'</td><td>'.$row['OTNP_SERIAL_NO'].'</td>';
+				<td>'.$row['OPD_SIGN_RECEIPT'].'</td><td>'.$row['OPD_COA_RECEIPT'].'</td><td>'.$row['OPD_MEMO'].'</td><td>'.$row['OPD_SERIAL_NO'].'</td>';
 		echo '</tr>';
 		$cc[$i][0]=$num;
 	}

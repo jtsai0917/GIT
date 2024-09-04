@@ -40,7 +40,7 @@ if(isset($_POST['search']))
 	  
 	$query="SELECT          OTD.OTD_NO AS a1, CTD.CTD_CUST_SHORT_NAME AS a2, OCM.OCM_CHK_ADDITION AS a4, 
                             OCM.OCM_CHK_SURFACE AS a5, OCM.OCM_PLT_NAME AS a6, OCM.OCM_PLT_STYLE AS a7, 
-                            OCM.OCM_CF_MAN AS a8
+                            OCM.OCM_CF_MAN AS a8,OTD.OPM_ORDER_NO as a9  
 FROM              OUT_CHECK_DRUM AS OCM INNER JOIN
                             OUT_DECISION AS OTD ON OTD.OTD_NO = OCM.OTD_NO LEFT OUTER JOIN
                             CUSTOMER_DATA AS CTD ON OTD.CTD_CUST_NO = CTD.CTD_CUST_NO
@@ -49,20 +49,20 @@ FROM              OUT_CHECK_DRUM AS OCM INNER JOIN
 	{
 		$query="SELECT          OTD.OTD_NO AS a1, CTD.CTD_CUST_SHORT_NAME AS a2, OCM.OCM_CHK_ADDITION AS a4, 
                             OCM.OCM_CHK_SURFACE AS a5, OCM.OCM_PLT_NAME AS a6, OCM.OCM_PLT_STYLE AS a7, 
-                            OCM.OCM_CF_MAN AS a8
+                            OCM.OCM_CF_MAN AS a8, OTD.OPM_ORDER_NO as a9 
 FROM              OUT_CHECK_DRUM AS OCM INNER JOIN
                             OUT_DECISION AS OTD ON OTD.OTD_NO = OCM.OTD_NO LEFT OUTER JOIN
                             CUSTOMER_DATA AS CTD ON OTD.CTD_CUST_NO = CTD.CTD_CUST_NO
 				WHERE OTD.OTD_NO = '".$_POST['otd_no']."' ORDER BY  OTD.OTD_NO DESC";
 	}
-//	echo $query."<BR>";
+	echo $query."<BR>";
 	$result = mssql_query($query);
 	$numRows = mssql_num_rows($result);
 	while($row = mssql_fetch_array($result))
 	{
 		echo '<tr>';
 		echo '<td>'.$row['a1'].'</td><td>'.$row['a2'].'</td><td>'._otd_($row['a1']).'</td><td>'.$row['a4'].'</td>
-		<td>'.$row['a5'].'</td><td>'.$row['a6'].'</td><td>'.$row['a7'].'</td><td>'.$row['a8'].'</td>'.'<td>'.'<input type="button" name="rull" id="rull" value="¦C¦L" onClick="'."window.open('./index.php?url=drum_check_print&id=".$row['a1']." ', '_self');".'"/>';
+		<td>'.$row['a5'].'</td><td>'.$row['a6'].'</td><td>'.$row['a7'].'</td><td>'.$row['a8'].'</td>'.'<td>'.'<input type="button" name="rull" id="rull" value="¦C¦L" onClick="'."window.open('./index.php?url=drum_check_print&id=".$row['a9']." ', '_self');".'"/>';
 
 		echo '</tr>';
 	}	

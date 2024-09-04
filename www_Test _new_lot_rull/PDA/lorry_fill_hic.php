@@ -141,12 +141,14 @@ function checkform7 ( form )
 	{$fo1='autofocus="autofocus"';}else{$fo1='';}
 	if($_SESSION['lid']<>'' and $_SESSION['lorry_no1']=='' and $_SESSION['fid']=='')
 	{$fo2='autofocus="autofocus"';}else{$fo2='';}
+	if($_SESSION['lid']<>'' and $_SESSION['lorry_no1']<>'' and $_SESSION['fid']=='')
+	{$fo3='autofocus="autofocus"';}else{$fo3='';}
 ?>
 </p>
      Lot NO ：
     <input type="text"  autocomplete="off" name="lid" id="lid"  style="font-size:<?php echo $_SESSION['font_size'];?>px" size="12" <?php echo ' value="'.$_SESSION['lid'].'"'.$fo1; ?>  onchange="set_date_session(this.name,this.value)"/><BR /><BR />
      Lorry NO (槽車)：
-    <input type="text" autocomplete="off" name="lorry_no1" id="lorry_no1"  style="font-size:<?php echo $_SESSION['font_size'];?>px" size="12" <?php echo ' value="'.$_SESSION['lorry_no1'].'"'.$fo2;; ?>  onchange="set_date_session(this.name,this.value)"/><?php  $lorry_no1=(trim($_SESSION['lorry_no1'])) ;$lorry_no1=substr($lorry_no1,0,6);?><BR /><BR />
+    <input type="password" autocomplete="off" name="lorry_no1" id="lorry_no1"  style="font-size:<?php echo $_SESSION['font_size'];?>px" size="12" <?php echo ' value="'.$_SESSION['lorry_no1'].'"'.$fo2;; ?>  onchange="set_date_session(this.name,this.value)"/><?php  echo $lorry_no1=(trim($_SESSION['lorry_no1'])) ;$lorry_no1=substr($lorry_no1,0,6);?><BR /><BR />
     
 <?php
 if($_SESSION['lid']<>'' and $_SESSION['lorry_no1']<>''){
@@ -176,7 +178,7 @@ if($_SESSION['lid']<>'' and $_SESSION['lorry_no1']<>''){
 <?php
 $loginFormAction = $_SERVER['PHP_SELF']; 
 if(isset($_POST['enter'])){
-	enter($_POST['lid'],$_POST['lorry_no1']);	
+	enter($fid,$lorry_no1);	
 }
 ///end enter
 if(isset($_POST['end'])) 
@@ -375,7 +377,6 @@ FROM              FILLPLAN_OUT_DECIDE AS A LEFT OUTER JOIN
                             PRODUCT_DATA AS C ON A.PDD_PROD_NO = C.PDD_PROD_NO LEFT OUTER JOIN
                             CUSTOMER_PRODUCTS AS D ON A.CTD_CUST_NO = D.CTD_CUST_NO AND A.PDD_PROD_NO = D.PDD_PROD_NO
 WHERE          (A.FDM_LOT_NO = '".trim($_SESSION['lid'])."')";
-// echo $query."<BR>";
 $result = mssql_query($query);
 $numRows = mssql_num_rows($result);
 while($row = mssql_fetch_array($result))
@@ -395,9 +396,8 @@ while($row = mssql_fetch_array($result))
 	echo '樣品瓶數 ： '.$smp_cnt.'</br>';
 	echo '充填量 ： '.$fdm_qty.'</br></br>';
 }
-//echo "lorry_no:".$lorry_no.":"."lorry_no1:".$lorry_no1."<BR>";
-//break;;
-if( $lorry_no<>trim($lorry_no1))
+
+if($short_name<>trim($fid) and $lorry_no<>trim($lorry_no1))
 {
 	$_SESSION['lid']=$_SESSION['fid']=$_SESSION['lorry_no1']=$_POST['lid']='';
 	my_msg("充填口,槽車皆錯誤，請檢查原因","fill.php");
@@ -548,7 +548,7 @@ function tank(){
 	$jj->lid=$_SESSION['lid'];
 	$jj->ani();
 	$pid=trim($jj->pid);
-	if(($_SESSION['select_series']=='2系' or $_SESSION['select_series']=='3系' or $_SESSION['select_series']=='4系') and $pid=='P050-000'  ){
+	if($_SESSION['select_series']=='2系' or $_SESSION['select_series']=='3系' or $_SESSION['select_series']=='4系'){
 		echo '<BR>選擇充填路徑<table width="600" border="1" bgcolor="#CCCCCC"><tr><td width="50">系別</td><td width="100">TANK</td><td width="450">Pump + 過濾器 X 3 + 充填口</td></tr><tr><td>';
 		select_series($pid);
 		echo '</td><td>';
@@ -737,7 +737,7 @@ VALUES          (CONVERT(DATETIME, '".date("Y-m-d")."', 102), N'".$_SESSION['lid
 	echo '氣密測試(1.9kg/cm^2 10分鐘): <input type="text"  autocomplete="off" name="sti0" id="sti0"  style="font-size:'.($_SESSION['font_size']).'px" size="12"  value="1.9" /><br>';
 	echo '氣密測試開始時間 : <input type="text"  autocomplete="off" name="sti1" id="sti1"  style="font-size:'.($_SESSION['font_size']).'px" size="12"  value="" /><br>';
 	echo '氣密測試結束時間 : <input type="text"  autocomplete="off" name="sti2" id="sti2" value=""  style="font-size:'.($_SESSION['font_size']).'px" size="12" /><br>';
-	echo '充填路徑： <input type="text"  autocomplete="off" name="flow" value="'.$_SESSION['select_flow'].'"  style="font-size:'.($_SESSION['font_size']).'px" size="20"  readonly="readonly"/></br>';
+	echo '充填路徑： <input type="text"  autocomplete="off" name="flow" value="'.$_SESSION['select_flow'].'"  style="font-size:'.($_SESSION['font_size']).'px" size="12"  readonly="readonly"/></br>';
 	echo '<input type="hidden" name="remnant" id="remnant" value="'.$_POST['remnant'].'"/>';
 	echo '<input type="hidden" name="m3" id="m3" value="'.$_POST['m3'].'" />';
 	echo '<input type="hidden" name="bm3" id="m3" value="'.$_POST['bm3'].'" />';
