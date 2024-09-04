@@ -550,6 +550,7 @@ function tank(){
 	$jj->ani();
 	$pid=trim($jj->pid);
 	if($_SESSION['select_series']=='2系' or $_SESSION['select_series']=='3系' or $_SESSION['select_series']=='4系'){
+		$_SESSION['select_flow']='';
 		echo '<BR>選擇充填路徑<table width="600" border="1" bgcolor="#CCCCCC"><tr><td width="50">系別</td><td width="100">TANK</td><td width="450">Pump + 過濾器 X 3 + 充填口</td></tr><tr><td>';
 		select_series($pid);
 		echo '</td><td>';
