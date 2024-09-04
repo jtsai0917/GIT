@@ -1,0 +1,5066 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:x="urn:schemas-microsoft-com:office:excel"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=big5">
+<meta name=ProgId content=Excel.Sheet>
+<meta name=Generator content="Microsoft Excel 15">
+<link rel=File-List href="QSELMF3017-001A4.files/filelist.xml">
+<!--[if !mso]>
+<style>
+v\:* {behavior:url(#default#VML);}
+o\:* {behavior:url(#default#VML);}
+x\:* {behavior:url(#default#VML);}
+.shape {behavior:url(#default#VML);}
+</style>
+<![endif]-->
+<style id="QSELMF3017-001A4 原料受入充填作業檢查表2 (002)_6039_Styles">
+<!--table
+	{mso-displayed-decimal-separator:"\.";
+	mso-displayed-thousand-separator:"\,";}
+.font56039
+	{color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font66039
+	{color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font76039
+	{color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font86039
+	{color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font96039
+	{color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font106039
+	{color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font116039
+	{color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:新細明體, serif;
+	mso-font-charset:136;}
+.font126039
+	{color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font136039
+	{color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.font146039
+	{color:red;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;}
+.xl156039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl636039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl646039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl656039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl666039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl676039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl686039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl696039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:0%;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl706039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl716039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:0%;
+	text-align:center;
+	vertical-align:middle;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl726039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:bottom;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl736039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:top;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl746039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl756039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl766039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl776039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl786039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl796039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl806039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl816039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl826039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl836039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl846039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl856039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl866039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl876039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl886039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl896039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl906039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl916039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl926039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl936039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl946039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border:.5pt solid windowtext;
+	background:#A6A6A6;
+	mso-pattern:black none;
+	white-space:nowrap;}
+.xl956039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	background:#A6A6A6;
+	mso-pattern:black none;
+	white-space:nowrap;}
+.xl966039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:0%;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	background:#A6A6A6;
+	mso-pattern:black none;
+	white-space:nowrap;}
+.xl976039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl986039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl996039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl1006039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl1016039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl1026039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:bottom;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl1036039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1046039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1056039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1066039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1076039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1086039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1096039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:24.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1106039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1116039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1126039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1136039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1146039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1156039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1166039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1176039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl1186039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl1196039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1206039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1216039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1226039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1236039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1246039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1256039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1266039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1276039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1286039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1296039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1306039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1316039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1326039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1336039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1346039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1356039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1366039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1376039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1386039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1396039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1406039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1416039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1426039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1436039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1446039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1456039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1466039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1476039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	background:#A6A6A6;
+	mso-pattern:black none;
+	white-space:nowrap;}
+.xl1486039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1496039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1506039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1516039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1526039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1536039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1546039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1556039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1566039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1576039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1586039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1596039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1606039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1616039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1626039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl1636039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl1646039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1656039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1666039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1676039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1686039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1696039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1706039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1716039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1726039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1736039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1746039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1756039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;
+	layout-flow:vertical;}
+.xl1766039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;
+	layout-flow:vertical;}
+.xl1776039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;
+	layout-flow:vertical;}
+.xl1786039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl1796039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl1806039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1816039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1826039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1836039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1846039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1856039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl1866039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1876039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1886039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1896039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1906039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1916039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1926039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1936039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1946039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1956039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1966039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1976039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1986039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:general;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl1996039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2006039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2016039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2026039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2036039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2046039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2056039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2066039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2076039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2086039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2096039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:9.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2106039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:9.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2116039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2126039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2136039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2146039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2156039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2166039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2176039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2186039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2196039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2206039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2216039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:.5pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2226039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2236039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2246039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2256039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:right;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2266039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2276039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2286039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2296039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2306039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:"\@";
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2316039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:"\@";
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2326039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:"\@";
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2336039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl2346039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:12.0pt;
+	font-weight:400;
+	font-style:normal;
+	text-decoration:none;
+	font-family:Calibri, serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:normal;}
+.xl2356039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2366039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2376039
+	{padding:0px;
+	mso-ignore:padding;
+	color:black;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2386039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:none;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2396039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2406039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2416039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:1.0pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2426039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:none;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2436039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:.5pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+.xl2446039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:9.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2456039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:9.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2466039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:none;
+	border-bottom:.5pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2476039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:.5pt solid windowtext;
+	border-right:1.0pt solid windowtext;
+	border-bottom:.5pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2486039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2496039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:none;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2506039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:left;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:none;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;}
+.xl2516039
+	{padding:0px;
+	mso-ignore:padding;
+	color:windowtext;
+	font-size:11.0pt;
+	font-weight:700;
+	font-style:normal;
+	text-decoration:none;
+	font-family:微軟正黑體, sans-serif;
+	mso-font-charset:136;
+	mso-number-format:General;
+	text-align:center;
+	vertical-align:middle;
+	border-top:none;
+	border-right:1.0pt solid windowtext;
+	border-bottom:1.0pt solid windowtext;
+	border-left:1.0pt solid windowtext;
+	mso-background-source:auto;
+	mso-pattern:auto;
+	white-space:nowrap;
+	layout-flow:vertical;}
+-->
+</style>
+</head>
+
+<body>
+<!--[if !excel]>&nbsp;&nbsp;<![endif]-->
+<!--下列資訊是由 Microsoft Excel 網頁發佈精靈所產生。-->
+<!--如果由 Excel 重新發佈相同的項目時，在 DIV 標籤間的所有資訊將會被取代。-->
+<!----------------------------->
+<!--START OF OUTPUT FROM EXCEL PUBLISH AS WEB PAGE WIZARD -->
+<!----------------------------->
+
+<div id="QSELMF3017-001A4 原料受入充填作業檢查表2 (002)_6039" align=center
+x:publishsource="Excel">
+
+<table border=0 cellpadding=0 cellspacing=0 width=864 style='border-collapse:
+ collapse;table-layout:fixed;width:648pt'>
+ <col width=72 span=12 style='width:54pt'>
+ <tr height=41 style='height:30.75pt'>
+  <td height=41 class=xl636039 width=72 style='height:30.75pt;width:54pt'></td>
+  <td colspan=5 class=xl1096039 width=360 style='width:270pt'>原料受入充填作業檢查表</td>
+  <td class=xl636039 width=72 style='width:54pt'></td>
+  <td class=xl636039 width=72 style='width:54pt'></td>
+  <td class=xl636039 width=72 style='width:54pt'></td>
+  <td class=xl636039 width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt' align=left valign=top><!--[if gte vml 1]><v:shapetype
+   id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+   path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+   <v:stroke joinstyle="miter"/>
+   <v:formulas>
+    <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+    <v:f eqn="sum @0 1 0"/>
+    <v:f eqn="sum 0 0 @1"/>
+    <v:f eqn="prod @2 1 2"/>
+    <v:f eqn="prod @3 21600 pixelWidth"/>
+    <v:f eqn="prod @3 21600 pixelHeight"/>
+    <v:f eqn="sum @0 0 1"/>
+    <v:f eqn="prod @6 1 2"/>
+    <v:f eqn="prod @7 21600 pixelWidth"/>
+    <v:f eqn="sum @8 21600 0"/>
+    <v:f eqn="prod @7 21600 pixelHeight"/>
+    <v:f eqn="sum @10 21600 0"/>
+   </v:formulas>
+   <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+   <o:lock v:ext="edit" aspectratio="t"/>
+  </v:shapetype><v:shape id="矩形_x0020_1" o:spid="_x0000_s3073" type="#_x0000_t75"
+   style='position:absolute;margin-left:10.5pt;margin-top:.75pt;width:45pt;
+   height:32.25pt;z-index:1;visibility:visible;mso-wrap-style:square;
+   v-text-anchor:top' o:gfxdata="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
+" o:insetmode="auto">
+   <v:imagedata src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image001.png"
+    o:title=""/>
+   <o:lock v:ext="edit" aspectratio="f"/>
+   <x:ClientData ObjectType="Pict">
+    <x:SizeWithCells/>
+    <x:CF>Bitmap</x:CF>
+    <x:AutoPict/>
+   </x:ClientData>
+  </v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+  position:absolute;z-index:1;margin-left:14px;margin-top:1px;width:60px;
+  height:43px'><img width=60 height=43
+  src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image002.png"
+  v:shapes="矩形_x0020_1"></span><![endif]><span style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td height=41 class=xl636039 width=72 style='height:30.75pt;width:54pt'></td>
+   </tr>
+  </table>
+  </span></td>
+  <td class=xl636039 width=72 style='width:54pt'></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl636039 style='height:16.5pt'></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+  <td class=xl636039></td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=4 height=22 class=xl906039 style='border-right:1.0pt solid black;
+  height:16.5pt'>項<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>目</td>
+  <td colspan=2 class=xl906039 style='border-right:1.0pt solid black;
+  border-left:none'>記<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>錄</td>
+  <td class=xl906039 style='border-left:none'>&nbsp;</td>
+  <td colspan=5 class=xl2036039 style='border-right:1.0pt solid black'>備<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>註<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>欄</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td rowspan=8 height=174 class=xl2116039 style='height:130.5pt'>受入指示</td>
+  <td colspan=3 class=xl1426039 style='border-right:1.0pt solid black;
+  border-left:none'><span style='mso-spacerun:yes'>&nbsp;</span>品<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>名</td>
+  <td colspan=2 class=xl1426039 style='border-right:1.0pt solid black;
+  border-left:none'><input type="text" name="prod_name" value="123" size="14" style="text-align:right;"></td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1316039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>受<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>入<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>日<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>期</td>
+  <td colspan=2 class=xl1446039 style='border-right:1.0pt solid black;
+  border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>年<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>月<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>日</td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>供<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>應<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>商</td>
+  <td colspan=2 class=xl1446039 style='border-right:1.0pt solid black;
+  border-left:none'>&nbsp;</td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td colspan=4 class=xl2046039 style='border-right:.5pt solid black'>比<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>重<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp; </span>參<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>照</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1316039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>L<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>o<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>t<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>N o.</td>
+  <td colspan=2 class=xl1466039 style='border-right:1.0pt solid black;
+  border-left:none'>&nbsp;</td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td colspan=2 class=xl2046039 style='border-right:.5pt solid black'>品<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>名</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>比<span
+  style='mso-spacerun:yes'>&nbsp; </span>重</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>Sample</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=26 style='height:19.5pt'>
+  <td colspan=3 height=26 class=xl1316039 style='border-right:1.0pt solid black;
+  height:19.5pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>有<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>效<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>期<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>限</td>
+  <td colspan=2 class=xl1356039 style='border-right:1.0pt solid black;
+  border-left:none'>合<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+  </span>、<span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>否</td>
+  <td class=xl686039 style='border-left:none'>&nbsp;</td>
+  <td class=xl676039 style='border-top:none'>硫酸</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>H<font
+  class="font66039"><sub>2</sub></font><font class="font56039">SO</font><font
+  class="font66039"><sub>4</sub></font></td>
+  <td class=xl676039 style='border-top:none;border-left:none'>1.841</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>濃、金、保X2</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1316039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>C<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>O<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>A<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>合<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>否</td>
+  <td colspan=2 class=xl1356039 style='border-right:1.0pt solid black;
+  border-left:none'><span style='mso-spacerun:yes'>&nbsp;</span>合<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>、<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>否</td>
+  <td class=xl686039 style='border-left:none'>&nbsp;</td>
+  <td class=xl926039 style='border-top:none'>雙氧水</td>
+  <td rowspan=2 class=xl926039 style='border-bottom:.5pt solid black;
+  border-top:none'>H<font class="font66039"><sub>2</sub></font><font
+  class="font56039">O</font><font class="font66039"><sub>2</sub></font></td>
+  <td rowspan=2 class=xl926039 style='border-bottom:.5pt solid black;
+  border-top:none'>1.24</td>
+  <td rowspan=2 class=xl926039 style='border-bottom:.5pt solid black;
+  border-top:none'>濃、金、保X2</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1316039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>取<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>樣<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>須<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>要<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>瓶<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>數</td>
+  <td colspan=2 class=xl2096039 style='border-right:1.0pt solid black;
+  border-left:none'><span style='mso-spacerun:yes'>&nbsp; </span>濃．金．水．微．陰．保X2</td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td class=xl696039>(60%)</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=3 height=22 class=xl1656039 style='border-right:1.0pt solid black;
+  height:16.5pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>受<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>入<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>預<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>定<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>量<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>(A)</td>
+  <td colspan=2 class=xl1076039 style='border-right:1.0pt solid black;
+  border-left:none'>L</td>
+  <td class=xl706039 style='border-left:none'>&nbsp;</td>
+  <td class=xl956039 style='border-top:none'>雙氧水</td>
+  <td rowspan=2 class=xl956039 style='border-bottom:.5pt solid black;
+  border-top:none'>H<font class="font66039"><sub>2</sub></font><font
+  class="font56039">O</font><font class="font66039"><sub>2</sub></font></td>
+  <td rowspan=2 class=xl956039 style='border-bottom:.5pt solid black;
+  border-top:none'>1.12</td>
+  <td rowspan=2 class=xl956039 style='border-bottom:.5pt solid black;
+  border-top:none'>濃、金、保X2</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td rowspan=5 height=116 class=xl2116039 style='border-bottom:1.0pt solid black;
+  height:87.0pt'>重量確認</td>
+  <td colspan=3 class=xl2006039 style='border-right:1.0pt solid black;
+  border-left:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;
+  </span>L<span style='mso-spacerun:yes'>&nbsp; </span>o<span
+  style='mso-spacerun:yes'>&nbsp; </span>r<span style='mso-spacerun:yes'>&nbsp;
+  </span>r<span style='mso-spacerun:yes'>&nbsp; </span>y<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>N o.</td>
+  <td colspan=2 class=xl1376039 style='border-right:1.0pt solid black;
+  border-left:none'>&nbsp;</td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td class=xl966039>(35%)</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=26 style='height:19.5pt'>
+  <td colspan=3 height=26 class=xl1316039 style='border-right:1.0pt solid black;
+  height:19.5pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>客<span
+  style='mso-spacerun:yes'>&nbsp; </span>戶<span style='mso-spacerun:yes'>&nbsp;
+  </span>端<span style='mso-spacerun:yes'>&nbsp; </span>出<span
+  style='mso-spacerun:yes'>&nbsp; </span>貨<span style='mso-spacerun:yes'>&nbsp;
+  </span>量<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td colspan=2 class=xl1396039 style='border-right:1.0pt solid black;
+  border-left:none'>&#9312;<span style='mso-spacerun:yes'>&nbsp; </span><font
+  class="font56039"><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>Kg</font></td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td class=xl716039 style='border-top:none'>硝酸</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>HNO<font
+  class="font66039"><sub>3</sub></font></td>
+  <td class=xl676039 style='border-top:none;border-left:none'>1.422</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>濃、金、保X2</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=26 style='height:19.5pt'>
+  <td colspan=3 height=26 class=xl1316039 style='border-right:1.0pt solid black;
+  height:19.5pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>揚<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>液<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>前<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>淨<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>量<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>(A)</td>
+  <td colspan=2 class=xl1216039 style='border-right:1.0pt solid black;
+  border-left:none'>Kg</td>
+  <td class=xl706039 style='border-left:none'>&nbsp;</td>
+  <td class=xl676039 style='border-top:none'>液氨</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>NH<font
+  class="font66039"><sub>3</sub></font></td>
+  <td class=xl676039 style='border-top:none;border-left:none'>0.6</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>濃、金、保X2</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1316039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>揚<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>液<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>後<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>淨<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>量<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>(B)</td>
+  <td colspan=2 class=xl1216039 style='border-right:1.0pt solid black;
+  border-left:none'>Kg</td>
+  <td class=xl706039 style='border-left:none'>&nbsp;</td>
+  <td class=xl946039 style='border-top:none'>醋酸</td>
+  <td class=xl946039 style='border-top:none;border-left:none'>ACOH</td>
+  <td class=xl946039 style='border-top:none;border-left:none'>1.05</td>
+  <td class=xl946039 style='border-top:none;border-left:none'>濃、金、保X2</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=3 height=22 class=xl1956039 style='border-right:1.0pt solid black;
+  height:16.5pt;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>受<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>入<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>量<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>(<span
+  style='mso-spacerun:yes'>&nbsp; </span>A -<span
+  style='mso-spacerun:yes'>&nbsp; </span>B )</td>
+  <td colspan=2 class=xl1256039 style='border-right:1.0pt solid black;
+  border-left:none'>&#9313;<font class="font56039"><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>Kg</font></td>
+  <td class=xl706039 style='border-left:none'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=2 height=22 class=xl906039 style='border-right:1.0pt solid black;
+  height:16.5pt'>指示者</td>
+  <td colspan=4 class=xl1886039 style='border-left:none'>印</td>
+  <td class=xl706039>&nbsp;</td>
+  <td class=xl786039 colspan=3>▓ 接<span style='mso-spacerun:yes'>&nbsp;
+  </span>續(過水原料注意點)</td>
+  <td class=xl786039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td rowspan=11 height=243 class=xl2156039 style='border-bottom:1.0pt solid black;
+  height:182.25pt'>充填前準備</td>
+  <td colspan=2 rowspan=2 class=xl1856039 width=144 style='border-right:.5pt solid black;
+  width:108pt'><span style='mso-spacerun:yes'>&nbsp;</span>原料<font
+  class="font146039">受入</font><font class="font136039">槽液量確認<br>
+    (控制室)</font><font class="font146039">(電子化時擇一輸入)</font></td>
+  <td class=xl916039>A</td>
+  <td colspan=2 class=xl1276039 style='border-right:1.0pt solid black;
+  border-left:none'>　　　　　　　　　　%　　　<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>m<font class="font96039"><sup>3</sup></font></td>
+  <td class=xl706039 style='border-left:none'>&nbsp;</td>
+  <td colspan=4 rowspan=3 class=xl976039 width=288 style='width:216pt'>液側盲板拆除時,
+  遠離人員方向的 1 、 2 號螺絲先拆卸,發現有液體洩漏, 暫停作業, 作更嚴格的安全措施(穿著雨衣,防護面罩後),<span
+  style='mso-spacerun:yes'>&nbsp; </span>再繼續拆除 3、4 號螺絲。</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td height=23 class=xl936039 style='height:17.25pt'>B</td>
+  <td colspan=2 class=xl1296039 style='border-right:1.0pt solid black;
+  border-left:none'>　　　　　　　　　　%　　　<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>m<font class="font96039"><sup>3</sup></font></td>
+  <td class=xl706039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1316039 style='height:15.75pt'><span
+  style='mso-spacerun:yes'>&nbsp; </span>Coupler<span
+  style='mso-spacerun:yes'>&nbsp; </span>洗<span style='mso-spacerun:yes'>&nbsp;
+  </span>淨</td>
+  <td colspan=2 class=xl1316039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1576039 style='height:15.75pt'><span
+  style='mso-spacerun:yes'>&nbsp; </span>Coupler<span
+  style='mso-spacerun:yes'>&nbsp; </span>接<span style='mso-spacerun:yes'>&nbsp;
+  </span>續(過水原料注意點)<font class="font116039">▓</font></td>
+  <td colspan=2 class=xl1316039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=26 style='height:19.5pt'>
+  <td colspan=3 height=26 class=xl1606039 style='height:19.5pt'><span
+  style='mso-spacerun:yes'>&nbsp; </span>確 定 氣 壓<span
+  style='mso-spacerun:yes'>&nbsp; </span>(N<font class="font66039"><sub>2</sub></font><font
+  class="font76039">)<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>2.0Kg/cm</font><font class="font86039"><sup>2</sup></font><font
+  class="font76039"><span style='mso-spacerun:yes'>&nbsp;</span></font></td>
+  <td colspan=2 class=xl1336039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl676039>品名</td>
+  <td class=xl676039 style='border-left:none'>有效期限</td>
+  <td class=xl896039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td colspan=3 height=23 class=xl1656039 style='height:17.25pt'><span
+  style='mso-spacerun:yes'>&nbsp; </span>氣密 Test 至少10min (1.9Kg/cm<font
+  class="font86039"><sup>2</sup></font><font class="font56039">)</font></td>
+  <td colspan=2 class=xl1316039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl676039 style='border-top:none'>HNO3</td>
+  <td class=xl676039 style='border-top:none;border-left:none'>6個月</td>
+  <td class=xl896039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt'><span style='mso-spacerun:yes'>&nbsp; </span>加壓時安全閥的壓力錶,<span
+  style='mso-spacerun:yes'>&nbsp; </span>是否上升</td>
+  <td colspan=2 class=xl996039 width=144 style='border-right:1.0pt solid black;
+  border-left:none;width:108pt'>是<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>、<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>否</td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl946039 style='border-top:none'>ACOH</td>
+  <td class=xl946039 style='border-top:none;border-left:none'>6個月</td>
+  <td class=xl896039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl2386039 style='border-right:1.0pt solid black;
+  height:15.75pt'>▲H2O2原料受入充填口紀錄</td>
+  <td colspan=2 class=xl2336039 width=144 style='border-right:1.0pt solid black;
+  border-left:none;width:108pt'>1<span style='mso-spacerun:yes'>&nbsp;
+  </span>or<span style='mso-spacerun:yes'>&nbsp; </span>2 or<span
+  style='mso-spacerun:yes'>&nbsp; </span>NA</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl786039></td>
+  <td class=xl796039 style='border-top:none'>H2O2</td>
+  <td class=xl796039 style='border-top:none;border-left:none'>6個月</td>
+  <td class=xl806039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1686039 style='border-right:1.0pt solid black;
+  height:15.75pt'><span style='mso-spacerun:yes'>&nbsp; </span>保壓確認 Lorry、Pass
+  box壓力錶</td>
+  <td colspan=2 rowspan=2 class=xl1526039 style='border-right:1.0pt solid black;
+  border-bottom:.5pt solid black'>有<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>、<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>無</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl786039>注意事項:</td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl806039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1806039 style='border-right:1.0pt solid black;
+  height:15.75pt'><span style='mso-spacerun:yes'>&nbsp; </span>的壓力有無下降</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td colspan=4 rowspan=9 class=xl976039 width=288 style='width:216pt'><font
+  class="font116039">※</font><font class="font106039">H2O2原料受入用hose管路使用完畢,
+  請以PE袋及膠帶封口 。套袋及拆袋的作業方式以水平方向的移動避免異物汙染</font></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=3 height=22 class=xl1916039 style='border-right:1.0pt solid black;
+  height:16.5pt'><span style='mso-spacerun:yes'>&nbsp; </span>本體&amp;軟管洩漏有無確認</td>
+  <td colspan=2 class=xl1566039 style='border-right:1.0pt solid black;
+  border-left:none'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td rowspan=6 height=129 class=xl1786039 style='border-bottom:1.0pt solid black;
+  height:96.75pt;border-top:none'>充填前取樣</td>
+  <td colspan=3 height=21 width=216 style='height:15.75pt;width:162pt'
+  align=left valign=top><!--[if gte vml 1]><v:shape id="直線接點_x0020_7" o:spid="_x0000_s3079"
+   type="#_x0000_t75" style='position:absolute;margin-left:108pt;margin-top:.75pt;
+   width:.75pt;height:16.5pt;z-index:7;visibility:visible' o:gfxdata="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
+">
+   <v:imagedata src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image003.png"
+    o:title=""/>
+   <o:lock v:ext="edit" aspectratio="f"/>
+   <x:ClientData ObjectType="Pict">
+    <x:SizeWithCells/>
+    <x:CF>Bitmap</x:CF>
+    <x:AutoPict/>
+   </x:ClientData>
+  </v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+  position:absolute;z-index:7;margin-left:144px;margin-top:1px;width:1px;
+  height:22px'><img width=1 height=22
+  src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image004.png"
+  v:shapes="直線接點_x0020_7"></span><![endif]><span style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td colspan=3 height=21 class=xl1716039 width=216 style='height:15.75pt;
+    border-left:none;width:162pt'><span style='mso-spacerun:yes'>&nbsp;
+    </span>取樣時間<span
+    style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span>擔當</td>
+   </tr>
+  </table>
+  </span></td>
+  <td class=xl816039 style='border-top:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>時<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>分</td>
+  <td class=xl826039 style='border-top:none'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td rowspan=2 height=44 class=xl1626039 style='height:33.0pt;border-top:none'>流量</td>
+  <td colspan=2 class=xl1646039><span style='mso-spacerun:yes'>&nbsp;
+  </span>12m3<span style='mso-spacerun:yes'>&nbsp; </span>(3.0m<font
+  class="font126039"><sup>3</sup></font><font class="font106039">/Hr)</font></td>
+  <td colspan=2 class=xl1236039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=2 height=21 class=xl1746039 style='height:15.75pt'><span
+  style='mso-spacerun:yes'>&nbsp; </span>洩漏有無再確認</td>
+  <td colspan=2 class=xl2466039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1236039 style='height:15.75pt;border-left:
+  none'><span style='mso-spacerun:yes'>&nbsp; </span>取 樣 前 Purge 量　(20kg)</td>
+  <td colspan=2 class=xl1236039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1236039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>實際取樣瓶數:<span style='mso-spacerun:yes'>&nbsp; </span>　　　　 瓶●</td>
+  <td colspan=2 class=xl2446039 style='border-right:1.0pt solid black;
+  border-left:none'><span style='mso-spacerun:yes'>&nbsp; </span>濃．金．水．微．陰．保X2</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=3 height=22 class=xl2486039 style='height:16.5pt;border-left:
+  none'><span style='mso-spacerun:yes'>&nbsp; </span>充填前警示牌放置確認</td>
+  <td colspan=2 class=xl2486039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td rowspan=3 height=66 class=xl1786039 style='height:49.5pt;border-top:none'>合格後充填</td>
+  <td colspan=3 height=21 width=216 style='height:15.75pt;width:162pt'
+  align=left valign=top><!--[if gte vml 1]><v:shape id="直線接點_x0020_3" o:spid="_x0000_s3075"
+   type="#_x0000_t75" style='position:absolute;margin-left:108pt;margin-top:.75pt;
+   width:.75pt;height:16.5pt;z-index:3;visibility:visible' o:gfxdata="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
+">
+   <v:imagedata src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image003.png"
+    o:title=""/>
+   <o:lock v:ext="edit" aspectratio="f"/>
+   <x:ClientData ObjectType="Pict">
+    <x:SizeWithCells/>
+    <x:CF>Bitmap</x:CF>
+    <x:AutoPict/>
+   </x:ClientData>
+  </v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+  position:absolute;z-index:3;margin-left:144px;margin-top:1px;width:1px;
+  height:22px'><img width=1 height=22
+  src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image004.png"
+  v:shapes="直線接點_x0020_3"></span><![endif]><span style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td colspan=3 height=21 class=xl1716039 width=216 style='height:15.75pt;
+    border-left:none;width:162pt'><span style='mso-spacerun:yes'>&nbsp;
+    </span>充填受入開始時間<span
+    style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span>擔當</td>
+   </tr>
+  </table>
+  </span></td>
+  <td class=xl816039 style='border-top:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>時<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>分</td>
+  <td class=xl826039 style='border-top:none'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td rowspan=2 height=45 class=xl1626039 style='height:33.75pt;border-top:
+  none'>流量</td>
+  <td colspan=2 class=xl1646039><span style='mso-spacerun:yes'>&nbsp;
+  </span>12m3<span style='mso-spacerun:yes'>&nbsp; </span>(3.0m<font
+  class="font126039"><sup>3</sup></font><font class="font106039">/Hr)</font></td>
+  <td colspan=2 class=xl1236039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td colspan=4 rowspan=2 class=xl976039 width=288 style='width:216pt'>●H2O2原料受入用hose管路接續完成滿管後靜置1hr
+  後再取樣送分析.正確確認Hose管內品質.</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=2 height=22 class=xl1746039 style='height:16.5pt'><span
+  style='mso-spacerun:yes'>&nbsp; </span>洩漏有無再確認</td>
+  <td colspan=2 class=xl2466039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td rowspan=14 height=300 class=xl2116039 style='border-bottom:1.0pt solid black;
+  height:225.0pt'>充填終了程序</td>
+  <td colspan=2 class=xl2196039 style='border-right:.5pt solid black;
+  border-left:none'><span style='mso-spacerun:yes'>&nbsp; </span>操作盤空檢知</td>
+  <td rowspan=3 height=66 width=72 style='border-bottom:.5pt solid black;
+  height:49.5pt;width:54pt' align=left valign=top><!--[if gte vml 1]><v:shape
+   id="直線接點_x0020_4" o:spid="_x0000_s3076" type="#_x0000_t75" style='position:absolute;
+   margin-left:0;margin-top:33pt;width:.75pt;height:17.25pt;z-index:4;
+   visibility:visible' o:gfxdata="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
+">
+   <v:imagedata src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image005.png"
+    o:title=""/>
+   <o:lock v:ext="edit" aspectratio="f"/>
+   <x:ClientData ObjectType="Pict">
+    <x:SizeWithCells/>
+    <x:CF>Bitmap</x:CF>
+    <x:AutoPict/>
+   </x:ClientData>
+  </v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+  position:absolute;z-index:4;margin-left:0px;margin-top:44px;width:1px;
+  height:23px'><img width=1 height=23
+  src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image006.png"
+  v:shapes="直線接點_x0020_4"></span><![endif]><span style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td rowspan=3 height=66 class=xl2416039 width=72 style='border-bottom:.5pt solid black;
+    height:49.5pt;width:54pt'>互相確認</td>
+   </tr>
+  </table>
+  </span></td>
+  <td colspan=2 class=xl1176039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl786039></td>
+  <td colspan=4 rowspan=3 class=xl976039 width=288 style='width:216pt'><font
+  class="font116039">▲</font><font class="font106039">H2O2原料受入充填口紀錄.北邊(內)充填口1,南邊(外)充填口2,<span
+  style='mso-spacerun:yes'>&nbsp;</span></font></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td colspan=2 height=23 class=xl1236039 style='border-right:.5pt solid black;
+  height:17.25pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>製品桶槽液面確認</td>
+  <td colspan=2 class=xl1196039 style='border-right:1.0pt solid black'>　　　　　　　　　　%　　　<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>m<font class="font126039"><sup>3</sup></font></td>
+  <td class=xl836039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td height=22 class=xl846039 colspan=2 style='height:16.5pt;border-right:
+  .5pt solid black'><span style='mso-spacerun:yes'>&nbsp; </span>充填受入結束時間<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span><span style='display:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;</span>擔當</span></td>
+  <td class=xl866039><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>時<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span>分</td>
+  <td class=xl876039>&nbsp;</td>
+  <td class=xl836039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td colspan=3 height=23 class=xl1826039 style='border-right:1.0pt solid black;
+  height:17.25pt;border-left:none'>「氣密Test (1.9Kg/cm<font class="font96039"><sup>2</sup></font><font
+  class="font56039"> x 10分鐘)」　</font></td>
+  <td colspan=2 class=xl1156039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td colspan=6 class=xl2086039 style='border-right:1.0pt solid black'>連<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>絡<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>事<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp; </span>項</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>關閉N2供氣閥</td>
+  <td colspan=2 class=xl1106039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl2356039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>保壓確認 Lorry、Pass box壓力錶</td>
+  <td colspan=2 rowspan=2 class=xl1146039 style='border-right:1.0pt solid black;
+  border-bottom:.5pt solid black'>有<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>、<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp; </span>無</td>
+  <td class=xl656039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1826039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>的壓力有無下降</td>
+  <td class=xl656039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>檢查安全閥壓力錶紅色指針為 0</td>
+  <td colspan=2 class=xl1106039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>L o r r y 洩 壓 作 業</td>
+  <td colspan=2 class=xl1106039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>容器氣壓排放完了確認</td>
+  <td colspan=2 class=xl1106039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>容器 (氣、液) 閥緊閉確認</td>
+  <td colspan=2 class=xl1106039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1466039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>Coupler取出洗淨</td>
+  <td colspan=2 class=xl1106039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl656039></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td colspan=3 height=21 class=xl1236039 style='border-right:1.0pt solid black;
+  height:15.75pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>軟管收納及檢查<font class="font116039">※</font></td>
+  <td colspan=2 class=xl1236039 style='border-right:1.0pt solid black;
+  border-left:none'>&nbsp;</td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl886039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=3 height=22 class=xl1236039 style='border-right:1.0pt solid black;
+  height:16.5pt;border-left:none'><span style='mso-spacerun:yes'>&nbsp;
+  </span>充填後警示牌移除確認<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td colspan=2 class=xl1126039 style='border-right:1.0pt solid black'>&nbsp;</td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl786039></td>
+  <td class=xl886039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td rowspan=4 height=93 class=xl1756039 width=72 style='border-bottom:1.0pt solid black;
+  height:69.75pt;border-top:none;width:54pt'>入量確認充填受</td>
+  <td colspan=3 class=xl1496039 style='border-right:1.0pt solid black'><span
+  style='mso-spacerun:yes'>&nbsp; </span>充填前原料槽液量 (A)</td>
+  <td colspan=2 class=xl1046039 style='border-right:1.0pt solid black;
+  border-left:none'>　　　　　　　　　　%　　　<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>m<font class="font126039"><sup>3</sup></font></td>
+  <td colspan=6 class=xl2276039 style='border-right:1.0pt solid black;
+  border-left:none'>判<span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>定</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td colspan=3 height=23 class=xl1236039 style='border-right:1.0pt solid black;
+  height:17.25pt'><span style='mso-spacerun:yes'>&nbsp; </span>充填妥原料槽液量 (B)</td>
+  <td colspan=2 class=xl1056039 style='border-right:1.0pt solid black;
+  border-left:none'>　　　　　　　　　　%　　　<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>m<font class="font126039"><sup>3</sup></font></td>
+  <td class=xl776039 style='border-left:none'>&nbsp;</td>
+  <td colspan=4 class=xl1016039 width=288 style='width:216pt'>&#9312; 或 &#9313; － ( &#9314; × 比重
+  ×&#9315;<span style='mso-spacerun:yes'>&nbsp; </span>) ≦ 400 → OK</td>
+  <td class=xl886039>&nbsp;</td>
+ </tr>
+ <tr height=23 style='height:17.25pt'>
+  <td colspan=3 height=23 class=xl1466039 style='border-right:1.0pt solid black;
+  height:17.25pt'><span style='mso-spacerun:yes'>&nbsp; </span>充填期間使用液量 (C)</td>
+  <td colspan=2 class=xl1216039 style='border-right:1.0pt solid black;
+  border-left:none'>　　　　　　　　　　%　　　<span style='mso-spacerun:yes'>&nbsp;&nbsp;
+  </span>m<font class="font96039"><sup>3</sup></font></td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td colspan=4 rowspan=2 height=47 width=288 style='height:35.25pt;width:216pt'
+  align=left valign=top><!--[if gte vml 1]><v:shape id="Line_x0020_15" o:spid="_x0000_s3078"
+   type="#_x0000_t75" style='position:absolute;margin-left:.75pt;margin-top:24.75pt;
+   width:219pt;height:.75pt;z-index:6;visibility:visible;mso-wrap-style:square;
+   v-text-anchor:top' o:gfxdata="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
+di54bWxQSwUGAAAAAAQABAD1AAAA9wUAAAAA
+" o:insetmode="auto">
+   <v:imagedata src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image007.png"
+    o:title=""/>
+   <o:lock v:ext="edit" aspectratio="f"/>
+   <x:ClientData ObjectType="Pict">
+    <x:SizeWithCells/>
+    <x:CF>Bitmap</x:CF>
+    <x:AutoPict/>
+   </x:ClientData>
+  </v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+  position:absolute;z-index:6;margin-left:1px;margin-top:33px;width:292px;
+  height:1px'><img width=292 height=1
+  src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image008.png"
+  v:shapes="Line_x0020_15"></span><![endif]><span style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td colspan=4 rowspan=2 height=47 class=xl1036039 width=288
+    style='height:35.25pt;width:216pt'>計算：</td>
+   </tr>
+  </table>
+  </span></td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=24 style='height:18.0pt'>
+  <td colspan=3 height=24 class=xl2306039 style='border-right:1.0pt solid black;
+  height:18.0pt'><span style='mso-spacerun:yes'>&nbsp; </span>受入LORRY實際量 (
+  B－A＋C )<span style='mso-spacerun:yes'>&nbsp;</span></td>
+  <td colspan=2 class=xl1076039 style='border-right:1.0pt solid black;
+  border-left:none'><span style='mso-spacerun:yes'>&nbsp;&nbsp; </span><font
+  class="font76039">&#9314;</font><font class="font56039"><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>m</font><font class="font96039"><sup>3</sup></font></td>
+  <td class=xl646039 style='border-left:none'>&nbsp;</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=2 height=22 class=xl906039 style='border-right:1.0pt solid black;
+  height:16.5pt'>充 填 擔 當</td>
+  <td class=xl906039 style='border-top:none;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>印</td>
+  <td align=left valign=top><!--[if gte vml 1]><v:shape id="直線接點_x0020_5"
+   o:spid="_x0000_s3077" type="#_x0000_t75" style='position:absolute;
+   margin-left:39pt;margin-top:.75pt;width:.75pt;height:33.75pt;z-index:5;
+   visibility:visible' o:gfxdata="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
+pQUAAAAA
+">
+   <v:imagedata src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image009.png"
+    o:title=""/>
+   <o:lock v:ext="edit" aspectratio="f"/>
+   <x:ClientData ObjectType="Pict">
+    <x:SizeWithCells/>
+    <x:CF>Bitmap</x:CF>
+    <x:AutoPict/>
+   </x:ClientData>
+  </v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+  position:absolute;z-index:5;margin-left:52px;margin-top:1px;width:1px;
+  height:45px'><img width=1 height=45
+  src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image010.png"
+  v:shapes="直線接點_x0020_5"></span><![endif]><span style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td height=22 class=xl756039 width=72 style='height:16.5pt;border-top:none;
+    width:54pt'>&nbsp;</td>
+   </tr>
+  </table>
+  </span></td>
+  <td class=xl756039 style='border-top:none'>&nbsp;</td>
+  <td class=xl766039 style='border-top:none'>印</td>
+  <td colspan=2 rowspan=2 class=xl2226039 style='border-bottom:1.0pt solid black'>判定結果：</td>
+  <td rowspan=2 class=xl1906039 style='border-bottom:1.0pt solid black'>合</td>
+  <td rowspan=2 height=44 width=72 style='border-bottom:1.0pt solid black;
+  height:33.0pt;width:54pt' align=left valign=top><!--[if gte vml 1]><v:shape
+   id="Line_x0020_16" o:spid="_x0000_s3074" type="#_x0000_t75" style='position:absolute;
+   margin-left:40.5pt;margin-top:10.5pt;width:21pt;height:12pt;z-index:2;
+   visibility:visible;mso-wrap-style:square;v-text-anchor:top' o:gfxdata="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
+" o:insetmode="auto">
+   <v:imagedata src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image011.png"
+    o:title=""/>
+   <o:lock v:ext="edit" aspectratio="f"/>
+   <x:ClientData ObjectType="Pict">
+    <x:SizeWithCells/>
+    <x:CF>Bitmap</x:CF>
+    <x:AutoPict/>
+   </x:ClientData>
+  </v:shape><![endif]--><![if !vml]><span style='mso-ignore:vglayout;
+  position:absolute;z-index:2;margin-left:54px;margin-top:14px;width:28px;
+  height:16px'><img width=28 height=16
+  src="QSELMF3017-001A4.files/QSELMF3017-001A4%20原料受入充填作業檢查表2%20(002)_6039_image012.png"
+  v:shapes="Line_x0020_16"></span><![endif]><span style='mso-ignore:vglayout2'>
+  <table cellpadding=0 cellspacing=0>
+   <tr>
+    <td rowspan=2 height=44 class=xl896039 width=72 style='border-bottom:1.0pt solid black;
+    height:33.0pt;width:54pt'>否</td>
+   </tr>
+  </table>
+  </span></td>
+  <td class=xl726039>再受入</td>
+  <td class=xl666039>&nbsp;</td>
+ </tr>
+ <tr height=22 style='height:16.5pt'>
+  <td colspan=2 height=22 class=xl906039 style='border-right:1.0pt solid black;
+  height:16.5pt'>指示者確認</td>
+  <td class=xl906039 style='border-top:none;border-left:none'><span
+  style='mso-spacerun:yes'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </span>印</td>
+  <td class=xl756039 style='border-top:none'>&nbsp;</td>
+  <td class=xl756039 style='border-top:none'>&nbsp;</td>
+  <td class=xl766039 style='border-top:none'>印</td>
+  <td class=xl736039>檢查確認</td>
+  <td class=xl746039>&nbsp;</td>
+ </tr>
+ <tr height=21 style='height:15.75pt'>
+  <td height=21 class=xl156039 style='height:15.75pt'></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+  <td class=xl156039></td>
+ </tr>
+ <![if supportMisalignedColumns]>
+ <tr height=0 style='display:none'>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+  <td width=72 style='width:54pt'></td>
+ </tr>
+ <![endif]>
+</table>
+
+</div>
+
+
+<!----------------------------->
+<!--END OF OUTPUT FROM EXCEL PUBLISH AS WEB PAGE WIZARD-->
+<!----------------------------->
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<?php
+function datepick(){
+echo '
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+  <link rel="stylesheet" href="/css/jquery-ui.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/css/jquery-1.12.4.js"></script>
+  <script src="/css/jquery-ui.js"></script>
+  <script src="/css/datepicker-zh-TW.js"></script>
+  <script src="/css3menu/GridViewScroll/gridviewScroll.js"></script>
+  <link href="/css3menu/GridViewScroll/GridviewScroll.css" rel="stylesheet" />
+  <script type="text/javascript">
+    $(function() {
+    $( "#datepicker1" ).datepicker({
+    	dateFormat: "yy/mm/dd",
+      changeMonth: true,
+      changeYear: true
+    });
+	$( "#datepicker2" ).datepicker({
+			dateFormat: "yy/mm/dd",
+      changeMonth: true,
+      changeYear: true
+    });
+  });
+  function set_date_session(nam,val){
+	window.open("../backend.php?name="+nam+"&value="+val)  
+  }
+</script>
+</head>';
+}
+?>

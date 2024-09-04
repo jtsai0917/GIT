@@ -1,0 +1,18 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php
+session_start();
+include("../lib/fun.php");
+include("../checkuser.php");
+include("../lib/jtsai.php");
+include("../connections/conn.php");
+lasturl();
+datepick();
+if($_GET['pcn']==1){
+	$query="update AnalyzeDesign set PCN=0 where AND_LOT_NO='".$_GET['lotno']."'";
+}
+else{
+	$query="update AnalyzeDesign set PCN=1 where AND_LOT_NO='".$_GET['lotno']."'";
+}
+$result=mssql_query($query);
+jumpto("index.php?url=pcn_no");
+?>

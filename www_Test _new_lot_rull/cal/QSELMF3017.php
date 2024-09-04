@@ -1,0 +1,91 @@
+<?php
+include("../connections/conn.php");
+include("../lib/fun.php");
+echo '<form method="post" action="">';
+// echo '<input type="submit" name="submit" value="確認/儲存">';
+echo '</form>';
+echo '操作員:'.$_POST['operator']."<BR>";
+echo '品名:'.$_POST['prod_name']."<BR>";
+$_POST['datepicker4']=ddo($_POST['datepicker4']);
+echo '受入日期:'.($_POST['datepicker4'])."<BR>";
+echo '供應商:'.$_POST['suplier']."<BR>";
+echo 'Lot NO:'.$_POST['Lot_No']."<BR>";
+echo '有效期限:'.$_POST['Validity_period']."<BR>";
+echo 'COA :'.$_POST['COA']."<BR>";
+echo '預定數量:'.$_POST['planed_rcv_qty']."<BR>";
+echo 'Lorry No:'.$_POST['lorry_no']."<BR>";
+
+echo '客戶端出貨量:'.$_POST['cust_out']."<BR>";
+echo ' 揚   液   前   淨   量   (A):'.$_POST['Q1']."<BR>";
+echo ' 揚   液   後   淨   量   (B):'.$_POST['Q2']."<BR>";
+echo '受   入   量    (  A -  B ):'.$_POST['rcv_qty']."<BR>";
+echo '分析指示人:'.$_POST['ani_director']."<BR>";
+echo '槽液量確認A:'.$_POST['ctrl_A']."%".$_POST['ctrl_A_']."m3<BR>";
+echo '槽液量確認B:'.$_POST['ctrl_B']."%".$_POST['ctrl_B_']."m3<BR>";
+echo 'Coupler  洗  淨:'.$_POST['check1']."<BR>";
+echo 'Coupler  接  續:'.$_POST['check2']."<BR>";
+echo '確 定 氣 壓  (N2)   2.0Kg/cm2:'.$_POST['check3']."<BR>";
+echo '氣密 Test 至少10min (1.9Kg/cm2):'.$_POST['check4']."<BR>";
+echo '加壓時安全閥的壓力錶,  是否上升	:'.$_POST['PS1']."<BR>";
+echo 'H2O2原料受入充填口紀錄:'.$_POST['H2O21']."<BR>";
+echo '保壓確認 Lorry:'.$_POST['P2']."<BR>";
+echo '本體&軟管洩漏有無確認:'.$_POST['P3']."<BR>";
+echo '取樣時間:'.$_POST['t1']."<BR>";
+echo '取樣擔當:'.$_POST['u1']."<BR>";
+echo '流量:'.$_POST['fs']."<BR>";
+echo '洩漏有無再確認:'.$_POST['ck1']."<BR>";
+echo 'Purge 量:'.$_POST['pq']."<BR>";
+
+echo '取樣瓶數:'.$_POST['sampc']."<BR>";
+echo '取樣瓶數:'.$_POST['samp_txt']."<BR>";
+echo '充填前警示牌放置確認:'.$_POST['ck2']."<BR>";
+echo '充填受入開始時間:'.$_POST['t2']."<BR>";
+echo '充填受入操作員:'.$_POST['u2']."<BR>";
+echo '流量:'.$_POST['f2']."<BR>";
+echo '洩漏有無再確認:'.$_POST['ck3']."<BR>";
+echo '操作盤空檢知:'.$_POST['ck4']."<BR>";
+echo '製品桶槽液面確認:'.$_POST['a1']."%".$_POST['a2']."m3<BR>";
+echo '充填受入結束時間:'.$_POST['a3'].'充填受入操作員:'.$_POST['a4']."<BR>";
+echo '氣密Test(1.9Kg/cm2 x 10分鐘):'.$_POST['a5']."<BR>";
+echo '關閉N2供氣閥:'.$_POST['ck5']."<BR>";
+
+echo '保壓確認:'.$_POST['ck6']."<BR>";
+echo '檢查安全閥壓力錶紅色指針為 0:'.$_POST['ck7']."<BR>";
+echo ' L o r r y 洩 壓 作 業:'.$_POST['ck8']."<BR>";
+echo '容器氣壓排放完了確認:'.$_POST['ck9']."<BR>";
+echo '容器 (氣、液) 閥緊閉確認:'.$_POST['ck10']."<BR>";
+echo 'Coupler取出洗淨:'.$_POST['ck11']."<BR>";
+echo '軟管收納及檢查※:'.$_POST['ck12']."<BR>";
+
+echo '充填後警示牌移除確認 :'.$_POST['ck13']."<BR>";
+
+Echo '充填前原料槽液量 (A):'.$_POST['fa']."%".$_POST['ga']."m3<BR>";
+echo '充填妥原料槽液量 (B):'.$_POST['fb']."%".$_POST['gb']."m3<BR>";
+
+echo '充填期間使用液量 (C):'.$_POST['fc']."%".$_POST['gc']."m3<BR>";
+echo '受入LORRY實際量 ( B－A＋C ):'.$_POST['hb']."m3<BR>";
+echo '判定結果:'.$_POST['ifgood']."<BR>";
+
+if(isset($_POST['submit'])){
+	$query="SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME = 'QSELMF3017') AND (COLUMN_NAME <> 'index') AND (DATA_TYPE <> 'timestamp')";
+	$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		$str1=$str1.$row['COLUMN_NAME'].",";
+		$str2=$str2."'".trim($_POST[$row['COLUMN_NAME']])."',";
+	}
+	$str1=substr($str1,0,-1);
+	$str2=substr($str2,0,-1);
+	$str3="insert into QSELMF3017 (".$str1.") values (".$str2.")";
+	echo $str3."<BR>";
+	$rst=mssql_query($str3);
+	echo '<form type="post" action=""><input type="submit" name="close" value="離開頁面"></form>';
+	$_SESSION['QQQ']=$str3;
+	my_msg_close("儲存完畢");
+}
+if(isset($_POST['his_list'])){
+	echo '<script type="text/javascript">window.close()</script>';
+}
+if(isset($_POST['close'])){
+	echo '<script type="text/javascript">window.close()</script>';
+}
+?>

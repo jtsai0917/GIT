@@ -1,0 +1,23 @@
+<?php
+session_start();
+include("../connections/conn.php");
+$query="SELECT      [index],    FILE_LOCATION.PROD_NO as prodno, FILE_LOCATION.file_path as path, EMPLOYEE_DATA.EMP_NAME
+FROM              FILE_LOCATION INNER JOIN
+                            EMPLOYEE_DATA ON FILE_LOCATION.creator = EMPLOYEE_DATA.EMP_NO"; 
+echo '<form name="form1" action="" method="post">';
+echo '<select name="type" id="type"> <option></option>';        
+             
+$result=mssql_query($query);
+ 
+while($row=mssql_fetch_array($result)){
+	echo '<option value="'.$row['index'].'">'.$row['path'].'</option>';
+}
+
+echo '</select><input type="submit" name="checked" value="Check"> </form>'; 
+
+if(isset($_POST['checked'])){
+	echo "File ID : ".$_POST['type']."<BR>";
+	$query="select file_path from FILE_LOCATION where [index]= ";
+}
+?>
+

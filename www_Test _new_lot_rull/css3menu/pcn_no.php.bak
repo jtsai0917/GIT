@@ -1,0 +1,9 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<form id="form1" name="form1" method="post" action="">
+  <input type="submit" name="sub" id="return" value="送出" />
+</form>
+
+<?php
+	
+	
+?>

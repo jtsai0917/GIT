@@ -1,0 +1,190 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" /><?php 
+include("../lib/fun.php");
+session_start();
+
+$loginFormAction = $_SERVER['PHP_SELF'];
+if((isset($_POST["mm_insert"])) && ($_POST["mm_insert"] == "form1")){
+	if ($_POST['OK']=="on"){$ok=1;}
+	else {$ok=0;}
+	include_once("../connections/conn.php");
+	$query="INSERT INTO TLOQA9100301
+                            (TestDate, CHK1, CHK2, LotNo, SerialNo, SampleNo, TestQty, H2SO4_1, H2SO4_2, KMnO4ml_1, KMnO4f, 
+                            KMnO4ml_2, Level_1, Level_2, Average, CHK3, CHK4, Ok, Tester, Operator, AnaManager, AnalyzeTime)";
+	$query.=" VALUES          ('".$_POST['TestDate']."',1,1,'".$_POST['lot_no']."','".$_POST['serialno']."','".$_POST['sampleno']."',".$_POST['qty'].",".$_POST['qty2'].",".$_POST['qty3'].",".$_POST['qty4'].",".$_POST['qty10'].",".$_POST['qty5'].",".$_POST['qty7'].",".$_POST['qty9'].",".$_POST['qty8'].",1,1,".$ok.",'".$_SESSION['uname']."','".$_POST['operator2']."','','".$_POST['analyzetime']."')";
+
+//echo $_POST['OK'];
+
+//echo $_POST['OK2'];
+$result = mssql_query($query);
+if (!$result) {
+    print("SQL statement failed with error:\n");
+    print("   ".mssql_get_last_message()."\n");
+  } else {
+mssql_close($dbhandle); 
+header("Location:cal_prod.php?lot_no=".$_POST['lot_no']);  
+
+}}
+?><head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+
+
+<style type="text/css">
+.centet {
+	text-align: center;
+	color: #F00;
+}
+red {
+	color: #F00;
+}
+</style>
+</head>
+
+<form name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+  <p>
+    <?php
+session_start();
+include ("../connections/conn.php");
+$query="SELECT          TLOQA9100301.*
+FROM              TLOQA9100301 INNER JOIN
+                            AnalyzeDesign ON TLOQA9100301.LotNo = AnalyzeDesign.AND_LOT_NO
+WHERE          (AnalyzeDesign.AND_LOT_NO = '".$_GET['lot_no']."')";
+
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+
+?>
+  </p>
+  <p>請務必填寫樣品瓶號 </p>
+  <p>Lot NO：
+    <label for="lotno"></label>
+    <input type="text" name="lot_no" id="lot_no" value="<?php echo $_GET['lot_no']?>" readonly="readonly">
+  測試人員：
+  <input type="text" name="tester" id="tester" value="<?php echo $_SESSION['uname']?>" readonly="readonly">
+  取樣瓶號碼：
+  <input type="text" name="sampleno" id="sampleno" value="">
+  序號：
+  <input type="text" name="serialno" id="serialno" value="<?php echo ($numRows+1); ?>" readonly="readonly">
+  <input type="hidden" name="operator" id="operator" value="">
+
+  
+  Operator:
+  <input type="text" name="operator2" id="operator2" value="<?php echo iconv("utf-8","big5",$_GET['operator']);?>" readonly="readonly" />
+
+  </p>
+  <p>項目：</p>
+  <table width="1200" border="1">
+    <tr class="centet">
+      <td width="200">項目</td>
+      <td width="200">n1</td>
+      <td width="200">n2</td>
+      <td width="200">項目</td>
+      <td width="200">n1</td>
+      <td width="200">n2</td>
+    </tr>
+    <tr class="centet">
+      <td>試料量[gr]</td>
+      <td>
+        <label for="qty"></label>
+      <input type="text" name="qty" id="qty" value="0" ></td>
+      <td>&nbsp;</td>
+      <td>含量[wt%]</td>
+      <td><input type="text" name="qty7" id="qty7" value="0" ></td>
+      <td><input type="text" name="qty9" id="qty9" value="0" ></td>
+    </tr>
+    <tr class="centet">
+      <td>[1:15] H2SO4 ml</td>
+      <td><input type="text" name="qty2" id="qty2" value="0" ></td>
+      <td><input type="text" name="qty3" id="qty3" value="0" ></td>
+      <td bgcolor="#D6D6D6">平均值[wt%]</td>
+      <td><input type="text" name="qty8" id="qty8" value="" ></td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr class="centet">
+      <td>KMnO4 ml</td>
+      <td><input type="text" name="qty4" id="qty4" value="0" ></td>
+      <td><input type="text" name="qty5" id="qty5" value="0" ></td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr class="centet">
+<td>KMnO4 f</td>
+      <td>
+            <input type="text" name="qty10" id="qty10" value="0" />
+            <input type="hidden" name="CHK1" id="CHK1" value="1" >
+            <input type="hidden" name="CHK2" id="CHK2" value="1" >
+            <input type="hidden" name="CHK3" id="CHK3" value="1" >
+            <input type="hidden" name="CHK4" id="CHK4" value="1" ></td>
+      <td>&nbsp;</td>
+      <td>合否判定
+      <input type="checkbox" name="OK" id="OK" /></td>
+      <input type="hidden" name="TestDate" id="TestDate" value="<?php echo $row['TestDate']?>" >
+            <input type="hidden" name="TestDate" id="TestDate" value="<?php echo date("Y-m-d") ?>" >
+            <input type="hidden" name="analyzetime" id="analyzetime" value="<?php echo date("YmdHms") ?>" >
+      <td>
+      <label for="OK"></label></td>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  <?php 
+
+mssql_close($dbhandle);
+?>
+<script type="text/javascript" language="JavaScript">
+document.forms['form1'].elements['qty8'].focus();
+</script>  <p>
+    <input type="hidden" name="mm_insert" id="mm_insert" value="form1">
+    <input type="submit" name="submit" id="submit" value="新增">
+<input type="button" name="button" id="button" value=" 取 消 " onClick="window.open('<?php echo $_SESSION['lasturl'].$_POST['lot_no'];?>', 'Select');">
+  </p>
+</form>
+<p>&nbsp;</p>
+<?php
+session_start();
+include ("../connections/conn.php");
+$query="SELECT          TLOQA9100301.*
+FROM              TLOQA9100301 INNER JOIN
+                            AnalyzeDesign ON TLOQA9100301.LotNo = AnalyzeDesign.AND_LOT_NO
+WHERE          (AnalyzeDesign.AND_LOT_NO = '".$_GET['lot_no']."')";
+
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+while($row = mssql_fetch_array($result)){
+?>
+<td><label for="lotno"></label>
+  測試人員：
+  <input type="text" name="tester" id="tester" value="<?php echo $row['Tester']?>" readonly="readonly">
+  
+  Operator:
+  <input type="text" name="operator" id="operator" value="<?php echo iconv("utf-8","big5",$_GET['operator']);?>" readonly="readonly"></td>
+    <table width="1200" border="1">
+
+    <tr class="centet">
+      <td width="120">序號：
+      <input name="serialno2" type="text" id="serialno2" value="<?php echo $row['SerialNo']?>" size="4" readonly="readonly"></td>
+      <td width="200"> 取樣瓶號碼：
+      <input name="sampleno2" type="text" id="sampleno2" value="<?php echo $row['SampleNo']?>" size="10" readonly="readonly"></td>
+      <td width="200">試料量[gr]
+      :
+      <input name="qty11" type="text" id="qty11" value="<?php echo $row['TestQty']?>" size="10"readonly="readonly"></td>
+      <td width="200">平均值[wt%]        :
+      <input name="qty6" type="text" id="qty6" value="<?php echo $row['Average']?>" size="10" readonly="readonly"></td>
+      <td width="100">合否判定
+        <input type="checkbox" name="OK2" id="OK2" <?php 
+			if ($row['Ok']=="1"){echo 'checked';}
+			?> />
+        <input type="hidden" name="TestDate2" id="TestDate2" value="<?php echo $row['TestDate']?>" />
+        <input type="hidden" name="CHK5" id="CHK5" value="1" />
+        <input type="hidden" name="CHK5" id="CHK6" value="1" />
+        <input type="hidden" name="CHK5" id="CHK7" value="1" />
+      <input type="hidden" name="CHK5" id="CHK8" value="1" /></td>
+      <td width="200">&nbsp;</td>
+    </tr>
+  </table>
+  <?php 
+  }
+mssql_close($dbhandle);
+?>
+<input type="hidden" name="mm_insert" id="mm_insert" value="form1">
+<p>&nbsp; </p>
+  <p>&nbsp; </p>

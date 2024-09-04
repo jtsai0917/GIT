@@ -1,0 +1,83 @@
+<?php
+session_start();
+	include("../connections/conn.php");
+	include("../lib/fun.php");
+	include("../lib/user_right.php");
+$a2=array_user_group($_SESSION['uid'],'分析主管');
+
+if($a2==0){jumpto("../cal/index.php?url=");}else{ $disable2='';}
+datepick();
+$_SESSION['lasturl']="/cal/index.php?url=form_update";
+?>
+<head>
+<title>Update Form</title>
+<meta http-equiv="content-type" content="text/html; charset=big5"/>
+<link rel="stylesheet" href="/css3menu/mbcsmbmcp.css" type="text/css"/>
+</head>
+<font size="+2" color="red">
+分析檢查作業表  範本上傳 </font></br><BR>
+
+<font size="+1">藥品類型 (同類藥品使用相同檔案) : </font>
+<form name="form1" method="post" action="" enctype="multipart/form-data">
+<select name="chemical" id="chemical"   onchange="set_date_session(this.name,this.value)" >
+	
+<?php
+$query="SELECT DISTINCT ELEMENT_FORM.PDD_CHEMICAL 
+FROM              ELEMENT_FORM INNER JOIN
+                            AnalyzeItem ON ELEMENT_FORM.ELM_ID = AnalyzeItem.ANI_INDEX";
+                          
+$result=mssql_query($query);
+while($row=mssql_fetch_array($result)){
+	if($_SESSION['chemical']==$row['PDD_CHEMICAL']){$select='selected="selected" ';}
+	else{$select='';}
+	echo '<option value="'.$row['PDD_CHEMICAL'].'" '.$select.'>'.$row['PDD_CHEMICAL'].'</option>';
+}
+?>
+</select>
+<BR><BR><font size="+1">分析群組: </font><BR>
+<select name="ani_form" id="ani_form"   onchange="set_date_session(this.name,this.value)" >
+	<option value=""></option>
+<?php
+$query="SELECT DISTINCT ELEMENT_FORM.PDD_CHEMICAL, ELEMENT_FORM.ELF_FORM, AnalyzeItem.ANI_GROUPNAME
+FROM              ELEMENT_FORM INNER JOIN
+                            AnalyzeItem ON ELEMENT_FORM.ELM_ID = AnalyzeItem.ANI_INDEX
+WHERE          (ELEMENT_FORM.PDD_CHEMICAL = '".$_SESSION['chemical']."')";
+                          
+$result=mssql_query($query);
+while($row=mssql_fetch_array($result)){
+	if($_SESSION['ani_form']==$row['ELF_FORM']){$select='selected="selected" ';}
+	else{$select='';}
+	echo '<option value="'.$row['ANI_GROUPNAME'].",".$row['ELF_FORM'].'" '.$select.'>'.$row['ANI_GROUPNAME']."-".$row['ELF_FORM'].'</option>';
+}
+echo '</select><BR><BR>';
+
+
+echo '現行版本；<a href="/FormList/PrintAnalyze/'.$_SESSION['chemical'].'/'.end(explode(",",$_SESSION['ani_form'])).'.docx">'.$_SESSION['ani_form'].'</a>';
+
+//echo '<input type="submit" name="get" value="確定">';
+
+echo '<BR><BR>上傳範本：
+      <input type="file" name="file" id="file" /><input type="submit" name="get" value="確定上傳">';
+?>
+
+</form>
+<?php
+if(isset($_POST['get'])){
+	
+	$ext = end(explode('.', $_FILES["file"]["name"]));
+$groupname=reset(explode(',', $_POST['ani_form']));
+
+$formname=end(explode(',', $_POST['ani_form']));
+
+//	my_msg($path);
+	$filename=$_FILES["file"]["name"];
+
+echo	$fullpath="../FormList/PrintAnalyze/".$_SESSION['chemical']."/".end(explode(",",$_SESSION['ani_form'])).".".$ext;
+unlink($fullpath);
+
+//	echo $_FILES["file"]["tmp_name"]."<BR>";
+	move_uploaded_file($_FILES["file"]["tmp_name"],$fullpath);
+ 	$fullpath1="/var/www/www_Test".$fullpath;
+	chmod($fullpath1,777);
+}
+?>

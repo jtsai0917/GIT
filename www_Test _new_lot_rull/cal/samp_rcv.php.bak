@@ -1,0 +1,193 @@
+<?php
+session_start();
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+datepick();
+$_SESSION['smp_rcv']=$_SERVER['REQUEST_URI'];
+if(trim($_SESSION['sample_no'])==''){$autofocus_sample_no='autofocus="autofocus"';}
+elseif($_SESSION['smp_lot']==''){$autofocus_smp_lot='autofocus="autofocus"';}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>接收樣品瓶</title>
+</head>
+
+<body>
+<form id="form1" name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+分析室接收樣品瓶
+<table width="450" border="1"><tr><td>
+    <font size="+3">樣品瓶號：</font>
+  <input name="sample_no" type="text" id="sample_no" onchange="set_date_session(this.name,this.value)" style="font-size:20px" value="<?php echo $_SESSION['sample_no'];?>" size="10"  
+  <?php echo $autofocus_sample_no;?>/> 
+  <BR>再分析
+  <input type="checkbox" name="rework" id="rework" />
+
+   &nbsp;保留樣品<input type="checkbox" name="sample_keep" /></td></tr><tr><td>
+	<font size="+3">Lot NO :</font> &nbsp;&nbsp;&nbsp;
+      <input name="smp_lot" type="text" id="smp_lot" onchange="set_date_session(this.name,this.value)" style="font-size:20px" value="<?php echo $_SESSION['smp_lot'];?>" size="10" 
+  <?php echo $autofocus_smp_lot;?>  /> 
+  <input type="submit" name="submit" id="submit" value="submit" hidden="on"/>
+      <input onclick="window.close();" value="關閉視窗" type="button">
+      </td></tr></table>
+
+</form>
+</body>
+</html>
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+	if($_SESSION['smp_lot']<>'' and $_SESSION['sample_no']<>'')
+	{
+		$pdd=new get_from_lot_no;
+		$pdd->lid=$_POST['lot_no'];
+		$pdd->ani();
+		$pdd->cid();
+		$s3=$pdd->pdd_type;
+		$_SESSION['s1']=$s1=$pdd->cid;
+		$_SESSION['s2']=$s2=$pdd->pid;
+		$sma_id=strtoupper($_SESSION['sample_no']);
+		$lotno=strtoupper($_SESSION['smp_lot']);
+		$query="SELECT  COUNT(SMA_TIMES) AS cnt from Sample_All where (SMA_LOT = '".strtoupper($_SESSION['smp_lot'])."') AND (SMA_ID = '".strtoupper($_SESSION['sample_no'])."')";
+		$result=mssql_query($query);
+		$row=mssql_fetch_row($result);
+		if($row[0]==0){ // 新增此LOT的樣品瓶
+		
+			$query="SELECT          TOP (1) Sample_All.SMA_TIMES as T1, Sample.SMP_TIMES as T2
+		FROM              Sample_All INNER JOIN
+									Sample ON Sample_All.SMA_ID = Sample.SMP_ID
+		WHERE          (SMP_ID = '".$sma_id."')"; 
+		$query.=" ORDER BY   Sample_All.SMA_TIMES DESC, Sample.SMP_TIMES DESC";
+		$result = mssql_query($query);
+		$numRows = mssql_num_rows($result);
+		if($numRows>0){
+		while($row = mssql_fetch_array($result))
+			{   
+				$smp_times=max($row['T1'],$row['T2'])+1;
+				$smp_service=$row['SMP_SERVICE'];
+				if($smp_service==''){$smp_service=1;}
+			}
+		$query="INSERT INTO dbo.Sample_All
+									(SMA_ID, SMA_TIMES, SMA_SERVICE, SMA_LOT, SMA_USER, SMA_OUT, SMA_SMP, SMA_ANA, SMA_BACK, 
+									SMA_SAVE, SMA_SAVE_TIME, ISREWORK, SMA_FINISH, SMA_JUNK, SMA_JUNK_D, SMA_DRUMNO, 
+									SMA_SERIAL_NO, DHN_DRUM_NO, SMA_PREPSAMPLE_MAN, SMA_PREPSAMPLE_DATE, 
+									SMA_PREPSAMPLE_BACK_DATE, SMA_PREPSAMPLE_BACK_MAN, SMA_RETURN, SMA_RETURN_MAN)
+									VALUES          ('".$sma_id."',".$smp_times.",".$smp_service.",'".$lotno."',
+									'".$_SESSION['s1']."',NULL,'".$_SESSION['uid']."',NULL,NULL,'".date("Ymd")."','".date("His")."','',
+									NULL,NULL,NULL,'1~8',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)";
+									
+//		echo $query."<BR>";
+		$result = mssql_query($query);
+		if (!$result) {
+			echo "無法新增樣品瓶</br>";
+		  }
+		else{
+			$query="UPDATE          dbo.Sample
+					SET                   SMP_TIMES ='".$smp_times."', SMP_LOT ='".$lotno."', SMP_DRUMNO = '".$_POST['sn']."', SMP_USER ='".$_SESSION['s1']."'
+					, SMP_SMP ='".$_SESSION['uid']."', SMP_SAVE ='".date("Ymd")."', SMP_SAVE_TIME ='".date("His")."' 
+					WHERE          (SMP_ID = '".$sma_id."')";
+			$result = mssql_query($query);
+			if (!$result) {
+				echo "無法更新Sample資料表</br>";
+			  }
+			}
+		}
+		else
+			{
+				scriptconfirm("無此瓶號，建立新瓶號?","[".$sma_id."] 無此樣品瓶號","insert_smp.php?smp_id=".$sma_id."&sn=".$_POST['sn']."&rework=".$isrework);
+			}
+		}
+		
+		$query="update Sample_All set SMA_SERVICE = 1 WHERE (SMA_LOT = '".strtoupper($_SESSION['smp_lot'])."') AND (SMA_ID = '".strtoupper($_SESSION['sample_no'])."')";
+		$result=mssql_query($query);
+		
+		$chkre="select *  from analyze_first1 where lot_no='".$_SESSION['smp_lot']."' and  work_type=704 ";
+		$resultre = mssql_query($chkre);
+		$numRowsre = mssql_num_rows($resultre);	
+		if($numRowsre==0)
+		{
+			$query="INSERT INTO dbo.analyze_first1
+								  (lot_no, sample_no, create_time, create_user,work_type)
+				VALUES         ('".strtoupper($_SESSION['smp_lot'])."', '".strtoupper($_SESSION['sample_no'])."', '".date("YmdHis")."','".strtoupper($_SESSION['uid'])."',704)";
+			$result=mssql_query($query);
+		}
+	
+		if($_POST['sample_keep']=='on'){  // 紀錄保留樣品瓶
+			$query="INSERT INTO Sample_Keeping (Lot_No, sample_no, keep_datetime, creator) VALUES  
+			('".strtoupper($_SESSION['smp_lot'])."','".strtoupper($_SESSION['sample_no'])."','".date("YmdHis")."','".strtoupper($_SESSION['uid'])."')";
+			$result=mssql_query($query);
+		}
+		else{
+			$query="INSERT INTO Sample_Recieving (Lot_No, sample_no, rcv_datetime, creator) VALUES  
+			('".strtoupper($_SESSION['smp_lot'])."','".strtoupper($_SESSION['sample_no'])."','".date("YmdHis")."','".$_SESSION['uid']."')";
+//			echo $query;
+			$result=mssql_query($query);
+		}	
+		$query="SELECT DISTINCT AnalyzeDesign.AND_GET_QTY AS getqty
+FROM      Sample LEFT OUTER JOIN
+                   AnalyzeDesign ON AnalyzeDesign.AND_LOT_NO = Sample.SMP_LOT
+WHERE SAMPLE.SMP_LOT = '".$_SESSION['smp_lot']."'";
+		$result=mssql_query($query);
+		$row=mssql_fetch_row($result);
+		$getqty=$row[0];
+		$newqty=$getqty+1;		
+//		exec sp_executesql N'UPDATE "chemical".."ANALYZEDESIGN" SET "AND_GET_QTY"=@P1,"AND_GET_DATETIME"=@P2 WHERE "AND_LOT_NO"=@P3 AND "AND_GET_QTY"=@P4 AND "AND_GET_DATETIME"=@P5',N'@P1 int,@P2 varchar(12),@P3 varchar(11),@P4 int,@P5 varchar(12)',6,'201712251559','TF57H18B020',5,'201708180944' 
+
+
+//		exec sp_executesql N'UPDATE "chemical".."ANALYZEDESIGN" SET "AND_GET_QTY"=@P1,"AND_GET_DATETIME"=@P2 WHERE "AND_LOT_NO"=@P3 AND "AND_GET_QTY"=@P4 AND "AND_GET_DATETIME"=@P5',N'@P1 int,@P2 varchar(12),@P3 varchar(11),@P4 int,@P5 varchar(12)',7,'201712251612','TF57H18B020',6,'201712251559'
+
+//		exec sp_executesql N'UPDATE "chemical".."ANALYZEDESIGN" SET "AND_GET_QTY"=@P1,"AND_GET_DATETIME"=@P2 WHERE "AND_LOT_NO"=@P3 AND "AND_GET_QTY"=@P4 AND "AND_GET_DATETIME"=@P5',N'@P1 int,@P2 varchar(12),@P3 varchar(11),@P4 int,@P5 varchar(12)',8,'201712251631','TF57H18B020',7,'201712251612'
+		$query="UPDATE  AnalyzeDesign SET AND_GET_QTY = ".$newqty.", AND_GET_DATETIME = '".date("YmdHi")."' WHERE (AND_LOT_NO = '".$_SESSION['smp_lot']."')";
+		$result=mssql_query($query);
+		
+		if($_POST['sample_keep']=='on'){$keep="Yes";}else{$keep="No";}
+		echo "儲存紀錄...<BR>";	
+		echo "保留樣品".$keep;
+		echo "<BR>";
+		$gid=get_gid(trim($_SESSION['sample_no']));
+		$dif=substr(trim($_SESSION['sample_no']),4,1);
+		if($dif=='A' or $dif=='B' or $dif=='C' or $dif=='D' or $dif=='E' or $dif=='F' or $dif=='G' or $dif=='H' or $dif=='I' or $dif=='X' or $dif=='Y' or $dif=='Z'){
+					$query = "INSERT INTO dbo.Sample_Location (Lot_NO, SMPID, Cust_NO, Out_Date, createtime, creator, LOCATION, gid) VALUES 
+			(N'".trim($_SESSION['smp_lot'])."',N'".trim($_SESSION['sample_no'])."', N'NULL', '".date("Y-m-d H:i:s")."', '".date("Y-m-d H:i:s")."', '".$_SESSION['uid']."', 4,$gid)";
+			$result = mssql_query($query);
+		}
+//		echo $query."<BR>";
+		
+	
+		$_SESSION['sample_no']='';
+		$_SESSION['smp_lot']='';
+//		my_msg("OK");
+//		refresh();
+	}
+function get_gid($smpid){
+	$query="select gid from Sample_Location where SMPID = '".$smpid."' order by gid desc ";
+//	echo $query."<BR>";
+	$result=mssql_query($query);
+	if($result){
+		$row=mssql_fetch_row($result);
+		if($row[0]<>''){
+			return $row[0];
+		}
+		else{
+			return max_gid();
+		}
+	}
+	else{
+		return max_gid();
+	}
+}	
+function max_gid(){
+	$query="select max(gid) + 1 as mx from Sample_Location";
+	$result=mssql_query($query);
+	if($result){
+		$row=mssql_fetch_row($result);
+	return $row[0];
+	}
+	else{
+		return 1;
+	}
+}
+
+?>

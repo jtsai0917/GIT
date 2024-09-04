@@ -1,0 +1,167 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php 
+session_start();
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+datepick();
+echo '<font size="+2">刪除' .std($_GET['date']). "之前的所有分析資料</font><BR>";
+echo '<form id="form1" name="form1" method="post" action="">';
+echo '<input type="submit" style="font-size:16px" name="start" value=" 開始刪除 ">';
+echo '</form>';
+
+if(isset($_POST['start'])){
+
+	$query="SELECT DISTINCT ELF_FORM as F1 FROM ELEMENT_FORM";
+	$result=mssql_query($query);
+	$numrows=mssql_num_rows($result);
+	
+	echo '<font size="+2" color="#CC0066">刪除 Barcode 檢查表內超過'.std($_GET['date']).'，共計 '.$numrows.' 張</font><BR>';
+	echo "刪除檢查表：";
+	while($row=mssql_fetch_array($result)){
+		echo $row['F1'].",";
+		$qq="DELETE FROM ".$row['F1']." WHERE   (AnalyzeTime <= '".trim($_GET['date'])."')";
+		$res=mssql_query($qq);
+	}  // END WHILE
+	echo "完成<BR>";
+	
+	echo '<font size="+2" color="#CC0066">刪除 Sinetics 檢查表內超過'.std($_GET['date']).'，共計 3 張</font><BR>';
+	// SINETICS
+	echo 'Deleting QC_LotData .........';
+	$query="SELECT  COUNT(*) AS cnt FROM QC_LotData WHERE (AnalyzeTime <= '".trim($_GET['date'])."' and AnalyzeTime<>'')";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM QC_LotData WHERE (AnalyzeTime <= '".trim($_GET['date'])."' and AnalyzeTime<>'')";
+	echo "完成<BR>";
+	$result=mssql_query($query);
+	
+	echo 'Deleting QC_SpcData .........';
+	$query="SELECT  COUNT(*) AS cnt FROM QC_SpcData WHERE (TestDate <= '".sta($_GET['date'])."' and TestDate<>'')";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM QC_SpcData WHERE (TestDate <= '".sta($_GET['date'])."' and TestDate<>'')";
+	echo "完成<BR>";
+	$result=mssql_query($query);
+
+	echo 'Deleting QC_TYS_COA .........';
+	$query="SELECT  COUNT(*) AS cnt FROM QC_TYS_COA WHERE (TestDate <= '".sta($_GET['date'])."' and TestDate<>'')";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM QC_TYS_COA WHERE (TestDate <= '".sta($_GET['date'])."' and TestDate<>'')";
+	echo "完成<BR>";
+	$result=mssql_query($query);
+	
+	// 出貨資料
+	echo '<font size="+2" color="#CC0066">刪除出貨日期超過'.std($_GET['date']).'，共計 ６ 張</font><BR>';
+	echo 'Deleting Out_decision .........';
+	$query="SELECT  COUNT(*) AS cnt FROM OUT_DECISION WHERE (OTD_CREATE_DATE < '".$_GET['date']."')";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="Delete FROM OUT_DECISION WHERE (OTD_CREATE_DATE < '".$_GET['date']."')";
+	$result=mssql_query($query);
+	echo "完成<BR>";
+	echo 'Deleting Out_Plan .........';
+	$query="SELECT  COUNT(*) AS cnt FROM OUT_PLAN WHERE (OPM_CREATE_DATE < '".$_GET['date']."')";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM OUT_PLAN WHERE (OPM_CREATE_DATE < '".$_GET['date']."')";
+	$result=mssql_query($query);
+	echo "完成<BR>";
+	echo 'Deleting Out_check_lorry .........';
+	$query="SELECT  COUNT(*) AS cnt FROM OUT_CHECK_LORRY WHERE (OCL_CHK_DATE <= '".substr($_GET['date'],0,8)."')";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM OUT_CHECK_LORRY WHERE (OCL_CHK_DATE <= '".substr($_GET['date'],0,8)."')";
+	$result=mssql_query($query);
+	echo "完成<BR>";
+
+	echo 'Deleting OUT_CHECK_DRUML .........';
+	$query="SELECT  COUNT(*) AS cnt FROM OUT_CHECK_DRUM WHERE (SUBSTRING(OTD_NO, 1, 8) <= '".substr($_GET['date'],0,8)."')";
+ //  	echo $query."<BR>";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM OUT_CHECK_DRUM WHERE (SUBSTRING(OTD_NO, 1, 8) <= '".substr($_GET['date'],0,8)."')";
+//	echo $query."<BR>";
+ 	$result=mssql_query($query);
+	echo "完成<BR>";
+
+	echo 'Deleting OUT_CHECK_DRUM_DETAIL .........';
+	$query="SELECT  COUNT(*) AS cnt FROM OUT_CHECK_DRUM_DETAIL WHERE (SUBSTRING(OTD_NO, 1, 8) <= '".substr($_GET['date'],0,8)."')";
+ // 	echo $query."<BR>";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM OUT_CHECK_DRUM_DETAIL WHERE (SUBSTRING(OTD_NO, 1, 8) <= '".substr($_GET['date'],0,8)."')";
+//	echo $query."<BR>";
+ 	$result=mssql_query($query);
+	echo "完成<BR>";
+
+	echo 'Deleting PRODUCT_RUNNING_ACCOUNT .........';
+	$query="SELECT  COUNT(*) AS cnt FROM PRODUCT_RUNNING_ACCOUNT WHERE (PRA_OUT_TERM <= '".substr($_GET['date'],0,8)."' AND PRA_OUT_TERM <> '')";
+//  	echo $query."<BR>";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	echo "共 ".$row[0]." 筆.....";
+	$query="DELETE FROM PRODUCT_RUNNING_ACCOUNT WHERE (PRA_OUT_TERM <= '".substr($_GET['date'],0,8)."' AND PRA_OUT_TERM <> '')";
+//	echo $query."<BR>";
+ 	$result=mssql_query($query);
+	echo "完成<BR>";
+
+	//充填資料
+	echo '<font size="+2" color="#CC0066">刪除充填日期超過'.std($_GET['date']).'，共計 5 張</font><BR>';
+	$query="SELECT FDM_LOT_NO FROM FILLPLAN_OUT_DECIDE WHERE (FDM_CREATE_DATE < '".$_GET['date']."') AND (FDM_LOT_NO <> '')";
+//	echo $query."<BR>";
+	$result=mssql_query($query);
+	$numrows=mssql_num_rows($result);
+	while($row=mssql_fetch_array($result)){
+	//	echo $row['FDM_LOT_NO']."<BR>";
+		$q1="DELETE FROM FILL_INDICATE WHERE (FDM_LOT_NO = '".$row['FDM_LOT_NO']."')";
+		$r1=mssql_query($q1);
+		$q2="DELETE FROM EL_WASH_DRUM WHERE (FDM_LOT_NO = '".$row['FDM_LOT_NO']."')";
+		$r2=mssql_query($q2);
+		$q3="DELETE FROM EL_FILLDATA_DRUM WHERE (FDM_LOT_NO = '".$row['FDM_LOT_NO']."')";
+		$r3=mssql_query($q3);
+		$q4="DELETE FROM FILLPLAN_DRUM_CUSTOMER WHERE (FDM_LOT_NO = '".$row['FDM_LOT_NO']."')"; 
+		$r4=mssql_query($q4);
+		
+	}
+	echo 'Deleting FILLPLAN_OUT_DECIDE .........';
+	echo "共 ".$numrows." 筆.....";
+	$query="Delete FROM FILLPLAN_OUT_DECIDE WHERE (FDM_CREATE_DATE < '".$_GET['date']."') AND (FDM_LOT_NO <> '')";
+	$result=mssql_query($query);
+	echo "完成<BR>";
+	
+	//充填計畫
+	$query="DELETE FROM FILLPLAN_DRUM_MONTH  WHERE (FDM_YEAR_MONTH <= '".substr($_GET['date'],0,6)."')";
+	$result=mssql_query($query);
+	
+	//樣品瓶　sample
+	$query="DELETE FROM Sample WHERE (SMP_START <= '".substr($_GET['date'],0,8)."')";
+//	echo $query."<BR>";
+ 	$result=mssql_query($query);
+	
+	//樣品瓶　sample_all
+	$query="DELETE FROM Sample_All WHERE (SMA_SAVE <= '".substr($_GET['date'],0,8)."')";
+//	echo $query."<BR>";
+ 	$result=mssql_query($query);
+
+	$query="DELETE FROM LORRY_FILL_CHECK
+FROM              FILL_INDICATE INNER JOIN
+                            LORRY_FILL_CHECK ON FILL_INDICATE.FDM_LOT_NO = LORRY_FILL_CHECK.FDM_LOT_NO
+WHERE          (FILL_INDICATE.FID_FILL_BEGIN_DATE < '".$_GET['date']."')";
+	$result=mssql_query($query);
+	echo " Lorry_Fill_Check deleted..";
+	
+		$query="DELETE FROM  FROM FILL_INDICATE WHERE (FID_FILL_BEGIN_DATE < '".$_GET['date']."')";
+	$result=mssql_query($query);
+	echo " FILL_INDICATE deleted..";
+	
+
+} // END POST

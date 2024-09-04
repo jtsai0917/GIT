@@ -1,0 +1,198 @@
+M21:
+${type}
+${pdd_type0}	${pdd_type4}
+${Operator0}
+${LotNo0}	${LotNo4}
+${SampleNo0}	${SampleNo4}
+${TestQty0}
+
+${B0}
+${Pt0}
+${In0}
+${Si0}
+
+${Tester0}
+${AnalyzeTime0}
+${TestDate0}
+${CHK10}
+${CHK20}
+${CHK30}
+${CHK40}
+${dno0}	${dno4}
+${Ok0}
+${Li0}	${Li4}
+${Be0}	${Be4}
+${Ti0}	${Ti4}
+${V0}	${V1}	${V4}
+${Ga0}	${Ga4}
+${Ge0}	${Ge4}
+${AAS0}	${AAS4}
+${Sr0}	${Sr4}
+${Zr0}	${Zr4}
+${Nb0}	${Nb4}
+${Mo0}	${Mo4}
+${Ag0}	${Ag4}
+${Cd0}	${Cd4}
+${Sn0}	${Sn4}
+${Sb0}	${Sb4}
+${Ba0}	${Ba4}
+${Ta0}	${Ta4}
+${Au0}	${Au4}
+${Tl0}	${Tl4}
+${Bi0}	${Bi4}
+${Ce0}	${Ce1}	${Ce2}	${Ce3}	${Ce4}
+${Cs0}	${Cs1}	${Cs2}	${Cs3}	${Cs4}
+${Rb0}  ${Rb1}  ${Rb2}  ${Rb3}	${Rb4}
+
+
+${pdd_type1}
+${Operator1}
+${LotNo1}
+${SampleNo1}
+${TestQty1}
+${Tester1}
+${AnalyzeTime1}
+${TestDate1}
+${CHK11}
+${CHK21}
+${CHK31}
+${CHK41}
+${dno1}
+${Ok1}
+${Li1}
+${Be1}
+${Ti1}
+${V1}
+${Ga1}
+${Ge1}
+${AAS1}
+${Sr1}
+${Zr1}
+${Nb1}
+${Mo1}
+${Ag1}
+${Cd1}
+${Sn1}
+${Sb1}
+${Ba1}
+${Ta1}
+${Au1}
+${Tl1}
+${Bi1}
+${Ce1}
+${Cs1}
+${Rb1}
+
+
+${pdd_type2}
+${Operator2}
+${LotNo2}
+${SampleNo2}
+${TestQty2}
+${Tester2}
+${AnalyzeTime2}
+${TestDate2}
+${CHK12}
+${CHK22}
+${CHK32}
+${CHK42}
+${dno2}
+${Ok2}
+${Li2}
+${Be2}
+${Ti2}
+${V2}
+${Ga2}
+${Ge2}
+${AAS2}
+${Sr2}
+${Zr2}
+${Nb2}
+${Mo2}
+${Ag2}
+${Cd2}
+${Sn2}
+${Sb2}
+${Ba2}
+${Ta2}
+${Au2}
+${Tl2}
+${Bi2}
+${Ce2}
+${Cs2}
+${Rb2}
+
+
+${pdd_type3}
+${Operator3}
+${LotNo3}
+${SampleNo3}
+${TestQty3}
+${Tester3}
+${AnalyzeTime3}
+${TestDate3}
+${CHK13}
+${CHK23}
+${CHK33}
+${CHK43}
+
+${CHK14}
+${CHK24}
+${CHK34}
+${CHK44}
+
+${dno3}
+
+${Ok0}
+${Ok1}
+${Ok2}
+${Ok3}
+${Ok4}
+
+${Li3}
+${Be3}
+${Ti3}
+${V3}
+${Ga3}
+${Ge3}
+${AAS3}
+${Sr3}
+${Zr3}
+${Nb3}
+${Mo3}
+${Ag3}
+${Cd3}
+${Sn3}
+${Sb3}
+${Ba3}
+${Ta3}
+${Au3}
+${Tl3}
+${Bi3}
+${Ce3}
+${Cs3}
+${Rb3}
+
+${B0}
+${B1}
+${B2}
+${B3}
+${B4}
+
+${Si0}
+${Si1}
+${Si2}
+${Si3}
+${Si4}
+
+${Pt0}
+${Pt1}
+${Pt2}
+${Pt3}
+${Pt4}
+
+${In0}
+${In1}
+${In2}
+${In3}
+${In4}

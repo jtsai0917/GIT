@@ -1,0 +1,113 @@
+@charset "big5";
+
+.ly {
+	width: 100px;
+	border: 1px solid #000;
+}
+.col0    {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	word-spacing: normal;
+	width: 50%;
+	padding: 0px;
+	left: auto;
+	border-top-color: #00F;
+	border-right-color: #00F;
+	border-bottom-color: #00F;
+	border-left-color: #00F;
+}
+.col1 {
+	width: 50%;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+}
+
+#sig_dep {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	float: left;
+	width: 150px;
+	height: 15px;
+	font-family: sans-serif;
+	text-align: center;
+}
+#left {
+	width: 200px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	float: left;
+}
+#sig1 {
+	width: 150px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	float: left;
+}
+#dep {
+	width: 150px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	float: left;
+}
+#sig_ok {
+	width: 150px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	float: left;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	height: 15px;
+	text-align: center;
+}
+#sig_time {
+	width: 150px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	float: left;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	height: 15px;
+	text-align: center;
+}
+#sig_comn {
+	width: 150px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	float: left;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	height: 75px;
+	text-align: center;
+}

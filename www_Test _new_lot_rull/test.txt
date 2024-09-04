@@ -1,0 +1,63 @@
+
+
+                    Quantitation Report - Summary                   
+
+ 
+
+File Name    : 06097.D
+File Path    : C:\2016\201604\
+Method       : C:\ICPCHEM\1\METHODS\EL-22.M
+Calibration  : C:\ICPCHEM\1\CALIB\EL-22.C
+Acq Time     : Apr 6 2016  04:30 pm 
+Sample Name  : TS66D06L623 [TS65H051]
+Sample Type  : Sample
+Comments     :  
+Prep Dilution  : 5.000E-01
+Auto Dilution  : Undiluted
+Total Dilution : 5.000E-01
+Operator Name: 7500
+Acq Mode     : Spectrum
+Cal Title    :  
+Cal Type     : External Calibration Method
+Last Calib   : Apr 06 2016  04:16 pm
+Bkg File     : --------
+Bkg Rejected Masses: --------
+Interference Correction : OFF
+Blank File   : --------
+VIS Fit      : Point to Point
+Weighting Method: 1/(SD*SD)
+Multi Tune   : #2 nogas.u
+
+
+ Element  Mass ISTD Tune    CPS or Ratio        Conc.          RSD(%) Time(sec)   Rep   VIS
+   Li       7        #2      178.7058 P     4.061E-04 ppb      8.60     1.80        3      
+   Be       9        #2      183.8416 P     6.024E-04 ppb     30.98     0.99        3      
+   Ti      48        #2     1,698.768 P     2.139E-03 ppb      0.44     0.99        3      
+   V       51        #2      373.3398 P        <0.000 ppb     98.56     1.80        3      
+   Ga      69        #2      761.0222 P     4.745E-04 ppb      9.64     3.00        3      
+
+   Ge      74        #2      420.5642 P        <0.000 ppb     13.11     1.80        3      
+   As      75        #2      143.7734 P        <0.000 ppb     39.43     0.99        3      
+   Rb      85        #2     5,925.037 P     3.146E-03 ppb      9.97     6.00        3      
+   Sr      88        #2      135.0190 P        <0.000 ppb      2.29     0.99        3      
+   Zr      90        #2      89.88946 P        <0.000 ppb      1.59     3.00        3      
+
+   Nb      93        #2      110.1027 P        <0.000 ppb      4.61     0.99        3      
+   Mo      95        #2      171.1133 P        <0.000 ppb     70.39     1.80        3      
+   Ag     107        #2      88.21674 P        <0.000 ppb      2.78     0.99        3      
+   Cd     111        #2      73.00046 P        <0.000 ppb     11.97     3.00        3      
+   Sn     118        #2      300.6799 P        <0.000 ppb      5.03     0.99        3      
+
+   Sb     121        #2      101.0007 P        <0.000 ppb      4.78     3.00        3      
+   Cs     133        #2      78.66751 P        <0.000 ppb      0.71     1.50        3      
+   Ba     138        #2      389.9087 P        <0.000 ppb      4.67     0.99        3      
+   Ce     140        #2      801.1368 P        <0.000 ppb      0.41     3.00        3      
+   Ta     181        #2      102.6952 P        <0.000 ppb      2.03     0.99        3      
+
+   Tl     205        #2      72.33381 P        <0.000 ppb      2.23     3.00        3      
+   Bi     209        #2      87.96382 P        <0.000 ppb      1.19     1.80        3      
+ 
+
+End of Report
+
+                         Wed Apr 06 16:50:37 2016

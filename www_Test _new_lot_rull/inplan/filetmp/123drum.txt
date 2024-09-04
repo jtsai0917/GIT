@@ -1,0 +1,13 @@
+1.
+INSERT INTO FILL_INDICATE
+                            (FDM_LOT_NO, PDD_PROD_NO, FID_FILL_BEGIN_DATE, FID_QTY, FID_SAM_COUNT, FID_WASHED_COUNT)
+VALUES          ('TW27H09D190', 'P002-190', '20170809142114', 0, 0, 0)
+
+
+2.
+executesql N'Update DRUM_HISTORY_NORMAL Set DHN_USED_COUNT = @P1  Where DHN_DRUM_NO = @P2 And DHN_USED_COUNT < @P3
+',N'@P1 int,@P2 varchar(20),@P3 int',0,'W27Q0001',0
+
+3.
+executesql N'Update DRUM_HISTORY_NORMAL     Set DHN_USED_COUNT = DHN_USED_COUNT,        CTD_CUST_NO1 = @P1,        PDD_PROD_NO1 = @P2,               DHN_LOT_NO1 = @P3            Where DHN_DRUM_NO = @P4         
+',N'@P1 varchar(20),@P2 varchar(20),@P3 varchar(30),@P4 varchar(20)','C13108','P002-190','TW27H09D190','W27Q0001'

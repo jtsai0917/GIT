@@ -1,0 +1,37 @@
+<?php
+//		$serverName = "195.7.2.100";
+		$serverName = "localhost";
+		$dbName = "chemical";
+		$user = "sa";
+		$password = "2Iairiol!@#";
+//		$password = "9037";
+
+try {
+    // 建立 PDO 連接
+    $conn = new PDO("dblib:host=$serverName;dbname=$dbName", $user, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		echo " connected to ".$serverName;
+    /*
+    / 執行查詢
+    $query = "SELECT * FROM employee_data";
+    $stmt = $conn->query($query);
+    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($result as $row) {
+        echo "ID: {$row['id']} | Name: {$row['name']} | Email: {$row['email']}<br>";
+    }
+
+    // 插入數據
+    $insertQuery = "INSERT INTO your_table (name, email) VALUES (?, ?)";
+    $stmt = $conn->prepare($insertQuery);
+    $name = "John Doe";
+    $email = "john@example.com";
+    $stmt->bindParam(1, $name);
+    $stmt->bindParam(2, $email);
+    $stmt->execute();
+    echo "Data inserted successfully.";
+*/
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+?>

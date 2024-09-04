@@ -1,0 +1,32 @@
+<?php
+$serverName = "localhost";
+$databaseName = "chemical";
+$username = "sa";
+$password = "9037";
+
+try {
+    $dsn = "odbc:Driver={SQL Server};Server=$serverName;Database=$databaseName;";
+    $conn = new PDO($dsn, $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // 執行查詢
+    $query = "SELECT * FROM your_table WHERE id = :id";
+    $stmt = $conn->prepare($query);
+    
+    // 替換 ":id" 為你要查詢的實際 ID
+    $id = 1;
+    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+    
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($row) {
+        echo "ID: {$row['id']} | Name: {$row['name']} | Email: {$row['email']}<br>";
+    } else {
+        echo "No matching record found.";
+    }
+
+} catch (PDOException $e) {
+    echo "Error: " . $e->getMessage();
+}
+?>

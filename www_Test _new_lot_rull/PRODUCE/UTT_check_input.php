@@ -1,0 +1,145 @@
+<?php 
+session_start();
+include("../lib/fun.php");
+include("../checkuser.php");
+include("../lib/jtsai.php");
+include("../connections/conn.php");
+lasturl();
+datepick(); 
+unset($_SESSION['form_no'],$_SESSION['TAG_NO'],$_SESSION['i'],$_SESSION['form'],$_SESSION['UTT_time']);
+
+$_SESSION['form_no']=$_GET['form'];
+?>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<form name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+  <label for="textfield"></label>
+
+ 		<font size="+3"><strong>巡檢表單：<span class="d1">
+        <?php
+		$query="select way from UTT_FORM_DATA where [index]=".$_GET['form'];
+		$result=mssql_query($query);
+		$row=mssql_fetch_array($result);
+		if(trim($row[0])=='B'){
+		$query1="SELECT distinct form1 FROM UTT_TAGNO_DATA where form=".$_GET['form'];
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		}
+		else
+		{
+		$query1="SELECT distinct form1 FROM UTT_TAGNO_DATA where form1=".$_GET['form'];
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);	
+		}
+		$_SESSION['FORM']=trim($row1[0]);
+		
+		$query="select * from UTT_FORM_DATA where way='A' and [index]=".trim($row1[0]);
+		$result=mssql_query($query);
+		$row=mssql_fetch_array($result);
+		echo trim($row['Form']);
+		$_SESSION['form']=$_SESSION['FORM']
+		?>
+        <br>
+        <br>
+ 		巡檢日期 
+        <input name="datepicker1" readonly="readonly"  type="text" id="datepicker7" style="font-size:20px" size="14" value="<?php echo date('Y/m/d');?>">
+        <br>
+        <br>
+        巡檢時間
+        <select name="time"  style="font-size:30px" value="<?php 	date("Y/m/d");?>">
+        <?php
+		for($i=0;$i<=23;$i++)
+		{
+			if($i<10){$i='0'.$i;}
+			$I=$i;	
+			if($I==$_SESSION['time']){$show1=' selected ';}else{$show1='';}
+			echo '<option value="'.$i.'" "'.$show1.'">'.$i.'</option>'; 
+		}
+		?>
+		?>
+        </select>點
+         <select name="time1" style="font-size:30px"  value="<?php 	echo $_SESSION['time1'];?>" >
+        <?php
+		for($i=0;$i<=59;$i++)
+		{
+			if($i<10){$i='0'.$i;}
+			$I=$i;	
+			if($I==$_SESSION['time1']){$show2=' selected ';}else{$show2='';}
+			echo '<option value="'.$i.'" "'.$show2.'">'.$i.'</option>'; 
+		}
+		?>
+		?>
+        </select>分
+       <br><br>
+        <input type="submit" name="next" id="next" value="下一步" style="font-size:30px" >
+        <input  type="button" name="back" id="back" style="font-size:30px" value="返回查詢" onclick="location.href='/PRODUCE/index.php?url=UTT_check'">
+        <input type="hidden" name="mm_insert" id="mm_insert" value="form1" >
+
+        </span></strong></font>
+</form>
+<?php
+if(isset($_POST['next']))
+{
+	include("../PHPEXCEL/Classes/PHPExcel.php");
+	include("../PHPEXCEL/Classes/PHPExcel/IOFactory.php");
+	$query2="select * from UTT_FORM_DATA where [index]='".$_SESSION['FORM']."'"; 
+	$result2=mssql_query($query2);
+	$row2=mssql_fetch_row($result2);
+	$link=trim($row2[3]);
+	$sn=trim($row2[4]);
+	$sn1=trim($row2[5]);
+	$way=trim($row2[6]);
+	$reader= PHPExcel_IOFactory::createReaderForFile("..".$link);
+	$reader->setReadDataOnly(true);
+	$excel= $reader->load("..".$link);
+	$sheet = $excel->getSheet(0);
+	$highestRow = $sheet->getHighestRow ();// 獲取當頁最大行數
+	$highestColumn = $sheet->getHighestColumn ();// 獲取當頁最大列數 
+	$Num=PHPExcel_Cell::columnIndexFromString(substr($sn,0,1))-1;//A->1
+	$Num1=preg_replace('/[^\d]/','',$sn);$I=0;
+	for($i=$Num1;$i<=$highestRow;$i++)
+	{
+		$val=$sheet->getCellByColumnAndRow($Num,$i)->getValue();
+		$val1=$sheet->getCellByColumnAndRow(($Num+1),$i)->getValue();
+		$val=trim($val);
+		if($val==''){continue;}
+		$_SESSION['TAG_NO'][$I]=$val;
+		$_SESSION['TAG_NAME'][$I]=mb_convert_encoding($val1,"big5","utf-8");
+		//echo '第一行:'.$I.':'.$val.'<br>';
+		$I++;
+	}
+	//echo $Num.','.$Num1.','.$sn1.'<br>';
+	$Num=PHPExcel_Cell::stringFromColumnIndex($Num+4);
+	if($sn1<>'')
+	{
+		$Num=PHPExcel_Cell::columnIndexFromString(substr($sn1,0,1))-1;//A->1
+		$Num1=preg_replace('/[^\d]/','',$sn1);
+		//echo $Num.','.$Num1;break;
+		for($i=$Num1;$i<=$highestRow;$i++)
+		{
+			$val=$sheet->getCellByColumnAndRow($Num,$i)->getValue();
+			$val1=$sheet->getCellByColumnAndRow(($Num+1),$i)->getValue();
+			$val=trim($val);
+			if($val==''){continue;}
+			$_SESSION['TAG_NO'][$I]=$val;
+			$_SESSION['TAG_NAME'][$I]=mb_convert_encoding($val1,"big5","utf-8");
+			$I++;
+			//echo '第二行:'.$I.':'.$val.'<br>';
+		}
+	}
+	$_SESSION['date']=dateform1($_POST['datepicker1']);
+	$_SESSION['UTT_time']=$_POST['time'].$_POST['time1'];
+	$url="/PRODUCE/UTT_check_input_2.php?page=1&form_id=".$_GET['form'] ;  
+	$_SESSION['i']=0;
+	jumpto($url);
+
+
+}
+function dateform1($d1)  //2017/01/01 => 20170101
+{	
+	$rt=str_replace("/","",$d1);
+	return $rt;
+}
+?>
+</table>
+</br>

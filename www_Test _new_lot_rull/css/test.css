@@ -1,0 +1,20 @@
+@charset "big5";
+.test {
+	border-top-width: 1px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-color: #000;
+	width: 1024px;
+}
+.left {
+	height: 50px;
+	width: 50%;
+	border-top-width: thin;
+	border-right-width: thin;
+	border-bottom-width: thin;
+	border-left-width: thin;
+}
+.right {
+	width: 40%;
+}

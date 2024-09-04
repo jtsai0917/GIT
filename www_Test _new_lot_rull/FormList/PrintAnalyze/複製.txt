@@ -1,0 +1,119 @@
+
+${type}
+${TestDate0}
+${Operator0}
+	
+
+LOT NO.	${LotNo0}
+荷姿	${pdd_type0}
+桶號		${dno0}
+樣品瓶號	${SampleNo0}
+藥品自動${pdd_prod_name}
+試料量(gr)	${TestQty0}
+
+含　量(wt%)	${Level_10}	${Level_20}
+平均值(wt%)	${Average0}
+對照CH	${CHK10}
+檢查員		${Tester0}
+${Result0}
+蒸發前
+[B]	蒸發後
+[C]
+${AfterQty0}
+${BeforeQty0}
+${DsubC0}	
+合否判定
+${QTY0}
+${H2SO4_10}
+${H2SO4_20}
+${KMnO4ml_10}
+${KMnO4ml_20}
+${KMnO4f0}
+${Level_10}
+${Level_20}
+${Average0}
+${T10}
+${T20}
+${T30}
+${T40}
+${T50}
+${T60}
+${Value60}
+${Input00}
+${Input10}
+${Input20}
+${Input30}
+${Input40}
+${Input50}
+${Input60}
+${Input70}
+${std_qty0}
+${STD20}
+${Input130}
+
+
+
+${HNO30}
+${Value_R0}
+${Level_10}
+${Level_20}
+${BeforeQty0}
+${AfterQty0}
+${DsubC0}
+${Value00}
+${Value10}
+${Value20}
+${Value30}
+${Value40}
+${smp_qty0}
+
+${Au0}
+${T20}
+${T30}
+${TestAve0}
+${PH0}
+${FacterQty0}
+${LostQty0}
+${Value00}
+${Value10}
+${OK0}
+${Mo0}
+${Au0}
+${Cd0}
+${Sn0}
+${Sb0}
+${min0}
+${FACTOR10}
+${Cr0}
+${Mn0}
+${Fe0}
+${Ni0}
+${Co0}
+${Cu0}
+${Pb0}
+
+${B0}
+${In0}
+${Pt0}
+${Au0}
+${Si0}
+${Se0}
+${Hg0}
+${Pd0}
+${W0}		
+${Au0}	
+
+
+${Analyze0}
+${ACT0}
+${TC0}
+${IC0}
+${TOC10}
+${Hg1}
+${P1}
+${Pd1}
+${CL0}		
+${SO4 2-0}
+${Value10}
+
+${SampleDate2}	${TestQty2}	${Count2}	${Tester2}

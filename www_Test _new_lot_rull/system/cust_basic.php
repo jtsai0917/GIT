@@ -1,0 +1,195 @@
+<?php
+session_start();
+include("../lib/fun.php");
+auth('9-01',$_SESSION['aut']);
+lasturl();
+$editFormAction = $_SERVER['PHP_SELF'];
+include("../connections/conn.php");
+if(isset($_POST["cust_sup"]))
+{
+	$sup_="Y";
+}
+
+if(isset($_POST["cust"]))
+{
+	$sup_="N";
+}
+
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>無標題文件</title>
+</head>
+
+<body>
+
+<form id="form1" name="form1" method="post" action="">
+  <table width="800" border="1">
+  <tr><td>
+  客戶基本資料&nbsp;&nbsp;<input type="submit" name="cust_sup" id="submin" value="供應商" />&nbsp;&nbsp;<input type="submit" name="cust" id="submin" value="客  戶" />
+  </td></tr>
+    <tr>
+      <td><span class="d1">客戶：
+          <input type="button" name="X2" id="X2" value="X" onclick="window.open('../erase_customer.php ', '_self');" />
+          <input name="pdd_chemical3" type="text" id="pdd_chemical3" size="16" value="<?php echo $_SESSION['cid']?>" readonly="readonly" />
+          <input type="button" name="pdd_no2" id="pdd_no2" value="查詢客戶" onclick="window.open('../main.php?url=cust_no&sup=<?php echo $sup_;?> ', '_self');" />
+          <input name="pdd_chemical4" type="text" id="pdd_chemical4" size="20" value="<?php echo $_SESSION['cname']?>" />
+        <input type="submit" name="submit" id="submin" value="查詢" /><input type="submit" name="new" id="new" value=" 新增 " />
+      </span></td>
+    </tr>
+  </table>
+<?php
+if(isset($_POST["submit"]))
+{
+	
+	$query="SELECT          dbo.CUSTOMER_DATA.*
+FROM              dbo.CUSTOMER_DATA
+WHERE          (CTD_CUST_NO = '".$_POST['pdd_chemical3']."')";
+$result = mssql_query($query);
+while($row = mssql_fetch_array($result))
+{
+	echo '
+<table width="800" border="1">
+  <tr>
+    <td width="100">客戶編號</td>
+    <td width="100"><input name="cid" type="text" size="8" id="cid" value="'.$row['CTD_CUST_NO'].'" readonly/></td>
+    <td width="100">客戶名稱</td>
+    <td width="300"><input name="cname" type="text" size="20" id="cname" value="'.$row['CTD_CUST_NAME'].'"/></td>
+    <td width="100">客戶簡稱</td>
+    <td width="100"><input name="cnick" type="text" size="8" id="cnick" value="'.$row['CTD_CUST_SHORT_NAME'].'"/></td>
+  </tr>
+</table>';
+echo '<table width="800" border="1">
+  <tr>
+    <td width="99">客戶地址</td>
+    <td width="499"><input name="caddr" type="text" size="56" id="caddr" value="'.$row['CTD_ADDR'].'"/></td>
+    <td width="98">聯絡人</td>
+    <td width="100"><input name="coname" type="text"  size="10" id="coname" value="'.$row['CTD_CONTACT_MAN'].'"/></td>
+  </tr>
+  <tr>
+    <td width="99">送貨地址</td>
+    <td width="499"><input name="daddr" type="text" size="56" id="daddr" value="'.$row['CTD_DELIVER_ADDR'].'"/></td>
+    <td width="98">聯絡電話</td>
+    <td width="100"><input name="cphone" type="text"  size="8" id="cphone" value="'.$row['CTD_CONTACT_TEL'].'"/></td>
+  </tr>
+</table><table width="800" border="1">
+  <tr>
+    <td width="100">來回車程時間</td>
+    <td width="200"><input name="needtime" type="text" size="8" id="needtime" value="'.$row['CTD_DELIVER_TIME'].'"/>小時(整數)</td>
+    <td width="100">供應商<input name="sup" type="checkbox" id="sup" '.sup($row['CTD_SUPPLIER']).'/></td>
+    <td width="100">先進先出<input name="fifo" type="checkbox" id="fifo" '.fifo($row['CTD_FIFO']).' /></td>
+    <td width="100">停用<input name="CTD_DISABLE" type="checkbox" id="CTD_DISABLE" '.fifo($row['CTD_DISABLE']).' /></td>
+    <td width="300">
+	<input type="submit" name="delete" id="delete" value=" 刪除 " onClick="return confirm('."'確定刪除?'".')"/>
+	<input type="submit" name="new" id="new" value=" 新增 " />
+	<input type="submit" name="save" id="save" value=" 儲存 " />
+	</td>
+  </tr>
+</table>
+';
+}
+}
+
+if(isset($_POST["new"]))
+{
+echo '
+<table width="800" border="1">
+  <tr>
+    <td width="100">客戶編號</td>
+    <td width="100"><input name="cid" type="text" size="8" id="cid"/></td>
+    <td width="100">客戶名稱</td>
+    <td width="300"><input name="cname" type="text" size="20" id="cname"/></td>
+    <td width="100">客戶簡稱</td>
+    <td width="100"><input name="cnick" type="text" size="8" id="cnick"/></td>
+  </tr>
+</table>';
+echo '<table width="800" border="1">
+  <tr>
+    <td width="99">客戶地址</td>
+    <td width="499"><input name="caddr" type="text" size="56" id="caddr"/></td>
+    <td width="98">聯絡人</td>
+    <td width="100"><input name="coname" type="text"  size="10" id="coname"/></td>
+  </tr>
+  <tr>
+    <td width="99">送貨地址</td>
+    <td width="499"><input name="daddr" type="text" size="56" id="daddr"/></td>
+    <td width="98">聯絡電話</td>
+    <td width="100"><input name="cphone" type="text"  size="8" id="cphone"/></td>
+  </tr>
+</table><table width="800" border="1">
+  <tr>
+    <td width=98">來回車程時間</td>
+    <td width="200"><input name="needtime" type="text" size="8" id="needtime"/></td>
+    <td width="100">供應商<input name="sup" type="checkbox" id="sup"  /></td>
+    <td width="100">先進先出<input name="fifo" type="checkbox" id="fifo"  /></td>
+    <td width="100">停用<input name="CTD_DISABLE" type="checkbox" id="CTD_DISABLE" /></td>
+    <td width="300">
+	<input type="submit" name="submit" id="submit" value=" 離開 " />
+	<input type="submit" name="save1" id="save1" value=" 儲存 " />
+	</td>
+  </tr>
+</table>
+';		
+}
+
+if(isset($_POST["save1"]))
+{
+//	echo "POST_DISABLE".$_POST['CTD_DISABLE']."<BR>";
+	$query="INSERT INTO dbo.CUSTOMER_DATA
+                            (CTD_CUST_NO, CTD_CUST_NAME, CTD_CUST_SHORT_NAME, CTD_ADDR, CTD_DELIVER_ADDR, 
+                            CTD_DELIVER_TIME, CTD_CONTACT_MAN, CTD_CONTACT_TEL, CTD_SUPPLIER, CTD_FIFO, CTD_DISABLE)
+VALUES          ('".$_POST['cid']."','".$_POST['cname']."','".$_POST['cnick']."','".$_POST['caddr']."','".$_POST['daddr']."','".$_POST['needtime']."',
+'".$_POST['coname']."','".$_POST['cphone']."','".vsup($_POST['sup'])."','".vfifo($_POST['fifo'])."', '".vsup($_POST['CTD_DISABLE'])."')";
+// echo $query;
+$result = mssql_query($query);
+
+if($result){fun_alert("儲存完畢");}
+	else{fun_alert("儲存失敗");}
+
+}
+
+if(isset($_POST["save"]))
+{
+	$query="UPDATE          dbo.CUSTOMER_DATA
+SET                  CTD_DISABLE='".vsup($_POST['CTD_DISABLE'])."', CTD_CUST_NO ='".$_POST['pdd_chemical3']."', CTD_CUST_NAME ='".$_POST['cname']."', CTD_CUST_SHORT_NAME ='".$_POST['cnick']."', CTD_ADDR ='".$_POST['caddr']."', CTD_DELIVER_ADDR ='".$_POST['daddr']."', 
+                            CTD_DELIVER_TIME ='".$_POST['needtime']."', CTD_CONTACT_MAN ='".$_POST['coname']."', CTD_CONTACT_TEL ='".$_POST['cphone']."', CTD_SUPPLIER ='".vsup($_POST['sup'])."', CTD_FIFO ='".vfifo($_POST['fifo'])."'
+WHERE          (CTD_CUST_NO = '".$_POST['pdd_chemical3']."')";
+// echo $query."<BR>";
+$result = mssql_query($query);
+
+if($result){fun_alert("儲存完畢");}
+	else{fun_alert("儲存失敗");}
+
+}
+
+
+if(isset($_POST["delete"]))
+{
+	$query="DELETE FROM dbo.CUSTOMER_DATA
+WHERE          (CTD_CUST_NO = '".$_POST['pdd_chemical3']."')";
+$result = mssql_query($query);
+if($result){fun_alert("刪除完畢");}
+else{fun_alert("刪除失敗");}
+
+}
+?>
+</form>
+<p>&nbsp;</p>
+</body>
+</html>
+<?php
+function sup($sup){
+if(trim($sup)=="Y"){ return 'checked="checked"';}
+}
+function fifo($fifo){
+if(trim($fifo)=="Y"){ return 'checked="checked"';}
+}
+function vsup($vsup){
+if(trim($vsup)=="on"){ return 'Y';}
+else{ return 'N';}
+}
+function vfifo($vfifo){
+if(trim($vfifo)=="on"){ return 'Y';}
+}

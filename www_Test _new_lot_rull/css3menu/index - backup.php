@@ -1,0 +1,241 @@
+
+<html>
+<head>
+<title>TYS 化學藥品充填及管理系統</title>
+<meta http-equiv="content-type" content="text/html; charset=big5" />
+<link rel="stylesheet" href="/css3menu/mbcsmbmcp.css" type="text/css" />
+</head>
+<body>
+
+
+<!-- Navigation menus created with the free version of Easy CSS Menu downloaded from www.easycssmenu.com
+     You are free to use this menu code for personal, non-commercial use only. Any other use is a serious violation of copyright laws.
+     You are required to retain this comment block in your website code in an unchanged fashion.
+     The above limitations do not apply on menus created with the paid version of the software. -->
+<div id="mbmcpebul_wrapper" style="max-width: 822px;">
+  <ul id="mbmcpebul_table" class="mbmcpebul_menulist css_menu">
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>入荷作業</a></div></div>
+    <ul class="gradient_menu gradient188">
+    <li class="gradient_menuitem gradient31 first_item"><a href="/inplan/index.php?url=inplanlist" target="_self" title="">入荷計畫追蹤一覽表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/inplan/index.php?url=ipl_met" target="_self" title="">入荷計畫(A) FOR原物料</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/inplan/index.php?url=ipl_oem" target="_self" title="">入荷計畫(B) FOR OEM</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/inplan/index.php?url=from_file" target="_self" title="">入荷計畫檔案匯入</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/inplan/index.php?url=input" target="_self" title="">入荷計畫輸入</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/inplan/index.php?url=prod_type" target="_self" title="">入荷頻率查詢</a></li>
+
+    <li class="gradient_menuitem gradient31 last_item"><a title="">OEM 品數據輸入</a>
+    	<ul class="gradient_menu gradient157">
+     	 <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=upload_coa" target="_self" title="">上傳COA</a></li>
+      	 <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=list_coa" target="_self" title="">COA LIST</a></li>
+         <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_in_count_" target="_self" title="">台帳查詢</a></li>
+      	</ul></li>
+    </ul></li>
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>出荷作業<br /></a></div></div>
+    <ul class="gradient_menu gradient405">
+    <li class="gradient_menuitem gradient31 first_item"><a href="/prodout/index.php?url=out_trace" target="_self" title="">出荷追蹤一覽表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=outplan" target="_self" title="">出荷計劃書</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=import_out_plan" target="_self" title="">出荷決定(台南倉)檔案匯入</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=input_out_plan" target="_self" title="">出荷計畫輸入</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=out_decision" target="_self" title="">出荷決定書</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=out_decision_ax" target="_self" title="">出荷決定匯入_From AX</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=selection_plan" target="_self" title="">華立調度計畫書</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=car_plan" target="_self" title="">派車一覽表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=change_request" target="_self" title="">荷姿變更聯絡書</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=change_list" target="_self" title="">荷姿變更一覽表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=total_check" title="">Lorry 出荷檢量總表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=total_check1" title="">Lorry 出荷檢量總表匯出(AX)</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/prodout/index.php?url=drum_check_list" target="_self" title="">DRUM出荷檢查表</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/prodout/index.php?url=lorry_check_list" title="">Lorry 出荷檢查表</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/prodout/index.php?url=lorry_check_2in1" title="">Barcode二合一單</a></li>
+    </ul></li>
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>充填作業<br /></a></div></div>
+    <ul class="gradient_menu gradient436">
+    <?php 
+	 	if(strpos($_SESSION['aut'],'1025')!== false)
+		{
+			echo '<li class="gradient_menuitem gradient31 first_item"><a href="/fill/index.php?url=lorry_fill_check" target="_self" title="">補充填作業</a></li>';
+			echo '<li class="gradient_menuitem gradient31 first_item"><a href="/fill/index.php?url=cal_toto_lorry_ext" target="_self" title="">TOTO-LORRY 補充填作業</a></li>';
+		}
+	?>
+    <li class="gradient_menuitem gradient31 first_item"><a href="/fill/index.php?url=fill_list" target="_self" title="">充填作業追蹤一覽表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=switch_monthly" target="_self" title="">月充填計畫表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=fill_out_plan" target="_self" title="">充填計畫/出荷預定表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=instruction" target="_self" title="">充填作業指示報告書</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=daily" target="_self" title="">充填日報表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=fill_records" target="_self" title="">充填生產作業紀錄總表</a></li>  
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=re_sample" target="_self" title="">再分析要求表</a>
+    	<ul class="gradient_menu gradient157">
+     	 <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=re_sample" target="_self" title="">再取樣</a></li>
+      	 <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=rework" target="_self" title="">再分析作業</a></li>
+      	</ul></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=IPA_FILL" target="_self" title="">IPA 洗淨/充填作業</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=re_sample" target="_self" title="">CHECKLIST</a>
+    	<ul class="gradient_menu gradient157">
+            <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=el_wash_checklist" target="_self" title="">EL (DRUM)洗淨CHECKLIST</a></li>
+            <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=el_drum_check" target="_self" title="">EL 藥品(DRUM)充填CHECKLIST</a></li>
+    </ul></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=re_sample" target="_self" title="">CAL 作業</a>
+    	<ul class="gradient_menu gradient157">
+                
+            <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=cal_toto" target="_self" title="">CAL 在庫TOTO轉出荷TOTO移液作業檢查表</a></li>
+            <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=cal_toto_lorry" target="_self" title="">CAL TOTO轉LORRY移液作業檢查表</a></li>
+            <li class="gradient_menuitem gradient31"><a title="">CAL DRUM轉LORRY移液作業檢查表</a></li>
+    </ul></li>
+     <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=re_sample" target="_self" title="">檢查表</a>
+    	<ul class="gradient_menu gradient157">
+            <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=20L_check" target="_self" title="">H2O2(20L PE)充填檢查表</a></li>
+            <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=checklist_12_" target="_self" title="">(˙1~12m3)容器充填作業檢查表</a></li>
+     </ul></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=tank_batch" target="_self" title="">封槽管理作業</a>
+    	<ul class="gradient_menu gradient157">
+     	 <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=tank_batch" target="_self" title="">建立封槽LOT</a></li>
+         <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=tank_batch_list" target="_self" title="">編輯/查詢</a></li>
+      	</ul></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=sample_list_T" target="_self" title="">物流樣品瓶送出紀錄</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/fill/index.php?url=pressure_list" target="_self" title="">充填壓力查詢</a></li>
+    </ul></li>
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>回收作業</a></div></div>
+    <ul class="gradient_menu gradient188">
+    <li class="gradient_menuitem gradient31 first_item"><a href="/recover/index.php?url=drum_track" target="_self" title="">DRUM 追蹤一覽表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/recover/index.php?url=bord_count" target="_self" title="">棧板管理</a></li>
+    <li class="gradient_menuitem gradient31"><a title="">回收桶處理CHECKLIST-A(洗淨廢棄用)</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/recover/index.php?url=CAL_TOTO" target="_self" title="">CAL出荷TOTO容器使用回收一覽表</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/recover/index.php?url=drum_txt" target="_self" title="">DRUM 回收、報廢資料匯入</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/recover/index.php?url=bord_txt" target="_self" title="">棧板回收資料匯入</a></li>
+     <li class="gradient_menuitem gradient31 last_item"><a href="/recover/index.php?url=drum_update" target="_self" title="">DRUM廢棄作業</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/recover/index.php?url=bord_keyin" target="_self" title="">輸入回收棧板</a></li>
+    </ul></li>
+  	<li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>分析作業</a></div></div>
+    <ul class="gradient_menu gradient157">
+    <li class="gradient_menuitem gradient31 first_item"><a href="/cal/index.php?url=list_" target="_self" title="">分析依賴查詢畫面及結果</a>
+<?php
+if($_SESSION['uid']=='AA01'){
+echo '<ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=list_A" target="_self" title="">分析依賴查詢</a></li>
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=add_anylize_" target="_self" title="">新增/修改依賴</a></li>
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_rcv" target="_self" title="">接收樣品瓶</a></li>
+	  
+      </ul></li>';
+}
+else
+{
+echo '<ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=list_" target="_self" title="">分析依賴查詢</a></li>
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=add_anylize_" target="_self" title="">新增/修改依賴</a></li>
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_rcv_fill" target="_self" title="">樣品瓶作業</a></li>
+	  <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_rcv" target="_self" title="">接收樣品瓶</a></li>
+	  <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_rcv_list" target="_self" title="">樣品瓶接收列表</a></li>
+	  <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_return" target="_self" title="">退回樣品瓶</a></li>
+	  <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_return_list" target="_self" title="">退回樣品瓶列表</a></li>
+	  <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_keep" target="_self" title="">保留樣品瓶</a></li>
+	  <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_keep_list" target="_self" title="">保留樣品瓶列表</a></li>
+      </ul></li>';
+}
+
+?>
+      <ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=list_" target="_self" title="">分析依賴查詢</a></li>
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=add_anylize_" target="_self" title="">新增/修改依賴</a></li>
+      <li class="gradient_menuitem gradient31 "><a href="/cal/index.php?url=samp_rcv" target="_self" title="">接收樣品瓶</a></li>
+      </ul></li>
+<?php
+if($_SESSION['uid']=='AA01'){
+echo '<li class="gradient_menuitem gradient31"><a href="/cal/index.php" target="_self" title="">分析檢查作業表 製作/查詢</a>
+      <ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31 first_item"><a href="/cal/index.php?url=cal_prod_all" target="_self" title="">製品分析分項檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_anylize_input" target="_self" title="">解析分析分項檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_in_input" target="_self" title="">原料受入分析檢查作業表製作/查詢</a></li>
+	  <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_in_input&coa=1" target="_self" title="">原料受入COA檢查作業表製作/查詢</a>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=DL_LIST" target="_self" title="">回收率分析檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=DL_LIST_bot" target="_self" title="">DL分析檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=RR_list" target="_self" title="">R&R分析檢查作業表製作/查詢</a></li>
+      </ul>
+    </li>';	
+}
+else{
+echo '<li class="gradient_menuitem gradient31"><a href="/cal/index.php" target="_self" title="">分析檢查作業表 製作/查詢</a>
+      <ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31 first_item"><a href="/cal/index.php?url=cal_prod_input_fv" target="_self" title="">報告輸入</a></li>
+	  <li class="gradient_menuitem gradient31 first_item"><a href="/cal/index.php?url=cal_prod_input" target="_self" title="">製品分析分項檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_anylize_input" target="_self" title="">解析分析分項檢查作業表製作/查詢</a></li>
+	  <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_el_input" target="_self" title="">EL課內分析分項檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_in_input" target="_self" title="">原料受入分析檢查作業表製作/查詢</a></li>
+	  <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_in_input&coa=1" target="_self" title="">原料受入COA檢查作業表製作/查詢</a>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=DL_LIST" target="_self" title="">回收率分析檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=DL_LIST_bot" target="_self" title="">DL分析檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=RR_list" target="_self" title="">R&R分析檢查作業表製作/查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_prod_all" target="_self" title="">全項目分析查詢</a></li>
+      </ul>
+    </li>';	
+}
+?>
+   	<li class="gradient_menuitem gradient31"><a title="">台帳查詢</a>
+      <ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_prod_count_" target="_self" title="">製品分析台帳查詢</a></li>
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=cal_in_count_" target="_self" title="">原料受入分析台帳查詢</a></li>
+      </ul></li>
+	<li class="gradient_menuitem gradient31"><a title="">Sinetics 相關</a>
+      <ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=particle_trend_chart" target="_self" title="">製作 H2SO4 Particle Trend Chart</a></li>
+      </ul></li>
+    <li class="gradient_menuitem gradient31"><a href="/cal/index.php?url=fail_item_create" target="_self" title="">不合格品處置聯絡書</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/cal/index.php?url=fail_item_report" target="_self" title="">不合格品處置管理表</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/people/index.php?url=people" target="_self" title="">分析工時計算</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/cal/index.php?url=QC" target="_self" title="">再分析查詢</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/cal/index.php?url=retest" target="_self" title="">再分析-再取樣查詢</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/cal/index.php?url=find_all" target="_self" title="">其他查詢</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/cal/index.php?url=find_all1" target="_self" title="">其他查詢(1)</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/cal/index.php?url=cel_ftnir" target="_self" title="">FT-NIR 儀器校驗</a></li> 
+    <li class="gradient_menuitem gradient31 last_item"><a href="/cal/index.php?url=change_list" target="_self" title="">分析項目修改查詢</a></li>
+     </ul></li>
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>COA作業</a></div></div>
+    <ul class="gradient_menu gradient33">
+    <li class="gradient_menuitem gradient31 first_item last_item"><a  href="/cal/index.php?url=coa_list" target="_self" title="">COA製作進度查詢表</a></li>
+    <li class="gradient_menuitem gradient31 first_item last_item"><a  href="/COA/index.php?url=pass_to_sinetics" target="_self" title="">拋轉至Sinetics(製品)</a></li>
+    <li class="gradient_menuitem gradient31 first_item last_item"><a  href="/COA/index.php?url=pass_to_sinetics_" target="_self" title="">拋轉至Sinetics(分析)</a></li>
+  </ul></li> 
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>製造課</a></div></div>
+    <ul class="gradient_menu gradient33">
+    <li class="gradient_menuitem gradient31 first_item last_item"><a  href="/PRODUCE/index.php?url=H2SO4" target="_self" title="">硫酸生產出荷表</a></li>
+    <li class="gradient_menuitem gradient31 first_item last_item"><a  href="/PRODUCE/index.php?url=daily_input" target="_self" title="">硫酸生產輸入</a></li>
+
+ 	 <li class="gradient_menuitem gradient31 first_item last_item"><a  href="/PRODUCE/index.php?url=UTT_check_input" target="_self" title="">UTT巡檢</a>
+      <ul class="gradient_menu gradient157">
+      <li class="gradient_menuitem gradient31 "><a  href="/PRODUCE/index.php?url=UTT_check" target="_self" title="">UTT巡檢資料輸入/查詢</a></li>
+      <li class="gradient_menuitem gradient31 "><a  href="/PRODUCE/index.php?url=UTT_product_input" target="_self" title="">巡檢項目與規則新增/修正</a></li>
+      <li class="gradient_menuitem gradient31 "><a  href="/PRODUCE/index.php?url=UTT_form_input" target="_self" title="">巡檢表單規則新增/修正</a></li>
+      </ul></li>  </ul></li> 
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>樣品瓶作業</a></div></div>
+    <ul class="gradient_menu gradient64">
+    <li class="gradient_menuitem gradient31 first_item"><a href="/samples/index.php?url=add_sample" target="_self" title="">樣品瓶回收紀錄表</a></li>
+    <li class="gradient_menuitem gradient31 first_item"><a href="/samples/index.php?url=rcv_sample" target="_self" title="">輸出樣品瓶清單</a></li>
+    <li class="gradient_menuitem gradient31 first_item"><a href="/samples/index.php?url=re_an" target="_self" title="">再分析瓶查詢</a></li>
+    </ul></li>
+  <li><div class="buttonbg gradient_button gradient27" style="width: 80px;"><div class="arrow"><a>系統維護<br /></a></div></div>
+    <ul class="gradient_menu gradient343">
+    <li class="gradient_menuitem gradient31 first_item"><a href="/system/index.php?url=prod_basic" target="_self" title="">產品基本資料</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=prod_from" target="_self" title="">產品原料設定</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=cust_basic" target="_self" title="">客戶基本資料</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=prod_cust" target="_self" title="">客戶產品基本資料</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=department" target="_self" title="">部門基本資料</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=employee" target="_self" title="">員工基本資料</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=group" target="_self" title="">群組設定</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=rulls" target="_self" title="">權限設定</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=prod_capacity" target="_self" title="">製品桶槽容量設定</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=toto_basic" target="_self" title="">TOTO 桶基本資料</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=analyze_set" target="_self" title="分析項目設定" >分析頻度設定</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=iso_set" target="_self" title="台帳版本控制" >台帳版本控制</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=edit_fill_flow" target="_self" title="" >充填路徑相關設定</a></li>
+    <li class="gradient_menuitem gradient31"><a href="/system/index.php?url=erase_data" target="_self" title="">清除資料庫交易紀錄</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="/system/index.php?url=erase_data" target="_self" title="">清除舊資料</a></li>
+    <li class="gradient_menuitem gradient31 last_item"><a href="../input_barcode.php" target="_blank" title="">列印加密條碼</a></li>
+    </ul></li> 
+  </ul>
+</div>
+<!-- Menus will work without this javascript file. It is used only for extra
+     effects, improved usability, compatibility with very old web browsers
+     and support for touch screen devices. -->
+<script type="text/javascript" src="/css3menu/mbjsmbmcp.js"></script>
+
+</body>
+</html>

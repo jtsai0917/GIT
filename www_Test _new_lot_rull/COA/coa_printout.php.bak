@@ -1,0 +1,207 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<form name="coa" method="post" action="">
+	選擇COA格式<input type="radio" name="r1" value="7">7碼
+	<input type="radio" name="r1" value="10">10碼
+	<input type="submit" name="print" value="列印">
+
+</form>
+<?php
+
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+
+	$query="SELECT    SpecName, ProdNo, CustName, ProdName, Quantity, 
+                            LSL, UCL, LCL, DL, Specification, ShowMode, ItemType, Sort, PartNo, ShipDate, MfgDate, ExpDate, CustNo, 
+                              ShowDLPartNo, Createuser, Fixed, CreateTS, SampleNo, TYSSpec, TYSVer, 
+                            Comment, DefValue, mark
+FROM              QC_TYS_COA
+WHERE          (LotNo = '".$_GET['lid']."') AND (CustName = '".get_cust_sname($_GET['cid'])."')";
+// echo $query."<BR>";
+	$result=mssql_query($query);
+	$rr=mssql_num_rows($result);
+
+
+//$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",get_chinese_weekday($datetime1)));}
+//$objPHPExcel->getActiveSheet()->getPageSetup()->setFitToWidth('1');//列印的頁面長度自動調整為第一頁
+//  $objPHPExcel->getActiveSheet()->getPageSetup()->setFitToHeight('1');//列印的頁面高度自動調整為第一頁
+
+if(isset($_POST['print'])){
+	include("../PHPEXCEL/Classes/PHPExcel.php");
+	include("../PHPEXCEL/Classes/PHPExcel/IOFactory.php");
+	echo $rr."筆";
+	$objPHPExcel = new PHPExcel();
+	if($rr<=33){
+
+		$objPHPExcel = PHPExcel_IOFactory::load("./COA_sample.xlsx");
+		
+	}
+	else{
+
+		$objPHPExcel = PHPExcel_IOFactory::load("./COA_33.xlsx");
+	}
+
+	$objPHPExcel-> setActiveSheetIndex(0);
+
+
+	$lorryno="L".substr(trim($_GET['lid']),-3);
+	$query="SELECT   top(1)   SpecName, ProdNo, CustName, ProdName, Quantity,  MfgDate, ExpDate, ShipDate,
+                            LSL, UCL, LCL, DL, Specification, ShowMode, ItemType, Sort, PartNo, CustNo, 
+                              ShowDLPartNo, Createuser, Fixed, CreateTS, SampleNo, TYSSpec, TYSVer, 
+                            Comment, DefValue, mark
+FROM              QC_TYS_COA
+WHERE          (LotNo = '".$_GET['lid']."') AND (CustName = '".get_cust_sname($_GET['cid'])."')";
+// echo $query."<BR>";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	$lid=trim($_GET['lid']);
+	if($_POST['r1']==7){
+		$lid=substr($lid,0,7);
+	}
+	elseif($_POST['r1']==10){
+		$lid=substr($lid,0,7).substr($lid,-3,3);
+	}
+	$MfgDate=ddd($row[5]);
+	$ExpDate=ddd($row[6]);
+	$ShipDate=ddd($row[7]);
+	
+		$MfgDate=date("d-M-y",strtotime($MfgDate));
+		$ExpDate=date("d-M-y",strtotime($ExpDate));
+		$ShipDate=date("d-M-y",$ShipDate);
+		
+
+//	date("d-M-y",strtotime("2023-01-07");
+	
+		echo "客戶:".$row[2]."&nbsp;&nbsp;&nbsp;料號:".$row[1]."&nbsp;&nbsp;&nbsp;規格版本:".$row[0]."<BR>";
+
+	// 寫入品茗批號日期
+	$objPHPExcel->getActiveSheet()->setCellValue("C8", iconv("big5","utf-8",$row[1]));
+	$objPHPExcel->getActiveSheet()->setCellValue("C9", iconv("big5","utf-8",$lid));
+	$objPHPExcel->getActiveSheet()->setCellValue("C10", iconv("big5","utf-8",$row[4]));
+	$objPHPExcel->getActiveSheet()->setCellValue("B6", iconv("big5","utf-8",$row[2]));
+	if(strpos(" ".$row[2],"台積") >> 0){
+		$objPHPExcel->getActiveSheet()->setCellValue("H7", iconv("big5","utf-8",$lid));
+	}
+	
+	if($rr<=33){
+		$objPHPExcel->getActiveSheet()->setCellValue("A47", iconv("big5","utf-8","Manufacture Date: ".$MfgDate));
+		$objPHPExcel->getActiveSheet()->setCellValue("A48", iconv("big5","utf-8","Expiry Date: ".$ExpDate));
+	}
+	else{
+		$objPHPExcel->getActiveSheet()->setCellValue("A68", iconv("big5","utf-8","Manufacture Date: ".$MfgDate));
+		$objPHPExcel->getActiveSheet()->setCellValue("A69", iconv("big5","utf-8","Expiry Date: ".$ExpDate));
+	}
+	
+	
+
+	$objPHPExcel->getActiveSheet()->setCellValue("H6", iconv("big5","utf-8",$ShipDate));
+	
+	//寫入項目規格
+	$query="SELECT    distinct      LotNo, IX, ItemName, itemnickname, ItemUnit, TestDate, TrueResult, ReportResult, Judge, SpecName, SpecUnit, USL, 
+                            LSL, UCL, LCL, DL, Specification, ShowMode, ItemType, Sort, PartNo, ShipDate, MfgDate, ExpDate, CustNo, 
+                            CustName, ProdNo, ProdName, ShowDLPartNo, Createuser, Fixed, CreateTS, SampleNo, TYSSpec, TYSVer, Quantity, 
+                            Comment, DefValue, mark
+FROM              QC_TYS_COA
+WHERE          (LotNo = '".$_GET['lid']."') AND (CustName = '".$row[2]."') AND (ProdNo = '".$row[1]."') order by IX";
+
+	$result=mssql_query($query);
+	$j=0;
+	while($row=mssql_fetch_array($result)){
+		//	B13
+		$i=$j+13;
+		if($row['ItemType']==1){
+			$rb=$row['ItemName'];
+		}
+		elseif($row['ItemType']==2){
+			$rb=$itemname=$row['itemnickname'];
+			$rc="( ".$row['ItemName'];
+			$rd=")";
+		}
+		elseif($row['ItemType']==3){
+			$rb="Particles";
+			$rc="( ".str_replace("Particle","",$row['ItemName']);
+			$rd=")";
+		}
+		
+		$spc=trim($row['Specification']);
+		if(substr($spc,-4,4)=='max.'){
+			$rg=substr($spc,0,-4);
+			$rh="max.";
+		}
+		else{
+			$rg=$spc;
+		}
+		
+		$rep=trim($row['ReportResult']);
+		if(substr($rep,0,1)=='<'){
+			$rj=substr($rep,1);
+			$ri="<";
+		}
+		else{
+			$ri=$rep;
+			$rj='';
+		}
+		
+		
+		$objPHPExcel->getActiveSheet()->setCellValue("B".$i, iconv("big5","utf-8",$rb));
+		$objPHPExcel->getActiveSheet()->setCellValue("D".$i, iconv("big5","utf-8",$rd));
+		$objPHPExcel->getActiveSheet()->setCellValue("C".$i, iconv("big5","utf-8",$rc));
+		$objPHPExcel->getActiveSheet()->setCellValue("E".$i, iconv("big5","utf-8",$row['SpecUnit']));
+		$objPHPExcel->getActiveSheet()->setCellValue("G".$i, iconv("big5","utf-8",$rg));
+		$objPHPExcel->getActiveSheet()->setCellValue("H".$i, iconv("big5","utf-8",$rh));
+		$objPHPExcel->getActiveSheet()->setCellValue("I".$i, iconv("big5","utf-8",$ri));
+		$objPHPExcel->getActiveSheet()->setCellValue("J".$i, iconv("big5","utf-8",$rj));
+		
+				$bstyle_outline = array(
+			'borders' => array(
+			'outline' => array(
+				'style' => PHPExcel_Style_Border::BORDER_THIN
+				)
+			)
+		);
+		
+		$objPHPExcel->getActiveSheet()->getStyle('B'.$i.":".'D'.$i)->applyFromArray($bstyle_outline);
+		$objPHPExcel->getActiveSheet()->getStyle('E'.$i)->getBorders()->getAllborders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+		$objPHPExcel->getActiveSheet()->getStyle('F'.$i.":".'H'.$i)->applyFromArray($bstyle_outline);
+		$objPHPExcel->getActiveSheet()->getStyle('I'.$i.":".'J'.$i)->applyFromArray($bstyle_outline);
+				
+//		$objPHPExcel->getActiveSheet()->mergeCells('E'.$i.":".'G'.$i);
+//		$objPHPExcel->getActiveSheet()->getStyle('B'.$i.":".'C'.$i)->getBorders()->getAllborders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
+		
+		$j++;
+	}
+	
+	echo "列印".$_POST['r1']."碼<BR>";
+	echo "共".($j)."行<BR>";
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");	
+	$_SESSION['coa']='test';
+	$objWriter->save($_SESSION['coa'].'.xlsx');
+	chmod($_SESSION['coa'].'.xlsx', 0777);
+	exec('mv '.$_SESSION['coa'].'.xlsx /var/www/www_Test/COA');
+	downloadxlsx();
+}
+
+if(isset($_POST['print'])){
+	echo "列印".$_POST['r1']."碼<BR>";
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");	
+	$_SESSION['coa']='test';
+	$objWriter->save($_SESSION['coa'].'.xlsx');
+	chmod($_SESSION['coa'].'.xlsx', 0777);
+	exec('mv '.$_SESSION['coa'].'.xlsx /var/www/www_Test/COA');
+	downloadxlsx();
+	
+}
+
+
+
+function downloadxlsx()
+{
+			$path_root=$_SERVER['HTTP_HOST'];
+			//echo $path_root;
+			echo '</br><BR>';
+			echo "下載";
+			
+		echo '<script>document.location.href="http://'.$path_root.'/COA/'.$_SESSION['coa'].'.xlsx";</script>';
+		
+}
+?>

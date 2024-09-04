@@ -1,0 +1,136 @@
+<?php
+session_start();
+include("../connections/conn.php");
+include ("../lib/fun.php");
+include ("../lib/jtsai.php");
+datepick();
+if($_SESSION['uid']==''){jumpto("login.php");}
+$loginFormAction = $_SERVER['PHP_SELF'];
+?><head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<style type="text/css">
+body,td,th {
+	font-size:<?php echo $_SESSION['font_size'];?>px;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+</style>
+</head>
+ 
+
+<p><a href="fill.php"><img src="../pics/TYS.jpg" alt="" width="50" height="28" /></a>人員：<?php echo $_SESSION['uname']?></p>
+<?php
+$query="SELECT          A.FOD_UNI, A.CTD_CUST_NO, B.CTD_CUST_NAME, A.FDM_SERIAL_NO, A.PDD_PROD_NO, C.PDD_PROD_NAME, C.PDD_DRUM_KG,
+                            C.PDD_PROD_SHORT_NAME, A.FDM_SAM_BEFORE, A.FDM_SAM_BEF_CNT, A.FDM_SAM_CNT, 
+                            A.FDM_ATTACH_CNT, A.FDM_QTY_DRUM, A.FDM_QTY, D.CTP_ExportCountLimit, A.FDM_LY_NO
+FROM              FILLPLAN_OUT_DECIDE AS A LEFT OUTER JOIN
+                            CUSTOMER_DATA AS B ON A.CTD_CUST_NO = B.CTD_CUST_NO LEFT OUTER JOIN
+                            PRODUCT_DATA AS C ON A.PDD_PROD_NO = C.PDD_PROD_NO LEFT OUTER JOIN
+                            CUSTOMER_PRODUCTS AS D ON A.CTD_CUST_NO = D.CTD_CUST_NO AND 
+                            A.PDD_PROD_NO = D.PDD_PROD_NO
+WHERE          (A.FDM_LOT_NO = '".$_SESSION['lid']."')";
+echo $query;
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+while($row = mssql_fetch_array($result))
+{
+	$_SESSION['pidx']=$pid=$row['PDD_PROD_NO'];
+	$cid=$row['CTD_CUST_NO'];
+	$prod_name=$row['PDD_PROD_NAME'];
+	$cust_name=$row['CTD_CUST_NAME'];
+	$smp_cnt=$row['FDM_SAM_BEF_CNT']+$row['FDM_ATTACH_CNT']+$row['FDM_SAM_CNT']+2;
+	$fdm_qty=$row['FDM_QTY'];
+	$lorry_no=$row['FDM_LY_NO'];
+	$_SESSION['drum_kg']=$row['PDD_DRUM_KG'];
+	$fdm_qty_drum=$_SESSION['fdm_qty_drum']=$row['FDM_QTY_DRUM'];
+// P1	
+}
+	echo 'Lot NO：'.$_SESSION['lid'].'<BR>';
+	echo '品名 ： '.$prod_name.'</br>';
+	echo '日期 ： '.date("Y/m/d").'</br>';
+	echo '客戶 ： '.$cust_name. '</br>';
+	echo '需要樣品瓶數 ： '.$smp_cnt.'</br>';
+	echo '充填量 ： '.$fdm_qty."&nbsp;&nbsp;&nbsp;&nbsp;(".$fdm_qty_drum.')桶<BR>';
+
+	echo '充填前準備<BR>
+	<form id="form1" name="form1" method="post" action="'.$loginFormAction.'">';
+	
+	echo '液 Tube 品番 <input type="text" name="ltube_name" value=""/><BR>';
+	echo '液 Tube 數量 <input type="test" name="ltube_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '液 Plug 大 品番 <input type="text" name="lplugb_name" value=""/><BR>';
+	echo '液 Plug 大 數量 <input type="test" name="lplugb_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '液 Plug 小 品番 <input type="text" name="lplugs_name" value=""/><BR>';
+	echo '液 Plug 小 數量 <input type="test" name="lplugs_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '液 O-RING 品番 <input type="text" name="loring_name" value=""/><BR>';
+	echo '液 O-RING 數量 <input type="test" name="loring_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '液 墊圈小 品番 <input type="text" name="lparks_name" value=""/><BR>';
+	echo '液 墊圈小 數量 <input type="test" name="lparks_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '氣體 Plug 大 品番 <input type="text" name="aplugb_name" value=""/><BR>';
+	echo '氣體 Plug 大 數量 <input type="test" name="aplugb_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '氣體 Plug 小 品番 <input type="text" name="aplugs_name" value=""/><BR>';
+	echo '氣體 Plug 小 數量 <input type="test" name="aplugs_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '氣體 O-RING 品番 <input type="text" name="aoring_name" value=""/><BR>';
+	echo '氣體 O-RING 數量 <input type="test" name="aoring_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+
+	echo '氣體 墊圈小 品番 <input type="text" name="aparks_name" value=""/><BR>';
+	echo '氣體 墊圈小 數量 <input type="test" name="aparks_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+	
+	echo '氣蓋 品番 <input type="text" name="acap_name" value=""/><BR>';
+	echo '氣蓋 數量 <input type="test" name="acap_cnt" value="'.$fdm_qty_drum.'" /><BR>';
+
+	echo ' <input type="submit" name="save_first" autofocus="autofocus" style="font-size:'.$_SESSION['font_size'].'px" id="save_first" value=" 送 出 " />';
+	echo '</form>';
+?>
+
+<?php
+if(isset($_POST['save_first']))
+{
+	if($_POST['ltube_cnt']==''){$_POST['ltube_cnt']=0;}
+	if($_POST['lplugb_cnt']==''){$_POST['lplugb_cnt']=0;}
+	if($_POST['lplugs_cnt']==''){$_POST['lplugs_cnt']=0;}
+	if($_POST['loring_cnt']==''){$_POST['loring_cnt']=0;}
+	if($_POST['lparks_cnt']==''){$_POST['lparks_cnt']=0;}
+	if($_POST['aplugb_cnt']==''){$_POST['aplugb_cnt']=0;}
+	if($_POST['aplugs_cnt']==''){$_POST['aplugs_cnt']=0;}
+	if($_POST['aoring_cnt']==''){$_POST['aoring_cnt']=0;}
+	if($_POST['aparks_cnt']==''){$_POST['aparks_cnt']=0;}
+	if($_POST['acap_cnt']==''){$_POST['acap_cnt']=0;}
+
+	$query="INSERT INTO DRUM_WASH_UPDATE
+                   (FDM_LOT_NO, DWU_LIQ_TUBE_NO, DWU_LIQ_TUBE, DWU_LIQ_PLUG_B_NO, DWU_LIQ_PLUG_B, 
+                   DWU_LIQ_PLUG_S_NO, DWU_LIQ_PLUG_S, DWU_LIQ_ORING_B_NO, DWU_LIQ_ORING_B, DWU_LIQ_WASHER_S_NO, 
+                   DWU_LIQ_WASHER_S, DWU_GAS_PLUG_B_NO, DWU_GAS_PLUG_B, DWU_GAS_PLUG_S_NO, DWU_GAS_PLUG_S, 
+                   DWU_GAS_ORING_B_NO, DWU_GAS_ORING_B, DWU_GAS_WASHER_S_NO, DWU_GAS_WASHER_S, 
+                   DWU_GAS_CAP_NO, DWU_GAS_CAP, DWU_EL_MANOMETER, DWU_EL_WASH_PURGE, DWU_IPA_WASHED_CNT, 
+                   DWU_IPA_WASH_PURGE, DWU_WASHER)
+VALUES  ('".$_SESSION['lid']."', '".$_POST['ltube_name']."',".$_POST['ltube_cnt'].", '".$_POST['lplugb_name']."',".$_POST['lplugb_cnt'].", '".$_POST['lplugs_name']."',".$_POST['lplugs_cnt'].", '".$_POST['loring_name']."',".$_POST['loring_cnt'].",'".$_POST['lparks_name']."',".$_POST['lparks_cnt'].", '".$_POST['aplugb_name']."',".$_POST['aplugb_cnt'].", '".$_POST['aplugs_name']."',".$_POST['aplugs_cnt'].", '".$_POST['aoring_name']."',".$_POST['aoring_cnt'].",'".$_POST['aparks_name']."',".$_POST['aparks_cnt'].", 
+'".$_POST['acap_name']."',".$_POST['acap_cnt'].", 2, 5, 0, 0, '".$_SESSION['uid']."')";
+// echo $query;
+	$result=mssql_query($query);
+ 
+ 	// 更新 fill_indicate
+	$query="UPDATE  FILL_INDICATE SET	FID_FILL_BEGIN_DATE = '".date("YmdHis")."'	WHERE   (FDM_LOT_NO = '".$_SESSION['lid']."')";
+	$result=mssql_query($query);
+	
+jumpto("wash_drum_f2.php");
+}
+?>	
+	

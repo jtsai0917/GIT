@@ -1,0 +1,1592 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+	<?php
+	//ini_set("memory_limit","2048M");
+session_start();
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+include  "../PHPEXCEL/Classes/PHPExcel.php";
+include "../PHPEXCEL/Classes/PHPExcel/IOFactory.php";
+lasturl();
+datepick();
+?>
+ </br><form id="form1" name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+特別查詢
+日期： <input name="datepicker1" type="text" id="datepicker1" size="10" value="<?php if($_SESSION['datepicker1']){echo $_SESSION['datepicker1'];}?>" onChange="set_date_session(this.name,this.value)">
+~
+<input name="datepicker2" type="text" id="datepicker2" size="10" value="<?php if($_SESSION['datepicker2']){echo $_SESSION['datepicker2'];}?>" onChange="set_date_session(this.name,this.value)"></td> 
+<input name="submit2" type="submit" id="submit2" value=" 下載報告 "><BR />
+
+<input name="submit" type="submit" id="submit" value=" IPA(ACID)查詢 ">
+<input name="submit1" type="submit" id="submit1" value=" IPA(PH)查詢 ">
+<input name="submit4" type="submit" id="submit4" value=" UPW(PH)查詢 ">
+<input name="submit5" type="submit" id="submit5" value=" HCL(M13)查詢 ">
+<input name="submit6" type="submit" id="submit6" value=" NH4OH(CO3)查詢 ">
+<input name="submit7" type="submit" id="submit7" value=" 醋酸 硫酸(AA)查詢 "><BR />
+
+<input name="submit8" type="submit" id="submit8" value=" H2O2(TN)查詢 " />
+<input name="submit3" type="submit" id="submit3" value=" H2O2(MX TN)查詢 " />
+<input name="submit9" type="submit" id="submit9" value=" H2O2(CapN)查詢 ">
+<input name="submit10" type="submit" id="submit10" value=" H2O2(AA)查詢 ">
+<input name="submit11" type="submit" id="submit11" value=" 所有藥品(Particle)查詢 ">
+<input name="submit12" type="submit" id="submit12" value=" IPA(水分)查詢 "><BR />
+
+
+<input name="submit13" type="submit" id="submit13" value=" 0.01 N  KMnO4  標定分析H2SO4 SRP分析用 ">
+<input name="submit24" type="submit" id="submit24" value=" 0.0005 N  KMnO4  標定分析H2SO4 SRP分析用 ">
+<input name="submit14" type="submit" id="submit14" value=" 0.1  N   KMnO4   標定分析FOR H2O2用 ">
+<input name="submit15" type="submit" id="submit15" value=" 1 N  H2SO4 標定分析FOR FOR NH4OH滴定用 ">
+<input name="submit16" type="submit" id="submit16" value=" 1 N  NaOH 標定分析FOR NH4OH反滴定用 ">
+<input name="submit17" type="submit" id="submit17" value=" 0.01 N  NaOH 標定分析FOR H2O2游離酸用 ">
+<input name="submit18" type="submit" id="submit18" value=" 0.5 N  NaOH 標定分析FOR AT610滴定用 ">
+<input name="submit19" type="submit" id="submit19" value=" 0.1 N  NaOH 標定分析FOR HF(AT-510)用 "><BR />
+
+<input name="submit20" type="submit" id="submit20" value=" TOC_H2SO4查詢 ">
+<input name="submit21" type="submit" id="submit21" value=" H2SO4(NO3)查詢 ">
+<input name="submit22" type="submit" id="submit22" value=" H2SO4(PO4)查詢 ">
+<input name="submit23" type="submit" id="submit23" value=" H2SO4(RAI)查詢 " />
+<?PHP 
+$path_root=$_SERVER['HTTP_HOST'];
+			
+	 
+if(isset($_POST['submit']))
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+		$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW 200ml pH值3次平均"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA 25ml 混入UPW pH值3次平均"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA [H+]量平均"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA Acidity測定結果(ppm)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Acidity報告值(ppm)(DL 1ppm)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."UPW 200ml pH值3次平均".'</td>';
+	echo '<td>'."IPA 25ml 混入UPW pH值3次平均".'</td>';
+	echo '<td>'."IPA [H+]量平均 (u mole)".'</td>';
+	echo '<td>'."IPA Acidity測定結果(ppm)".'</td>';
+	echo '<td>'."Acidity報告值(ppm)(DL 1ppm)".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	
+	$query="select * from TLIQA9100317 where  (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') ";
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['TestQty'].'</td>';
+				echo '<td>'.$row['FacterQty'].'</td>';
+				echo '<td>'.$row['LostQty'].'</td>';
+				echo '<td>'.$row['Value0'].'</td>';
+				echo '<td>'.$row['Value1'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+			
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TestQty']));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['FacterQty']));$ENG++;	
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LostQty']));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value0']));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value1']));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+			
+		}	
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+	
+}
+
+
+		if(isset($_POST['submit2']))
+		{
+			
+			echo '</br>';
+			echo "下載";
+		echo '<script>document.location.href="http://'.$path_root.'/cal/find1.xlsx";</script>';
+		
+		}
+		
+if(isset($_POST['submit1']))
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW pH平均"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA25ml+UPW200ml pH平均"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA [H+]uMole濃度平均(umole/L)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA PH 平均"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA [H+]量平均(u mole)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","IPA PH 報告值"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."UPW pH平均".'</td>';
+	echo '<td>'."IPA25ml+UPW200ml pH平均".'</td>';
+	echo '<td>'."IPA [H+]uMole濃度平均(umole/L)".'</td>';
+	echo '<td>'."IPA PH 平均".'</td>';
+	echo '<td>'."IPA [H+]量平均(u mole)".'</td>';
+	echo '<td>'."IPA PH 報告值".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$query="select * from TLIQA9100342 where  (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') ";
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Test1'].'</td>';
+				echo '<td>'.$row['Test2'].'</td>';
+				echo '<td>'.$row['Test3'].'</td>';
+				echo '<td>'.$row['TestAve'].'</td>';
+				echo '<td>'.$row['Value0'].'</td>';
+				echo '<td>'.$row['PH'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Test1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Test2']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Test3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TestAve']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PH']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+			}
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+
+if(isset($_POST['submit3']))///H2O2 MX TN
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./form/H2O2_MX_TN.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."檢量線法檢測值(ppb)".'</td>';
+	echo '<td>'."標準添加法檢測值報告值(最小DL下限10 ppb)".'</td>';
+	echo '<td>'."STD-0".'</td>';
+	echo '<td>'."STD-1".'</td>';
+	echo '<td>'."STD-2".'</td>';
+	echo '<td>'."RSQ".'</td>';
+	echo '<td>'."SLOPE".'</td>';
+	echo '<td>'."UPW TN(ppb)".'</td>';
+	echo '<td>'."50ppb CK-1".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;
+	/*
+	$objPHPExcel->getActiveSheet()->setCellValue("A".$NUM, iconv("big5","utf-8","LOT NO"));
+	$objPHPExcel->getActiveSheet()->setCellValue("B".$NUM, iconv("big5","utf-8","SAMPLE NO"));
+	$objPHPExcel->getActiveSheet()->setCellValue("C".$NUM, iconv("big5","utf-8","DRUM NO"));
+	$objPHPExcel->getActiveSheet()->setCellValue("D".$NUM, iconv("big5","utf-8","檢量線法檢測值(ppb)"));
+	$objPHPExcel->getActiveSheet()->setCellValue("E".$NUM, iconv("big5","utf-8","標準添加法檢測值報告值(最小DL下限10 ppb)"));
+	$objPHPExcel->getActiveSheet()->setCellValue("F".$NUM, iconv("big5","utf-8","STD-0"));
+	$objPHPExcel->getActiveSheet()->setCellValue("G".$NUM, iconv("big5","utf-8","STD-1"));
+	$objPHPExcel->getActiveSheet()->setCellValue("H".$NUM, iconv("big5","utf-8","STD-2"));
+	$objPHPExcel->getActiveSheet()->setCellValue("I".$NUM, iconv("big5","utf-8","RSQ"));
+	$objPHPExcel->getActiveSheet()->setCellValue("J".$NUM, iconv("big5","utf-8","SLOPE"));
+	$objPHPExcel->getActiveSheet()->setCellValue("K".$NUM, iconv("big5","utf-8","UPW TN(ppb)"));
+	$objPHPExcel->getActiveSheet()->setCellValue("L".$NUM, iconv("big5","utf-8","50ppb CK-1"));
+	$objPHPExcel->getActiveSheet()->setCellValue("M".$NUM, iconv("big5","utf-8","分析時間"));
+	$objPHPExcel->getActiveSheet()->setCellValue("N".$NUM, iconv("big5","utf-8","Tester"));
+	$objPHPExcel->getActiveSheet()->setCellValue("O".$NUM, iconv("big5","utf-8","Operator"));
+	*/
+	$query="select * from TLOQA9100314 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."' and LotNo like '%MX%') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Value0'].'</td>';
+				echo '<td>'.$row['Value1'].'</td>';
+				echo '<td>'.$row['Value2'].'</td>';
+				echo '<td>'.$row['Value3'].'</td>';
+				echo '<td>'.$row['Value4'].'</td>';
+				echo '<td>'.$row['Value5'].'</td>';
+				echo '<td>'.$row['Value6'].'</td>';
+				echo '<td>'.$row['Value7'].'</td>';
+				echo '<td>'.$row['Value8'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				$MX=substr($row['LotNo'],3,3);
+				if($MX=='MXA'){$q=$row['Value1'];$r="";$s="";}
+				if($MX=='MXB'){$q="";$r=$row['Value1'];$s="";}
+				if($MX=='MXC'){$q="";$r="";$s=$row['Value1'];}
+				
+//				echo $MX."<BR>";
+				
+				$objPHPExcel->getActiveSheet()->setCellValue("A".$NUM, iconv("big5","utf-8",$row['LotNo']));
+				$objPHPExcel->getActiveSheet()->setCellValue("B".$NUM, iconv("big5","utf-8",$row['SampleNo']));
+				$objPHPExcel->getActiveSheet()->setCellValue("C".$NUM, iconv("big5","utf-8",""));
+				$objPHPExcel->getActiveSheet()->setCellValue("D".$NUM, iconv("big5","utf-8",$row['Value0']));
+				$objPHPExcel->getActiveSheet()->setCellValue("E".$NUM, iconv("big5","utf-8",$row['Value1']));
+				$objPHPExcel->getActiveSheet()->setCellValue("F".$NUM, iconv("big5","utf-8",$row['Value2']));
+				$objPHPExcel->getActiveSheet()->setCellValue("G".$NUM, iconv("big5","utf-8",$row['Value3']));
+				$objPHPExcel->getActiveSheet()->setCellValue("H".$NUM, iconv("big5","utf-8",$row['Value4']));
+				$objPHPExcel->getActiveSheet()->setCellValue("I".$NUM, iconv("big5","utf-8",$row['Value5']));
+				$objPHPExcel->getActiveSheet()->setCellValue("J".$NUM, iconv("big5","utf-8",$row['Value6']));
+				$objPHPExcel->getActiveSheet()->setCellValue("K".$NUM, iconv("big5","utf-8",$row['Value7']));
+				$objPHPExcel->getActiveSheet()->setCellValue("L".$NUM, iconv("big5","utf-8",$row['Value8']));
+				$objPHPExcel->getActiveSheet()->setCellValue("M".$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));
+				$objPHPExcel->getActiveSheet()->setCellValue("N".$NUM, iconv("big5","utf-8",$row['Tester']));	
+				$objPHPExcel->getActiveSheet()->setCellValue("O".$NUM, iconv("big5","utf-8",$row['Operator']));
+				$objPHPExcel->getActiveSheet()->setCellValue("Q".$NUM, iconv("big5","utf-8",$q));
+				$objPHPExcel->getActiveSheet()->setCellValue("R".$NUM, iconv("big5","utf-8",$r));
+				$objPHPExcel->getActiveSheet()->setCellValue("S".$NUM, iconv("big5","utf-8",$s));
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+
+if(isset($_POST['submit4']))
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","B"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Sn"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","PH"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","COND"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."B".'</td>';
+	echo '<td>'."Sn".'</td>';
+	echo '<td>'."PH".'</td>';
+	echo '<td>'."COND".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$query="select * from TLUQA9100345 where  (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') ";
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['B'].'</td>';
+				echo '<td>'.$row['Sn'].'</td>';
+				echo '<td>'.$row['PH'].'</td>';
+				echo '<td>'.$row['COND'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['B']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Sn']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PH']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['COND']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+			}
+				$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+if(isset($_POST['submit5']))//C開頭的都會找出來__LOTNO
+{
+	
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Mg"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Al"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","K"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Ca"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Mn"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Fe"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Ni"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Co"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Cu"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Zn"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Pb"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","W"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."Na".'</td>';
+	echo '<td>'."Mg".'</td>';
+	echo '<td>'."Al".'</td>';
+	echo '<td>'."K".'</td>';
+	echo '<td>'."Ca".'</td>';
+	echo '<td>'."Cr".'</td>';
+	echo '<td>'."Mn".'</td>';
+	echo '<td>'."Fe".'</td>';
+	echo '<td>'."Ni".'</td>';
+	echo '<td>'."Co".'</td>';
+	echo '<td>'."Cu".'</td>';
+	echo '<td>'."Zn".'</td>';
+	echo '<td>'."Pb".'</td>';
+	echo '<td>'."W".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	
+	
+	$query="select * from TLOQA9110113 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."')  and LOTNO like 'C%'";//C開頭的都會找出來
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Na'].'</td>';
+				echo '<td>'.$row['Mg'].'</td>';
+				echo '<td>'.$row['Al'].'</td>';
+				echo '<td>'.$row['K'].'</td>';
+				echo '<td>'.$row['Ca'].'</td>';
+				echo '<td>'.$row['Cr'].'</td>';
+				echo '<td>'.$row['Mn'].'</td>';
+				echo '<td>'.$row['Fe'].'</td>';
+				echo '<td>'.$row['Ni'].'</td>';
+				echo '<td>'.$row['Co'].'</td>';
+				echo '<td>'.$row['Cu'].'</td>';
+				echo '<td>'.$row['Zn'].'</td>';
+				echo '<td>'.$row['Pb'].'</td>';
+				echo '<td>'.$row['W'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Na']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Mg']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Al']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['K']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Ca']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Cr']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Mn']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Fe']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Ni']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Co']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Cu']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Zn']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Pb']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['W']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+	
+}
+if(isset($_POST['submit6']))
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."試料15g(S1)".'</td>';
+	echo '<td>'."試料10g(S2)".'</td>';
+	echo '<td>'."A：比濁所得碳酸鹽量(mg)".'</td>';
+	echo '<td>'."CO32- (ppb)".'</td>';
+	echo '<td>'."CO32- (ppb) (DL 1000ppb)".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","試料 15g"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","試料 10g"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","A:比濁所得鹽酸量(mg)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","CO32-(ppb)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","CO32-(DL 1000ppb)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLWQA9100316 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') ";//C開頭的都會找出來
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['TestQty0'].'</td>';
+				echo '<td>'.$row['TestQty1'].'</td>';
+				echo '<td>'.$row['Eyesight'].'</td>';
+				echo '<td>'.$row['Value0'].'</td>';
+				echo '<td>'.$row['Value1'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TestQty0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TestQty1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Eyesight']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+/*if(isset($_POST['submit7']))///醋酸的AA
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."平均含量(w t%)".'</td>';
+	echo '<td>'."含量(w t%)測定一".'</td>';
+	echo '<td>'."含量(w t%)測定二".'</td>';
+	echo '<td>'."含量(w t%)測定三".'</td>';
+	echo '<td>'."R基準5% 以內".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均含量(w t%)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","含量(w t%)測定一"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","含量(w t%)測定二"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","含量(w t%)測定三"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","R基準5% 以內"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLAQA9110501 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') ";
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Value6'].'</td>';
+				echo '<td>'.$row['T1'].'</td>';
+				echo '<td>'.$row['T2'].'</td>';
+				echo '<td>'.$row['T3'].'</td>';
+				echo '<td>'.$row['T4'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value6']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}*/
+if(isset($_POST['submit7']))///醋酸的AA
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."RSD%".'</td>';
+	echo '<td>'."AVE (%)".'</td>';
+	echo '<td>'."測定濃度1 (%)".'</td>';
+	echo '<td>'."測定濃度2 (%)".'</td>';
+	echo '<td>'."測定濃度3 (%)".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","RSD%"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","AVE (%)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","測定濃度1 (%)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","測定濃度2 (%)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","測定濃度3 (%)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLAQA9110501 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['R_Base'].'</td>';
+				echo '<td>'.$row['Value'].'</td>';
+				echo '<td>'.$row['T1'].'</td>';
+				echo '<td>'.$row['T2'].'</td>';
+				echo '<td>'.$row['T3'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['R_Base']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+
+if(isset($_POST['submit8']))///H2O2 TN
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."檢量線法檢測值(ppb)".'</td>';
+	echo '<td>'."標準添加法檢測值報告值(最小DL下限10 ppb)".'</td>';
+	echo '<td>'."STD-0".'</td>';
+	echo '<td>'."STD-1".'</td>';
+	echo '<td>'."STD-2".'</td>';
+	echo '<td>'."RSQ".'</td>';
+	echo '<td>'."SLOPE".'</td>';
+	echo '<td>'."UPW TN(ppb)".'</td>';
+	echo '<td>'."50ppb CK-1".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","檢量線法檢測值(ppb)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","標準添加法檢測值報告值(最小DL下限10 ppb)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-0"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","RSQ"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SLOPE"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW TN(ppb)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","50ppb CK-1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLOQA9100314 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Value0'].'</td>';
+				echo '<td>'.$row['Value1'].'</td>';
+				echo '<td>'.$row['Value2'].'</td>';
+				echo '<td>'.$row['Value3'].'</td>';
+				echo '<td>'.$row['Value4'].'</td>';
+				echo '<td>'.$row['Value5'].'</td>';
+				echo '<td>'.$row['Value6'].'</td>';
+				echo '<td>'.$row['Value7'].'</td>';
+				echo '<td>'.$row['Value8'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value5']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value6']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value7']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value8']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+if(isset($_POST['submit9']))///H2O2
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'." mgSum ".'</td>';
+	echo '<td>'."200ng QC Check Area 感度值差%(< ±15%之內)".'</td>';
+	echo '<td>'."TN CONC. Sum (ng)".'</td>';
+	echo '<td>'."測定結果值(ppt)".'</td>';
+	echo '<td>'."空白濾紙重量(A) mg".'</td>';
+	echo '<td>'."濾液總體積(C) L".'</td>';
+	echo '<td>'."初濾壓力 (kg/cm2)".'</td>';
+	echo '<td>'."末壓(kg/cm2)".'</td>';
+	echo '<td>'."BLANK (ng/mg)".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","mgSum"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","200ng QC Check Area 感度值差%(< ±15%之內)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","TN CONC. Sum (ng)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","測定結果值(ppt)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","空白濾紙重量(A) mg"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","濾液總體積(C) L"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","初濾壓力 (kg/cm2)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","末壓(kg/cm2)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","BLANK (ng/mg)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLOQA9100318 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['mgSum'].'</td>';
+				echo '<td>'.$row['concSum'].'</td>';
+				echo '<td>'.$row['TNQSum'].'</td>';
+				echo '<td>'.$row['Value'].'</td>';
+				echo '<td>'.$row['Value0'].'</td>';
+				echo '<td>'.$row['Value1'].'</td>';
+				echo '<td>'.$row['Value2'].'</td>';
+				echo '<td>'.$row['Value3'].'</td>';
+				echo '<td>'.$row['Value4'].'</td>';			
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['mgSum']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['concSum']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TNQSum']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+if(isset($_POST['submit10']))///H2O2 AA
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."  TestQty ".'</td>';
+	echo '<td>'." H2SO4_1".'</td>';
+	echo '<td>'." H2SO4_2".'</td>';
+	echo '<td>'." KMnO4ml_1".'</td>';
+	echo '<td>'." KMnO4ml_2".'</td>';
+	echo '<td>'."KMnO4  F值".'</td>';
+	echo '<td>'." 含量(w t%)測定一".'</td>';
+	echo '<td>'." 含量(w t%)測定二".'</td>';
+	echo '<td>'."平均含量(w t%)".'</td>';	
+	echo '<td>'."含量(w t%)測定三".'</td>';
+	echo '<td>'."R基準5% 以內".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","TestQty"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","1:15 H2SO4_1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","1:15 H2SO4_2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","KMnO4 ml_1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","KMnO4 ml_2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","KMnO4  F值"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","含量(w t%)測定一"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","含量(w t%)測定二"));$ENG++;	
+		$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均含量(w t%)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","含量(w t%)測定三"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","R基準5% 以內"));$ENG++;
+		$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLOQA9100301 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['TestQty'].'</td>';
+				echo '<td>'.$row['H2SO4_1'].'</td>';
+				echo '<td>'.$row['H2SO4_2'].'</td>';
+				echo '<td>'.$row['KMnO4ml_1'].'</td>';
+				echo '<td>'.$row['KMnO4ml_2'].'</td>';
+				echo '<td>'.$row['KMnO4f'].'</td>';
+				echo '<td>'.$row['Level_1'].'</td>';
+				echo '<td>'.$row['Level_2'].'</td>';
+				echo '<td>'.$row['Average'].'</td>';	
+				echo '<td>'.$row['T1'].'</td>';
+				echo '<td>'.$row['T2'].'</td>';			
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TestQty']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['H2SO4_1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['H2SO4_2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['KMnO4ml_1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['KMnO4ml_2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['KMnO4f']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Level_1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Level_2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Average']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+
+if(isset($_POST['submit11']))///ALL  P
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."  溫度15~35℃ 測定 ".'</td>';
+	echo '<td>'." 濕度80%以下 測定".'</td>';
+	echo '<td>'." UPW 測定確認<10個/ml".'</td>';
+	echo '<td>'." >0.1  測定結果".'</td>';
+	echo '<td>'." >>0.15  測定結果".'</td>';
+	echo '<td>'.">0.2 測定結果".'</td>';
+	echo '<td>'." 0.3 測定結果".'</td>';
+	echo '<td>'." 0.5 測定結果".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","溫度15~35℃ 測定"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","濕度80%以下 測定"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW 測定確認<10個/ml"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",">0.1  測定結果"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",">0.15  測定結果"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",">0.2  測定結果"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",">0.3  測定結果"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",">0.5  測定結果"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLAQA9110900 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['chkC'].'</td>';
+				echo '<td>'.$row['chkPercent'].'</td>';
+				echo '<td>'.$row['chkML'].'</td>';
+				echo '<td>'.$row['PP01'].'</td>';
+				echo '<td>'.$row['PPG1'].'</td>';
+				echo '<td>'.$row['PP02'].'</td>';
+				echo '<td>'.$row['PP03'].'</td>';
+				echo '<td>'.$row['PP05'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['chkC']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['chkPercent']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['chkML']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PP01']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PPG1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PP02']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PP03']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PP05']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+if(isset($_POST['submit12']))//IPA 水分
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."水分 1  ppm".'</td>';
+	echo '<td>'."水分 2  ppm".'</td>';
+	echo '<td>'." 水分 3  ppm".'</td>';
+	echo '<td>'." 平均  ppm".'</td>';
+	echo '<td>'." RSD %".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","水分 1  ppm"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","水分 2  ppm"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","水分 3  ppm"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",">平均  ppm"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",">RSD%"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLIQA9100320 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Water1'].'</td>';
+				echo '<td>'.$row['Water2'].'</td>';
+				echo '<td>'.$row['Water3'].'</td>';
+				echo '<td>'.$row['WaterAve'].'</td>';
+				echo '<td>'.$row['RSD'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Water1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Water2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Water3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['WaterAve']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['RSD']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+//------------------------------------------------------------------------------------------------------
+if(isset($_POST['submit13']) or (isset($_POST['submit14'])) or (isset($_POST['submit15'])) or isset($_POST['submit16']) or isset($_POST['submit17']) or isset($_POST['submit18']) or isset($_POST['submit19']) or isset($_POST['submit24']) )//IPA 水分
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	$NUM=1;$ENG='A';
+
+	
+	$query="select * from TLAQA9110501 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') " ;
+			if(isset($_POST['submit24']))
+			{
+				$query=$query."and lotno like '%K001'";
+				echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."Na2C2O4 重量1(g)".'</td>';
+				echo '<td>'."Na2C2O4 重量2(g)".'</td>';
+				echo '<td>'."0.0005N KMnO4 消耗量1(ml)".'</td>';
+				echo '<td>'."0.0005N KMnO4 消耗量2(ml)".'</td>';
+				echo '<td>'."Na2C2O4純度(0.97~1.00)".'</td>';
+				echo '<td>'."平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4 重量1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4 重量1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.0005N KMnO4 消耗量1(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.0005N KMnO4 消耗量2(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4純度(0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+			}
+			if(isset($_POST['submit13']))
+			{
+				$query=$query."and lotno like '%K001'";
+				echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."Na2C2O4 重量1(g)".'</td>';
+				echo '<td>'."Na2C2O4 重量2(g)".'</td>';
+				echo '<td>'."0.01N KMnO4 消耗量1(ml)".'</td>';
+				echo '<td>'."0.01N KMnO4 消耗量2(ml)".'</td>';
+				echo '<td>'."Na2C2O4純度(0.97~1.00)".'</td>';
+				echo '<td>'."平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4 重量1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4 重量1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.01N KMnO4 消耗量1(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.01N KMnO4 消耗量2(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4純度(0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+			}
+			if(isset($_POST['submit14']))
+			{
+				$query=$query."and lotno like '%K010'";
+				echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."Na2C2O4 重量1(g)".'</td>';
+				echo '<td>'."Na2C2O4 重量2(g)".'</td>';
+				echo '<td>'."0.1N KMnO4 消耗量1(ml)".'</td>';
+				echo '<td>'."0.1N KMnO4 消耗量2(ml)".'</td>';
+				echo '<td>'."Na2C2O4純度(0.97~1.00)".'</td>';
+				echo '<td>'."平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4 重量1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4 重量1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.1N KMnO4 消耗量1(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.1N KMnO4 消耗量2(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4純度(0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+			}
+			if(isset($_POST['submit15']))
+			{
+				$query=$query."and lotno like '%S100'";
+					echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."Na2CO3 重量1(g)".'</td>';
+				echo '<td>'."Na2CO3 重量2(g)".'</td>';
+				echo '<td>'."1N H2SO4消耗量1(ml)".'</td>';
+				echo '<td>'."1N H2SO4消耗量2(ml)".'</td>';
+				echo '<td>'."Na2CO3純度(0.97~1.00)".'</td>';
+				echo '<td>'."平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2CO3 重量1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2CO3 重量2(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","1N H2SO4消耗量1(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","1N H2SO4消耗量2(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Na2C2O4純度(0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+				
+			}
+			if(isset($_POST['submit16']))
+			{
+				$query=$query."and lotno like '%N100'";
+					echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."KHP(g)標準品重1(g)".'</td>';
+				echo '<td>'."KHP(g)標準品重2(g)".'</td>';
+				echo '<td>'."1N NaOH消耗量1(ml)".'</td>';
+				echo '<td>'."1N NaOH消耗量2(ml)".'</td>';
+				echo '<td>'."KHP純度 (0.97~1.00)".'</td>';
+				echo '<td>'."平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","KHP(g)標準品重1(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","KHP(g)標準品重2(g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","1N NaOH消耗量1(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","1N NaOH消耗量2(ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","KHP純度 (0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+			}
+			if(isset($_POST['submit17']))
+			{
+				$query=$query."and lotno like '%N001'";
+						echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."HOSO2NH2標準品重1   (g)".'</td>';
+				echo '<td>'."HOSO2NH2標準品重2   (g)".'</td>';
+				echo '<td>'."0.01N NaOH消耗量1    (ml)".'</td>';
+				echo '<td>'."0.01N NaOH消耗量2    (ml)".'</td>';
+				echo '<td>'."Amidosulfonic acid純度(0.97~1.00)".'</td>';
+				echo '<td>'."平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","HOSO2NH2標準品重1   (g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","HOSO2NH2標準品重2   (g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.01N NaOH消耗量1    (ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.01N NaOH消耗量2    (ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Amidosulfonic acid純度(0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+			}
+			if(isset($_POST['submit18']))
+			{
+				$query=$query."and lotno like '%N050'";
+						echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."HOSO2NH2標準品重1   (g)".'</td>';
+				echo '<td>'."HOSO2NH2標準品重2   (g)".'</td>';
+				echo '<td>'."0.5N NaOH消耗量1    (ml)".'</td>';
+				echo '<td>'."0.5N NaOH消耗量2    (ml)".'</td>';
+				echo '<td>'."Amidosulfonic acid純度(0.97~1.00)".'</td>';
+				echo '<td>'."AT-610用平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","HOSO2NH2標準品重1   (g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","HOSO2NH2標準品重2   (g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.5N NaOH消耗量1    (ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.5N NaOH消耗量2    (ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Amidosulfonic acid純度(0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","AT-610用平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+			}
+			
+			if(isset($_POST['submit19']))
+			{
+				$query=$query."and lotno like '%N010'";
+						echo '<td>'."LOT NO".'</td>';
+				echo '<td>'."SAMPLE NO".'</td>';
+				echo '<td>'."HOSO2NH2標準品重1   (g)".'</td>';
+				echo '<td>'."HOSO2NH2標準品重2   (g)".'</td>';
+				echo '<td>'."0.1N NaOH消耗量1    (ml)".'</td>';
+				echo '<td>'."0.1N NaOH消耗量2    (ml)".'</td>';
+				echo '<td>'."Amidosulfonic acid純度(0.97~1.00)".'</td>';
+				echo '<td>'."AT-510用平均 f 值".'</td>';
+	
+				echo '<td>'."分析時間".'</td>';
+				echo '<td>'."Tester".'</td>';
+				echo '<td>'."Operator".'</td>';
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","HOSO2NH2標準品重1   (g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","HOSO2NH2標準品重2   (g)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.1N NaOH消耗量1    (ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","0.1N NaOH消耗量2    (ml)"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Amidosulfonic acid純度(0.97~1.00)"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","AT-510用平均 f 值"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+			}
+			//echo $query;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['R_Base'].'</td>';
+				echo '<td>'.$row['T1'].'</td>';
+				echo '<td>'.$row['Value'].'</td>';
+				echo '<td>'.$row['T2'].'</td>';
+				echo '<td>'.$row['T3'].'</td>';
+
+				echo '<td>'.$row['F1'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['R_Base']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['T3']));$ENG++;
+
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['F1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+if(isset($_POST['submit20']))///H2SO4_TOC
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."H2SO4 秤重".'</td>';
+	echo '<td>'."UPW定量重".'</td>';
+	echo '<td>'."硫酸稀釋倍數".'</td>';
+	echo '<td>'."UPW TOC 1".'</td>';
+	echo '<td>'."H2SO4 TOC 1".'</td>';
+	echo '<td>'."UPW TOC 2".'</td>';
+	echo '<td>'."H2SO4 TOC 2".'</td>';
+	echo '<td>'."UPW TOC 3".'</td>';
+	echo '<td>'."H2SO4 TOC 3".'</td>';
+	echo '<td>'."UPW TOC 4".'</td>';
+	echo '<td>'."H2SO4 TOC 4".'</td>';
+	echo '<td>'."UPW TOC 平均".'</td>';
+	echo '<td>'."H2SO4 TOC 平均".'</td>';
+	echo '<td>'."樣品TOC".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","H2SO4 秤重"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW定量重"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","硫酸稀釋倍數"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW TOC 1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","H2SO4 TOC 1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW TOC 2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","H2SO4 TOC 2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW TOC 3"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","H2SO4 TOC 3"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW TOC 4"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","H2SO4 TOC 4"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","UPW TOC 平均"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","H2SO4 TOC 平均"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","樣品TOC"));$ENG++;
+
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLSQA9100317 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['H2SO4'].'</td>';
+				echo '<td>'.$row['UPW_H2SO4'].'</td>';
+				echo '<td>'.$row['TIMES'].'</td>';
+				echo '<td>'.$row['UPW_1'].'</td>';
+				echo '<td>'.$row['TEN_1'].'</td>';
+				echo '<td>'.$row['UPW_2'].'</td>';
+				echo '<td>'.$row['TEN_2'].'</td>';
+				echo '<td>'.$row['UPW_3'].'</td>';
+				echo '<td>'.$row['TEN_3'].'</td>';
+				echo '<td>'.$row['UPW_4'].'</td>';
+				echo '<td>'.$row['TEN_4'].'</td>';
+				echo '<td>'.$row['AVG_UPW'].'</td>';
+				echo '<td>'.$row['AVG_TEN'].'</td>';	
+				echo '<td>'.$row['TOC'].'</td>';			
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['H2SO4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['UPW_H2SO4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TIMES']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['UPW_1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TEN_1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['UPW_2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TEN_2']));$ENG++;				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['UPW_3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TEN_3']));$ENG++;				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['UPW_4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TEN_4']));$ENG++;				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AVG_UPW']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AVG_TEN']));$ENG++;				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TOC']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+
+if(isset($_POST['submit21']))///H2SO4 I NO3
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."BLK吸收度1".'</td>';
+	echo '<td>'."BLK吸收度2".'</td>';
+	echo '<td>'."BLK吸收度3".'</td>';
+	echo '<td>'."STD-1吸收度1".'</td>';
+	echo '<td>'."STD-1吸收度2".'</td>';
+	echo '<td>'."STD-1吸收度3".'</td>';
+	echo '<td>'."STD-2吸收度1".'</td>';
+	echo '<td>'."STD-2吸收度2".'</td>';
+	echo '<td>'."STD-2吸收度3".'</td>';
+	echo '<td>'."試料量(g)".'</td>';
+	echo '<td>'."測定結果(ppm)".'</td>';
+	echo '<td>'."NO3報告值(ppm)(最低0.02)".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","BLK吸收度1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","BLK吸收度2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","BLK吸收度3"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-1吸收度1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-1吸收度2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-1吸收度3"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-2吸收度1"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-2吸收度2"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-2吸收度3"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","試料量(g)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","測定結果(ppm)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","NO3報告值(ppm)(最低0.02)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLSQA9100305 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Input0'].'</td>';
+				echo '<td>'.$row['Input1'].'</td>';
+				echo '<td>'.$row['Input2'].'</td>';
+				echo '<td>'.$row['Input3'].'</td>';
+				echo '<td>'.$row['Input4'].'</td>';
+				echo '<td>'.$row['Input5'].'</td>';
+				echo '<td>'.$row['Input6'].'</td>';
+				echo '<td>'.$row['Input7'].'</td>';
+				echo '<td>'.$row['Input8'].'</td>';
+				echo '<td>'.$row['TestQty'].'</td>';
+				echo '<td>'.$row['Result'].'</td>';
+				echo '<td>'.$row['NO3'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input5']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input6']));$ENG++;				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input7']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Input8']));$ENG++;				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TestQty']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Result']));$ENG++;				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['NO3']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+if(isset($_POST['submit22']))///H2SO4 I PO4
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."PO4 測定結果".'</td>';
+	echo '<td>'."PO4 報告值".'</td>';
+	echo '<td>'."BLK吸收度".'</td>';
+	echo '<td>'."STD-1吸收度".'</td>';
+	echo '<td>'."STD-2吸收度".'</td>';
+	echo '<td>'."sample吸收度".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","PO4 測定結果"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","PO4 報告值"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","BLK吸收度"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-1吸收度"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","STD-2吸收度"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","sample吸收度"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLSQA9100306 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['Result'].'</td>';
+				echo '<td>'.$row['PO4'].'</td>';
+				echo '<td>'.$row['Light0'].'</td>';
+				echo '<td>'.$row['Light1'].'</td>';
+				echo '<td>'.$row['Light2'].'</td>';
+				echo '<td>'.$row['Light4'].'</td>';
+				
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Result']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['PO4']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Light0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Light1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Light2']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Light4']));$ENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+if(isset($_POST['submit23']))///H2SO4 RAI
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("./QC.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	 echo '<table border="1" width="1500">';
+	 echo '</tr>';
+	echo '<td>'."LOT NO".'</td>';
+	echo '<td>'."SAMPLE NO".'</td>';
+	echo '<td>'."sample量(g)".'</td>';
+	echo '<td>'."石英杯空重g".'</td>';
+	echo '<td>'."石英杯蒸發後重(g)".'</td>';
+	echo '<td>'."檢測結果(ppb)".'</td>';
+	echo '<td>'."報告值(ppb)(最小DL 100ppb)".'</td>';
+	echo '<td>'."分析時間".'</td>';
+	echo '<td>'."Tester".'</td>';
+	echo '<td>'."Operator".'</td>';
+	$NUM=1;$ENG='A';
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","LOT NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","SAMPLE NO"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","sample量(g)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","石英杯空重g"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","石英杯蒸發後重(g)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","檢測結果(ppb)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","報告值(ppb)(最小DL 100ppb)"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","分析時間"));$ENG++;
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Tester"));$ENG++;	
+	$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8","Operator"));$ENG++;
+	
+	$query="select * from TLSQA9100303 where (AnalyzeTime > '".dod($_POST['datepicker1'])."000000"."') 
+			AND (AnalyzeTime < '".dod($_POST['datepicker2'])."999999"."') order by lotno" ;
+			$result = mssql_query($query);
+			while ($row = mssql_fetch_array($result))
+			{
+				$NUM++;$ENG='A';
+				echo '</tr>';
+				echo '<td>'.$row['LotNo'].'</td>';
+				echo '<td>'.$row['SampleNo'].'</td>';
+				echo '<td>'.$row['TestQty'].'</td>';
+				echo '<td>'.$row['BeforeQty'].'</td>';
+				echo '<td>'.$row['AfterQty'].'</td>';
+				echo '<td>'.$row['Value0'].'</td>';
+				echo '<td>'.$row['Value1'].'</td>';
+				echo '<td>'.$row['AnalyzeTime'].'</td>';
+				echo '<td>'.$row['Tester'].'</td>';
+				echo '<td>'.$row['Operator'].'</td>';
+				
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['LotNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['SampleNo']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['TestQty']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['BeforeQty']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AfterQty']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value0']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Value1']));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['AnalyzeTime']."/"));$ENG++;
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Tester']));$ENG++;	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$NUM, iconv("big5","utf-8",$row['Operator']));$ENG++;
+				
+			}
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('find1.xlsx');
+}
+
+
+?>

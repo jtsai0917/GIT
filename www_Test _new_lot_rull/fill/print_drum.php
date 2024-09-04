@@ -1,0 +1,184 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title></title>
+列印 EL DRUM 充填 CHECKLIST 
+<form method="post" action="<?php echo $loginFormAction; ?>">
+<input type="submit" name="print" id="print" value="列印" />
+<input type="submit" name="leave" id="leave" value="離開" />
+</form>
+<?PHP 
+session_start();
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+include  "../PHPEXCEL/Classes/PHPExcel.php";
+include "../PHPEXCEL/Classes/PHPExcel/IOFactory.php";
+datepick();
+echo $_GET['id'];
+global $num;
+$num=0;
+if(isset($_POST['leave']))
+	{
+		jumpto($_SESSION['lasturl']);
+	}
+	if(isset($_POST['print']))
+		{
+			echo "</br>列印中....."; 
+			
+ 			$query="SELECT DISTINCT 
+                   FILL_INDICATE.FID_FILL_BEGIN_DATE, FILL_INDICATE.FID_QTY, FILL_INDICATE.FID_OPERATOR, 
+                   EL_FILLDATA_DRUM.EFD_OPERATOR
+FROM      FILL_INDICATE LEFT OUTER JOIN
+                   EL_FILLDATA_DRUM ON FILL_INDICATE.FDM_LOT_NO = EL_FILLDATA_DRUM.FDM_LOT_NO
+WHERE   (FILL_INDICATE.FDM_LOT_NO = '".trim($_GET['id'])."') ";
+$result=mssql_query($query);
+$row=mssql_fetch_row($result);
+$fill_date=std($row[0]);
+$fill_man=get_uname($row[3]);
+$fill_qty=round($row[1],2);
+
+			$objPHPExcel = new PHPExcel();
+			$objPHPExcel = PHPExcel_IOFactory::load("./EL_DRUM_FILL.xlsx");	
+			$objPHPExcel->setActiveSheetIndex($GLOBALS['num']);
+			
+				$V01=array();
+				$V02=array();
+				$V03=array();
+				$V04=array();
+				$V05=array();
+				$V06=array();
+				$V07=array();
+
+			$R2="SELECT DISTINCT 
+                EFD_SERIAL_NO, EFD_DRUM_NO, EFD_MAKELOT, EFD_EMPTY_SCALES, EFD_QTY, EFD_CHK_CAP, EFD_CHK_CAP_CLR
+				FROM      EL_FILLDATA_DRUM AS EFD
+				where 		EFD.FDM_LOT_NO='".trim($_GET['id'])."'
+				ORDER BY	EFD_SERIAL_NO";
+					
+			$result1 = mssql_query($R2);
+			$numRows = mssql_num_rows($result1);
+			while($row1 = mssql_fetch_array($result1))
+			{
+				if(trim($row1['EFD_MAKELOT'])=='')
+				{
+					$bb=check_made_lot($row1['EFD_DRUM_NO'],$_GET['id']);
+					$row1['EFD_MAKELOT']=$bb;
+				}
+//				echo $row1['EFD_SERIAL_NO'];
+				array_push($V01,$row1['EFD_SERIAL_NO']);
+				array_push($V02,$row1['EFD_DRUM_NO']);
+				array_push($V03,$row1['EFD_MAKELOT']);
+				array_push($V04,$row1['EFD_EMPTY_SCALES']);
+				array_push($V05,$row1['EFD_QTY']);
+				array_push($V06,$row1['EFD_CHK_CAP']);
+				array_push($V07,$row1['EFD_CHK_CAP_CLR']);			
+			}
+			$ENG='G';
+			$eight=12;
+			$nine=13;
+			$ten=14;
+			$forteen=15;
+			$fifteen=16;
+			$sixteen=17;
+			$seventeen=18;
+			$eighteen=19;
+			$twenty=20;
+			$smpnos=get_sample_no(trim($_GET['id']));
+			for($i=0;$i<$numRows;$i++)
+			{
+//				echo "<BR>".$V01[$i];
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$eight,$V01[$i] );
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$nine,$V02[$i] );
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$ten,$V03[$i] );
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$forteen,$V04[$i] );
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$fifteen,$V05[$i] );
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$sixteen,$V06[$i] );
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$seventeen,$V06[$i] );	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$eighteen,$V07[$i] );	
+				$objPHPExcel->getActiveSheet()->setCellValue($ENG.$twenty,$smpnos );	
+				$ENG++;	
+				$ans=($i+1)%16;			
+				if($ans==0)
+				{					
+				$GLOBALS['num']++;
+				$ENG='G';
+				$objPHPExcel->setActiveSheetIndex($GLOBALS['num']);
+				}
+				
+			}
+			
+			//EXCEL寫入客戶資料
+			$oo=round(($numRows/16),0);
+		for($i=0;$i<$oo;$i++){
+			$objPHPExcel->setActiveSheetIndex($i);
+			$user=array();
+			$user1=array();
+			$R1="SELECT  CTD.CTD_CUST_SHORT_NAME, FOD.FDM_QTY, FOD.FOD_YEAR_MONTH, FOD.FOD_DAY, DFD.DDC_PURGE, 
+                   DFD.DDC_SCALES_SET, DFD.DDC_CHK_SCALES
+FROM      FILLPLAN_OUT_DECIDE AS FOD INNER JOIN
+                   FILLPLAN_DRUM_CUSTOMER AS FDC ON FOD.FDM_LOT_NO = FDC.FDM_LOT_NO INNER JOIN
+                   CUSTOMER_DATA AS CTD ON FDC.CTD_CUST_NO = CTD.CTD_CUST_NO LEFT OUTER JOIN
+                   DRUM_FILL_DAY_CHECK AS DFD ON FOD.FDM_LOT_NO = DFD.FDM_LOT_NO
+WHERE   (FOD.FDM_LOT_NO = '".$_GET['id']."')";
+//			echo "<BR>".$R1."<BR>";	
+			$result = mssql_query($R1);
+			$numRows = mssql_num_rows($result);
+			while($row = mssql_fetch_array($result))
+			{
+				$day1=$row['FOD_YEAR_MONTH'].$row['FOD_DAY'];
+				array_push($user,$row['CTD_CUST_SHORT_NAME']);
+				$user1=iconv("big5","utf-8",$user[0]).iconv("big5","utf-8",$user[1]);
+				$qty=$row['FDM_QTY'];
+				$pur=$row['DDC_PURGE'];
+				$set=$row['DDC_SCALES_SET'];
+				$chk=$row['DDC_CHK_SCALES'];
+				
+			}
+			$objPHPExcel->getActiveSheet()->setCellValue("C3", $day1);
+			$objPHPExcel->getActiveSheet()->setCellValue("C4", $user1);
+			$objPHPExcel->getActiveSheet()->setCellValue("C5", $qty);
+			$objPHPExcel->getActiveSheet()->setCellValue("C6", $_GET['id']);
+			$objPHPExcel->getActiveSheet()->setCellValue("H8", $pur);
+			$objPHPExcel->getActiveSheet()->setCellValue("H9", $set);
+			$objPHPExcel->getActiveSheet()->setCellValue("H10",$chk);
+				
+			$R3="select SA.SMA_ID,SA.SMA_USER from Sample_All as SA where SA.SMA_LOT='".$_GET['id']."' and SMA_USER<>''";
+			//	echo $R3;
+				
+			$result2 = mssql_query($R3);
+			$numRows1 = mssql_num_rows($result2);
+			while($row2 = mssql_fetch_array($result2))
+			{
+				
+				$can=$can."  ".$row2['SMA_ID'];
+			}
+			$objPHPExcel->getActiveSheet()->setCellValue("A19",$can);
+		}
+			//EXCEL寫入客戶資料 //
+			
+			$path_root=$_SERVER['HTTP_HOST'];
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save('fill.xlsx');
+			echo '</br>';
+			echo "列印完成";
+		echo '<script>document.location.href="http://'.$path_root.'/fill/fill.xlsx";</script>';	
+		
+		}
+
+function check_made_lot($dmno,$lid)
+{
+	$query="SELECT  EWD_MAKELOT FROM EL_WASH_DRUM WHERE   
+	(FDM_LOT_NO = '".$lid."') AND (EWD_DRUM = '".$dmno."')";	
+	$result=mssql_query($query);
+	$rows=mssql_fetch_row($result);
+	return $rows[0];
+}
+
+function get_sample_no($lotno){
+	$query="SELECT   SMA_ID FROM Sample_All WHERE (SMA_LOT = '".$lotno."')";
+	$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		$str=$str.$row[0].", ";
+	}
+	return substr($str,0,-2);
+}
+?>

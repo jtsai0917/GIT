@@ -1,0 +1,60 @@
+<?php 
+include("../checkuser.php");
+include("../lib/fun.php");
+include("../connections/conn.php");
+datepick();
+session_start();
+lasturl();
+$aa=array();
+
+echo iconv("utf-8","big5",'根元素');
+$query="SELECT [index], name, [value], [order], [level] FROM istar_default_setting WHERE  (active = 1) order by[level], [order],[index] ";
+$result=mssql_query($query);
+echo '<table width="512" border="1"><tr bgcolor="#F1F1F1"><td>ID</td><td>'.iconv("utf-8","big5",'項目名稱').'</td><td>'.iconv("utf-8","big5",'設定值').'</td><td>'.iconv("utf-8","big5",'排列順序').'</td><td>'.iconv("utf-8","big5",'層別').'</td></tr>';
+while($row=mssql_fetch_array($result)){
+	echo '<tr><td>'.trim($row['index']).'</td><td>'.trim($row['name']).'</td><td>'.trim($row['value']).'</td><td>'.trim($row['order']).'</td><td>'.trim($row['level']).'</td></tr>';
+	array_push($aa,trim($row['index']).",".trim($row['name']).",".trim($row['value']).",".trim($row['order']).",".trim($row['level']));
+}
+echo '</table><BR><BR>';
+echo '<form action="" method="post">';
+echo 'ID <select name="id" onchange="set_date_session(this.name,this.value)"><option value=""></option>';
+
+foreach($aa as $value) {
+	$bb=explode(",",$value);
+	if($value==$_SESSION['id']){$s1='selected';}else{$s1='';}
+  echo '<option value="'.$value.'" '.$s1.'>'.$bb[0].'</option>';
+}
+echo '</select><BR>';
+$cc=explode(",",$_SESSION['id']);
+echo iconv("utf-8","big5",'項目名稱').'<input type="text" name="item" size="18" value="'.$cc[1].'"><input type="submit" name="sub1" value="'.iconv("utf-8","big5",'變更').'"><br>';
+echo iconv("utf-8","big5",'設定值').'<input type="text" name="value" value="'.$cc[2].'"><input type="submit" name="sub2" value="'.iconv("utf-8","big5",'變更').'"><br>';
+echo iconv("utf-8","big5",'排列順序').'<input type="text" name="order" size="18" value="'.$cc[3].'"><input type="submit" name="sub3" value="'.iconv("utf-8","big5",'變更').'"><br>';
+echo iconv("utf-8","big5",'層別 ').'<input type="text" name="order" size="18" value="'.$cc[4].'"><input type="submit" name="sub4" value="'.iconv("utf-8","big5",'變更').'"><br>';
+echo '<input type="submit" name="add" value="'.iconv("utf-8","big5",'新增').'"> &nbsp;<br>';
+echo '</form>';
+if(isset($_POST['sub1'])){
+	$query="update istar_default_setting set name='".$_POST['item']."' where [index]=".$cc[0];
+	$result=mssql_query($query);
+	refresh();
+}
+if(isset($_POST['sub2'])){
+	$query="update istar_default_setting set [value]='".$_POST['value']."' where [index]=".$cc[0];
+	$result=mssql_query($query);
+	refresh();
+}
+if(isset($_POST['sub3'])){
+	$query="update istar_default_setting set [order]='".$_POST['order']."' where [index]=".$cc[0];
+	$result=mssql_query($query);
+	refresh();
+}
+
+if(isset($_POST['add'])){
+	$query="INSERT INTO istar_default_setting
+                            (name, [value], active, creator, createtime, [level], UNIT, [order])
+VALUES          ('".$_POST['item']."', '".$_POST['value']."', 1, N'".$_SESSION['uid']."', '".date("Y-m-d H:i:s")."', 0, N'kg', ".$_POST['order'].")";
+//echo $query."<BR>";
+	$result=mssql_query($query);
+	refresh();
+}
+
+?>

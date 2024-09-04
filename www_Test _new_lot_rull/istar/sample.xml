@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MaterialInlineMeasurementData 
+						xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="Inlinedata-1.0.xsd"   
+            SupplierID="123456789"
+            MaterialNo="L123456"
+            ManufacturingSite="SITE1234"
+            ManufacturingLine="A"  
+            ProcessStage="STG1234"
+            EqpID="EQP1234"                       
+            FileGenTime="2015/11/10 17:42:00+08:00"
+            FileTemplateVersion="1.0">
+              <Data Parameter="PARAMETER1" ContainerID="N/A" MeasureTime="2015/11/10 10:48:35+08:00" VALUE="44.8" UNIT="BAR" SupplierBatchID="123456789" tsmcBatchID="2023" Status="N/A"/>
+              <Data Parameter="PARAMETER2" ContainerID="N/A" MeasureTime="2015/11/10 10:48:35+08:00" VALUE="44.8" UNIT="BAR" SupplierBatchID="123456789" tsmcBatchID="2023" Status="N/A"/>
+              <Data Parameter="PARAMETER3" ContainerID="N/A" MeasureTime="2015/11/10 10:48:35+08:00" VALUE="44.8" UNIT="BAR" SupplierBatchID="123456789" tsmcBatchID="2023" Status="N/A"/>
+              <Data Parameter="PARAMETER4" ContainerID="N/A" MeasureTime="2015/11/10 10:48:35+08:00" VALUE="44.8" UNIT="BAR" SupplierBatchID="123456789" tsmcBatchID="2023" Status="N/A"/>
+              <Data Parameter="PARAMETER5" ContainerID="N/A" MeasureTime="2015/11/10 10:48:35+08:00" VALUE="44.8" UNIT="BAR" SupplierBatchID="123456789" tsmcBatchID="2023" Status="N/A"/>
+              <Data Parameter="PARAMETER6" ContainerID="N/A" MeasureTime="2015/11/10 10:48:35+08:00" VALUE="44.8" UNIT="BAR" SupplierBatchID="123456789" tsmcBatchID="2023" Status="N/A"/>
+</MaterialInlineMeasurementData>

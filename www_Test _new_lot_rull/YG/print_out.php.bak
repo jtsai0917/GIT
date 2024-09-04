@@ -1,0 +1,207 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php 
+include("../connections/conn.php");
+include("../lib/fun.php");
+datepick();
+session_start();
+
+if(isset($_POST['quit'])){
+	echo '<script type="text/javascript">window.close();</script>';
+}
+
+$id=$_GET['carid'];
+	$path_root=$_SERVER['HTTP_HOST'];
+	require_once "../PHPEXCEL/Classes/PHPExcel.php";
+		require_once "../PHPEXCEL/Classes/PHPExcel/IOFactory.php";
+
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->setActiveSheetIndex(0);
+	if($_GET['sub_type']==1){	
+		$objPHPExcel = PHPExcel_IOFactory::load("letout.xlsx");
+	}
+	else{
+		$objPHPExcel = PHPExcel_IOFactory::load("letout_1.xlsx");
+	}
+		
+	$query="SELECT DISTINCT 
+                            PRODUCT_DATA.PDD_CHEMICAL AS CHEMICAL, EMPLOYEE_DATA.EMP_NAME, 
+                            CUSTOMER_DATA.CTD_CUST_SHORT_NAME AS CSN, YG_CHECK_DETAIL.PLACE, 
+                            YG_CHECK_DETAIL.LOT_NO AS lotno, YG_CHECK_DETAIL.CAR_NO, YG_CHECK_DETAIL.CAR_TYPE, 
+                            YG_CHECK_DETAIL.LORRY_NO, YG_CAR_OUT.DATETIME AS odt, FILLPLAN_OUT_DECIDE.FDM_REAL_OUT_TIME, 
+                            FILLPLAN_OUT_DECIDE.FDM_OUT_DATE, YG_CHECK_DETAIL.car_out_id, YG_CHECK_DETAIL.print_time, 
+                            PRODUCT_DATA.PDD_PROD_NAME, FILLPLAN_OUT_DECIDE.LY_SN, OUT_DECISION.OPM_ETA_DATE, YG_CHECK_DETAIL.drum_cnt as dcount 
+FROM              PRODUCT_DATA INNER JOIN
+                            FILLPLAN_OUT_DECIDE ON 
+                            PRODUCT_DATA.PDD_PROD_NO = FILLPLAN_OUT_DECIDE.PDD_PROD_NO FULL OUTER JOIN
+                            EMPLOYEE_DATA RIGHT OUTER JOIN
+                            OUT_PRODUCT INNER JOIN
+                            YG_CHECK_DETAIL ON OUT_PRODUCT.OPD_QTY_DRUM = YG_CHECK_DETAIL.drum_cnt AND 
+                            OUT_PRODUCT.OPD_LOT_NO = YG_CHECK_DETAIL.LOT_NO LEFT OUTER JOIN
+                            YG_CAR_OUT ON YG_CHECK_DETAIL.car_out_id = YG_CAR_OUT.[index] ON 
+                            EMPLOYEE_DATA.EMP_NO = YG_CHECK_DETAIL.CHECKER LEFT OUTER JOIN
+                            CUSTOMER_DATA INNER JOIN
+                            OUT_DECISION ON CUSTOMER_DATA.CTD_CUST_NO = OUT_DECISION.CTD_CUST_NO ON 
+                            OUT_PRODUCT.OPM_ORDER_NO = OUT_DECISION.OPM_ORDER_NO ON 
+                            FILLPLAN_OUT_DECIDE.FDM_LOT_NO = YG_CHECK_DETAIL.LOT_NO   
+WHERE          (YG_CHECK_DETAIL.car_out_id = ".$id.")"; 
+		$chem='';
+		$rr=44;
+		$result=mssql_query($query);
+// echo $query."<BR>";
+	while($row=mssql_fetch_array($result)){
+	 	$csn=$csn.",".$row['CSN'];
+		$dcount = $row['dcount'];
+		// 檢查是否為LORRY    A-02-2   口DRUM  口LORRY   出車 / 回廠  檢查放行單
+		if($row['PLACE']==0){	
+		
+		$lorry_no=$row['LORRY_NO']= substr(trim($row['lotno']),0,2).substr(trim($row['lotno']),-4);
+		$objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue('B2',std($row['OPM_ETA_DATE']))
+								->setCellValue("B3",iconv("big5","utf-8",substr($csn,1)))
+								->setCellValue('B4',$row['CHEMICAL'])
+								->setCellValue('J3',$row['CAR_NO'])
+								->setCellValue('A1',iconv("big5","utf-8"," A-02-2   口DRUM  ■LORRY   出車 / 回廠  檢查放行單"))
+								->setCellValue('X2',$row['lotno']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y3',"V");
+		$str="檢查時間:".sta($row['odt']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',iconv("big5","utf-8",$str));
+		$str="列印時間:".sta(date("YmdHis"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H35',iconv("big5","utf-8",$str));
+		}
+		if($row['PLACE']==1){	
+			
+		$chem.=$row['CHEMICAL'].",";
+		$objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue('B2',std($row['OPM_ETA_DATE']))
+								->setCellValue("B3",iconv("big5","utf-8",substr($csn,1)))
+								->setCellValue('B4',$chem);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1',iconv("big5","utf-8"," A-02-2   口DRUM  口LORRY   出車 / 回廠  檢查放行單"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y4',$row['CAR_NO']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('C6',trim($row['CHEMICAL']));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue("C7",trim($row['lotno']));
+		$str="檢查日期:".sta($row['odt']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',iconv("big5","utf-8",$str));
+		$str="列印時間:".sta(date("YmdHis"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H35',iconv("big5","utf-8",$str));
+		}
+		if($row['PLACE']==2){	
+			
+		$chem.=$row['CHEMICAL'].",";
+		$objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue('B2',std($row['OPM_ETA_DATE']))
+								->setCellValue("B3",iconv("big5","utf-8",substr($csn,1)))
+								->setCellValue('B4',$chem);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1',iconv("big5","utf-8"," A-02-2   口DRUM  口LORRY   出車 / 回廠  檢查放行單"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y4',$row['CAR_NO']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('G6',trim($row['CHEMICAL']));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue("G7",trim($row['lotno']));
+		$str="檢查日期:".sta($row['odt']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',iconv("big5","utf-8",$str));
+		$str="列印時間:".sta(date("YmdHis"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H35',iconv("big5","utf-8",$str));
+		}
+		
+		if($row['PLACE']==3){	
+			
+		$chem.=$row['CHEMICAL'].",";
+		$objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue('B2',std($row['OPM_ETA_DATE']))
+								->setCellValue("B3",iconv("big5","utf-8",substr($csn,1)))
+								->setCellValue('B4',$chem);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1',iconv("big5","utf-8"," A-02-2   口DRUM  口LORRY   出車 / 回廠  檢查放行單"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y4',$row['CAR_NO']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('L6',trim($row['CHEMICAL']));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue("L7",trim($row['lotno']));
+		$str="檢查日期:".sta($row['odt']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',iconv("big5","utf-8",$str));
+		$str="列印時間:".sta(date("YmdHis"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H35',iconv("big5","utf-8",$str));
+		}
+		if($row['PLACE']==4){	
+			
+		$chem.=$row['CHEMICAL'].",";
+		$objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue('B2',std($row['OPM_ETA_DATE']))
+								->setCellValue("B3",iconv("big5","utf-8",substr($csn,1)))
+								->setCellValue('B4',$chem);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1',iconv("big5","utf-8"," A-02-2   口DRUM  口LORRY   出車 / 回廠  檢查放行單"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y4',$row['CAR_NO']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('P6',trim($row['CHEMICAL']));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue("P7",trim($row['lotno']));
+		$str="檢查日期:".sta($row['odt']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',iconv("big5","utf-8",$str));
+		$str="列印時間:".sta(date("YmdHis"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H35',iconv("big5","utf-8",$str));
+		}
+		if($row['PLACE']==5){	
+			
+		$chem.=$row['CHEMICAL'].",";
+		$objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue('B2',std($row['OPM_ETA_DATE']))
+								->setCellValue("B3",iconv("big5","utf-8",substr($csn,1)))
+								->setCellValue('B4',$chem);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1',iconv("big5","utf-8"," A-02-2   口DRUM  口LORRY   出車 / 回廠  檢查放行單"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y4',$row['CAR_NO']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('U6',trim($row['CHEMICAL']));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue("U7",trim($row['lotno']));
+		$str="檢查日期:".sta($row['odt']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',iconv("big5","utf-8",$str));
+		$str="列印時間:".sta(date("YmdHis"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H35',iconv("big5","utf-8",$str));
+		}
+		if($row['PLACE']==6){	
+			
+		$chem.=$row['CHEMICAL'].",";
+		$objPHPExcel->setActiveSheetIndex(0)
+								->setCellValue('B2',std($row['OPM_ETA_DATE']))
+								->setCellValue("B3",iconv("big5","utf-8",substr($csn,1)))
+								->setCellValue('B4',$chem);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A1',iconv("big5","utf-8"," A-02-2   口DRUM  口LORRY   出車 / 回廠  檢查放行單"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y4',$row['CAR_NO']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y6',trim($row['CHEMICAL']));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue("Y7",trim($row['lotno']));
+		$str="檢查日期:".sta($row['odt']);
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A35',iconv("big5","utf-8",$str));
+		$str="列印時間:".sta(date("YmdHis"));
+		$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H35',iconv("big5","utf-8",$str));
+		}
+		//  換頁 
+		if($_GET['sub_type']==1){		
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('S35',iconv("big5","utf-8",stc($row['OPM_ETA_DATE'])));
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('J42',iconv("big5","utf-8",sts($row['print_time'])));
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue("X42",iconv("big5","utf-8","編號：".$row['car_out_id']));
+			
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.$rr,iconv("big5","utf-8",$row['PDD_PROD_NAME']."   ".substr(trim($row['lotno']),-4)));
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$rr,$dcount);
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.$rr,iconv("big5","utf-8","出荷"));
+			
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('S58',iconv("big5","utf-8",stc($row['OPM_ETA_DATE'])));
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('J66',iconv("big5","utf-8",sts($row['print_time'])));
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue("X61",iconv("big5","utf-8","編號：".$row['car_out_id']));
+			
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('A'.($rr+19),iconv("big5","utf-8",$row['PDD_PROD_NAME']."   ".substr(trim($row['lotno']),-4)));
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.($rr+19),$dcount);
+			$objPHPExcel->setActiveSheetIndex(0)->setCellValue('R'.($rr+19),iconv("big5","utf-8","出荷"));
+		}
+//		echo "LOTNO:".substr(trim($row['lotno']),-4);
+		$rr++;
+		
+								
+//		update_printed($aa[$z][1],$row['FDM_OUT_DATE']);
+	}
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, "Excel2007");
+		$objWriter->save("printout.xlsx");
+		update_printed($id);
+		echo '<form name="form1" method="post" action=""><input type="submit" name="quit" value="關閉" autofocus ></form>';
+		echo '<script>document.location.href="http://'.$path_root.'/YG/printout.xlsx";</script>';
+	
+function update_printed($id)
+{
+	$query="UPDATE YG_CHECK_DETAIL SET PRINTED = 1,print_time ='".date("YmdHis")."' WHERE (car_out_id = ".$id.") ";	
+	$result=mssql_query($query);
+	$query="UPDATE YG_CAR_OUT SET PRINTED = N'".date("YmdHis")."' WHERE ([index] = ".$id.")";	
+	$result=mssql_query($query);
+}
+echo '<script type="text/javascript">window.close();</script>';
+?>
+

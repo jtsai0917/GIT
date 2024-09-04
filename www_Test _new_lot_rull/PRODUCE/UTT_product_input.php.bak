@@ -1,0 +1,311 @@
+<?php 
+session_start();
+include("../lib/fun.php");
+include("../checkuser.php");
+include("../lib/jtsai.php");
+lasturl();
+datepick(); 
+?>
+
+<form name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+  <label for="textfield"></label>
+   巡檢項目：<span class="d1">
+        <input type="button" name="X" id="X" value="X" onClick="window.open('../erase_prod.php ', '_self');">
+        <input name="TAG_NO" type="text" id="TAG_NO" size="10" onchange="set_date_session(this.name,this.value)" value="<?php 
+		if ($_GET['pid']){
+			echo $_GET['pid'];
+			$_SESSION['pid']=$_GET['pid'];
+		}
+		elseif($_SESSION['pid']){
+			echo $_SESSION['pid'];
+		}
+		else{
+		echo '';
+		}
+		?>" >
+         <input type="button" name="pdd_no" id="pdd_no" value="項目" onClick="window.open('./utt_tag_no.php ', '_self');" >
+        <input name="TAG_NAME" type="text" id="TAG_NAME" size="16" value="<?php 
+		if ($_GET['pname']){
+			echo $_GET['pname'];
+			$_SESSION['pname']=$_GET['pname'];
+		}
+		elseif($_SESSION['pname']){
+			echo $_SESSION['pname'];
+		}
+		else{
+		echo '';
+		}
+		?>" readonly>
+  		<input type="submit" name="search" value="項目資料" />
+        <input type="submit" name="add" value="新增項目" />
+</form>
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+$_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
+if(isset($_POST['search']))
+{
+	$query="SELECT          UT.[index] as idx, UT.TAG_NO, UT.project, UT.unit, UT.spec, UT.high, UT.low, UT.mode, UT.form, UT.form1, UT.tag_mark, 
+                            UT.sign_form, UT.savetime, UT.saveuid, UF.[index] AS Expr1, UF.Form AS Expr2, UF.filename, UF.link, UF.sn, 
+                            UF.sn1, UF.way, UF.title, UF.savetime AS Expr3, UF.saveuid AS Expr4, UT.form AS FORM, UT.form1 AS FORM1
+          From  UTT_TAGNO_DATA UT left join UTT_FORM_DATA UF ON UT.form=UF.[index] where TAG_NO='".trim($_POST['TAG_NO'])."'";
+	echo "<BR>".$query."<BR>";
+	$result=mssql_query($query);
+	$numRows=mssql_num_rows($result);
+	if($numRows==0){my_msg('查無資料');}
+	$row=mssql_fetch_array($result);
+	$mode=trim($row['mode']);
+	$idx=trim($row['idx']);
+	$_SESSION['form']=trim($row['FORM']);
+	$_SESSION['form1']=trim($row['FORM1']);
+	if($mode=='GT')
+	{
+		$high='<input type="text" name="high" size="2" value="'.trim($row['high']).'">';
+		$low='<input type="text" name="low" size="2" value="'.trim($row['low']).'">';
+		$select='<select name="mode">
+		<option value="GT">大於</option>
+		<option value="BT">～</option>
+		<option value="LS">小於</option>
+		<option value="SAME">等於</option>
+		<option value="REMARK">紀錄</option>
+		</select>';
+	}
+	if($mode=='LS')
+	{
+		$high='<input type="text" name="high" size="2" value="'.trim($row['low']).'">';
+		$low='<input type="text" name="low" size="2" value="'.trim($row['high']).'">';
+		$select='<select name="mode">
+		<option value="LS">小於</option>
+		<option value="GT">大於</option>
+		<option value="BT">～</option>
+		<option value="SAME">等於</option>
+		<option value="REMARK">紀錄</option>
+		</select>';
+	}
+	if($mode=='BT')
+	{
+		$high='<input type="text" name="high" size="2" value="'.trim($row['high']).'">';
+		$low='<input type="text" name="low" size="2" value="'.trim($row['low']).'">';
+		$select='<select name="mode">
+		<option value="BT">～</option>
+		<option value="GT">大於</option>
+		<option value="LS">小於</option>
+		<option value="SAME">等於</option>
+		<option value="REMARK">紀錄</option>
+		</select>';
+	}
+	if($mode=='SAME')
+	{
+		$high='<input type="text" name="high" size="2" value="'.trim($row['high']).'">';
+		$low='<input type="text" name="low" size="2" value="">';
+		$select='<select name="mode">
+		<option value="SAME">等於</option>
+		<option value="BT">～</option>
+		<option value="GT">大於</option>
+		<option value="LS">小於</option>
+		<option value="REMARK">紀錄</option>
+		</select>';
+	}
+	if($mode=='REMARK')
+	{
+		$high='<input type="text" name="high" size="2" value="">';
+		$low='<input type="text" name="low" size="2" value="">';
+		$select='<select name="mode">
+		<option value="REMARK">紀錄</option>
+		<option value="BT">～</option>
+		<option value="GT">大於</option>
+		<option value="LS">小於</option>
+		<option value="SAME">等於</option>
+		</select>';
+	}
+	$_SESSION['TAG_NO']=trim($row['TAG_NO']);
+	echo '<form name="form2" method="post" action=""><table width="1200" border="1" align="left">';
+	echo '<tr bgcolor="#CCCCCC"><td>TAG_NO*</td><td>項目名稱*</td><td width="100">單位</td><td align="center">SPEC</td><td>巡檢表單(橫)</td><td>巡檢表單(直)</td><td>儲存</td></tr>';
+	echo '<tr><td><input type="text" name="TAG_NO"  value="'.trim($row['TAG_NO']).'"><input type="hidden" name="idx" value="'.trim($row['idx']).'"></td><td><input type="text" name="project" value="'.trim($row['project']).'"></td><td><input type="text" size="8" name="unit" value="'.trim($row['unit']).'"></td><td align="center">小'.$low.'  '.$select.'  '.$high.'大</td>
+	<td>';
+	UTT_FORM();
+	echo '</td><td>';
+	UTT_FORM1();
+	echo '</td><td align="center"><input type="submit" name="save" value="儲存"><br><br> <input type="submit" name="del" value="刪除資料"></td></tr>';
+	echo '</table></form>';
+}
+if(isset($_POST['del']))
+{
+	$query="DELETE UTT_TAGNO_DATA WHERE [index]='".$_POST['idx']."'";
+	$result=mssql_query($query);
+	if($result){
+		my_msg('刪除完畢');
+	}
+}
+if(isset($_POST['save'])){
+	$low=trim($_POST['low']);
+	$high=trim($_POST['high']);
+	if(trim($_POST['low'])!='' or trim($_POST['high'])!='')
+	{
+		if($_POST['mode']=='GT')
+		{
+			$spec='>';
+		}
+		elseif($_POST['mode']=='LS')
+		{
+			$spec='<';
+			$low=trim($_POST['high']);
+			$high=trim($_POST['low']);
+		}
+		elseif($_POST['mode']=='BT'){$spec='~';}
+		elseif($_POST['mode']=='SAME'){$spec='=';$low='';$high=strtoupper(trim($_POST['high']));}
+		$SPEC1=$_POST['low'].$spec.$_POST['high'];
+		if($_POST['mode']=='SAME' and trim($_POST['high'])==''){my_msg('請填入"大"欄位');}
+	}
+	$query="update UTT_TAGNO_DATA set TAG_NO='".$_POST['TAG_NO']."', project='".$_POST['project']."',unit='".$_POST['unit']."',spec='".$SPEC1."',low='".$low."',high='".$high."',mode='".$_POST['mode']."',form='".$_POST['form']."',form1='".$_POST['form1']."' where TAG_NO='".$_SESSION['TAG_NO']."'";
+	$result=mssql_query($query);
+	unset($_SESSION['TAG_NO']);
+	echo '<font size="+1">儲存完成!</font>';
+	}
+if(isset($_POST['add']))
+{
+	$high='<input type="text" name="high" size="2">';
+	$low='<input type="text" name="low" size="2">';
+	$select='<select name="mode">
+	<option value="BT">～</option>
+	<option value="GT">大於</option>
+	<option  value="LS">小於</option>
+	<option value="SAME">等於</option>
+	<option value="REMARK">紀錄</option>
+	</select>';
+	
+	echo '<table width="1000" border="1" align="left">';
+	echo '<tr bgcolor="#CCCCCC"><td>TAG_NO*</td><td>項目名稱*</td><td>單位</td><td align="center">SPEC</td><td>巡檢表單(橫)</td><td>巡檢表單(直)</td><td>儲存</td></tr>';
+	echo '<tr>
+	<td><input type="text" name="TAG_NO"></td>
+	<td><input type="text" name="project" ></td>
+	<td><input type="text" name="unit"></td>
+	<td align="center">小'.$low.'  '.$select.'  '.$high.'大</td>
+	<td>';
+	newprod();
+	echo '</td>
+	<td>';
+	newprod1();
+	echo '</td>
+	<td><input type="submit" name="new" value="儲存"></td>
+	</tr>';
+}
+if(isset($_POST['new']))
+{
+	$query="select * from UTT_TAGNO_DATA WHERE TAG_NO='".trim($_POST['TAG_NO'])."'";
+	$result=mssql_query($query);
+	$Num=mssql_num_rows($result);
+	if($Num<>0){my_msg('已有資料!');}
+	if($_POST['mode']!='REMARK')
+	{
+		if($_POST['mode']=='GT' and $_POST['low']>=$_POST['high'])
+		{
+			my_msg('spec錯誤');
+		}
+		elseif($_POST['mode']=='LS' and $_POST['low']<>'')
+		{
+			my_msg('spec錯誤');
+		}
+		elseif($_POST['mode']=='BT' and $_POST['low']=='' and $_POST['high']=='' or $_POST['low']>=$_POST['high'])
+		{
+			my_msg('spec錯誤');
+		}
+		elseif($_POST['mode']=='SAME' and $_POST['high']=='')
+		{
+			my_msg('請填入"大"欄位');
+		}
+	}
+	if($_POST['mode']=='GT')
+	{
+		$high=$_POST['high'];
+		$low=$_POST['low'];
+	}
+	if($_POST['mode']=='LS')
+	{
+		$high=$_POST['low'];
+		$low=$_POST['high'];
+	}
+	if($_POST['mode']=='BT')
+	{
+		
+		$high=$_POST['high'];
+		$low=$_POST['low'];
+	}
+	if($_POST['mode']=='SAME')
+	{
+		$high=strtoupper($_POST['high']);
+		$low=$_POST['low'];
+	}
+	if($_POST['mode']=='REMARK')
+	{
+		$high=$_POST['high'];
+		$low=$_POST['low'];
+	}
+	if($_POST['mode']=='GT'){$spec='>'.$_POST['high'];}
+	if($_POST['mode']=='LS'){$spec='<'.$_POST['high'];}
+	if($_POST['mode']=='SAME'){$spec='='.$_POST['high'];}
+	if($_POST['mode']=='BT'){$spec=$_POST['low'].'~'.$_POST['high'];}
+	if($_POST['mode']=='REMARK'){$spec='紀錄';}
+	$query="insert into UTT_TAGNO_DATA (TAG_NO, project, unit, spec, high, low, mode, form, form1, savetime, saveuid) values ('".$_POST['TAG_NO']."','".$_POST['project']."','".$_POST['unit']."','".$spec."','".$high."','".$low."','".$_POST['mode']."','".$_POST['form']."','".$_POST['form1']."','".date(Ymdhis)."','".$_SESSION['uid']."')";
+	$result=mssql_query($query);
+	my_msg('新增完畢!');
+}
+function dateform1($d1)  //2017/01/01 => 20170101
+{	
+	$rt=str_replace("/","",$d1);
+	return $rt;
+}
+function tag_cname($d2)
+{
+	$query="select project from UTT_TAG_DATA where TAG_NO='".$d2."'";
+	$result=mssql_query($query);
+	$row=mssql_fetch_array($result);
+	$d3=trim($row[0]);
+	return $d3;
+}
+function UTT_FORM(){///橫
+	echo '<select name="form">';
+	$query1="select * from UTT_FORM_DATA where [index]='".$_SESSION['form']."' and way='B' order by Form";
+	$result1=mssql_query($query1);
+	$row1=mssql_fetch_array($result1);
+	echo '<option value="'.$row1['index'].'">'.trim($row1['Form']).'</option>';
+	$query2="select * from UTT_FORM_DATA where way='B'";
+	$result2=mssql_query($query2);
+	while($row2=mssql_fetch_array($result2)){
+	if(trim($row1['index'])!=trim($row2['index']) or $row1['index']==''){
+	echo '<option value="'.trim($row2['index']).'">'.trim($row2['Form']).'</option>';}
+	}
+	echo'</select>';
+	}
+function UTT_FORM1(){///直
+	echo '<select name="form1">';
+	$query1="select * from UTT_FORM_DATA where [index]='".$_SESSION['form1']."' and way='A' order by Form";
+	$result1=mssql_query($query1);
+	$row1=mssql_fetch_array($result1);
+	$index=explode(trim($row1['Form']));
+	echo '<option value="'.$row1['index'].'">'.trim($row1['Form']).'</option>';
+	$query2="select * from UTT_FORM_DATA WHERE way='A'";
+	$result2=mssql_query($query2);
+	while($row2=mssql_fetch_array($result2)){
+	if(trim($row1['index'])!=trim($row2['index']) or $row1['index']==''){
+	echo '<option value="'.trim($row2['index']).'">'.trim($row2['Form']).'</option>';}
+	}
+	echo'</select>';
+	}
+function newprod(){///新增料號表單(橫)
+echo '<select name="form">';
+	$query2="select * from UTT_FORM_DATA WHERE way='B' order by Form";
+	$result2=mssql_query($query2);
+	while($row2=mssql_fetch_array($result2)){
+	echo '<option value="'.trim($row2['index']).'">'.trim($row2['Form']).'</option>';}
+	echo'</select>';
+}
+function newprod1(){///新增料號表單(直)
+echo '<select name="form1">';
+	$query2="select * from UTT_FORM_DATA WHERE way='A' order by Form";
+	$result2=mssql_query($query2);
+	while($row2=mssql_fetch_array($result2)){
+	echo '<option value="'.trim($row2['index']).'">'.trim($row2['Form']).'</option>';}
+	echo'</select>';
+}
+?>
+</br>

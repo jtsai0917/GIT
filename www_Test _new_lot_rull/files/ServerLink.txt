@@ -1,0 +1,1 @@
+Provider=SQLOLEDB.1;Persist Security Info=False;User ID=sa;Password=9037;Initial Catalog=chemical;Data Source=195.7.2.100

@@ -1,0 +1,175 @@
+
+<?php
+include("../lib/fun.php");
+include("../connections/conn.php");
+lasturl1();
+$query="select CTD_CUST_NO, PDD_PROD_NO, CTP_EXPORT, CTP_CLASS, SUBSTRING(CTP_SEL_LY_TOTO, 0, 256) AS ly, 
+                            SUBSTRING(CTP_SEL_LY_TOTO, 256, 256) AS ly1, CTP_DESC, CTP_FILL, CTP_ANALYZE, CTP_VALID_MON, 
+                          CTP_REMNANT_MON, CTP_CHANGE_DM, CTP_REWASH, 
+                          CTP_SAMPLE_BEFORE, CTP_COA_BEFORE, CTP_OUT_SMP_PE, 
+                          CTP_OUT_SMP_TFA, CTP_BEF_SMP_PE, CTP_BEF_SMP_TFA, 
+                          CTP_ANALYZE_1, CTP_ANALYZE_2, CTP_ANALYZE_3, CTP_ANALYZE_4, 
+                          CTP_OUT_COUNT, CTP_CUSTBAR1, CTP_CUSTBAR2, CTP_CUSTBAR3, 
+                          CTP_PRINT_FMT, CTP_BIGHOSEBAR, CTP_BIGHOSEBAR_Length, 
+                          CTP_ExportCountLimit, CTP_SAMPLE_MODE, CTP_UNIT, smp_total, smp_reg, CTP_CUSTBAR1_CHECK  
+FROM             CUSTOMER_PRODUCTS
+WHERE         (CTD_CUST_NO = '".$_GET['cid']."') and (PDD_PROD_NO = '".$_GET['pid']."')";
+// echo "<BR>".$query."<BR>";
+$result=mssql_query($query);
+while($row=mssql_fetch_array($result)){
+if($row['CTP_CUSTBAR1_CHECK']==1){$CTP_CUSTBAR1_CHECK=" checked ";}else{ $CTP_CUSTBAR1_CHECK="";}
+//	echo $row['ly']."<BR>";
+?>
+
+編輯客戶產品資料(<?php echo "客戶編號：".$_GET['cid']."   客戶名稱：".get_cust_name($_GET['cid']); ?>)
+<form name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+  <table width="640" border="1">
+    <tr>
+      <td width="350"><?php echo "料號: ".$row['PDD_PROD_NO']."  品名:".get_prod_name($row['PDD_PROD_NO']);?>  </td>
+      <td>外銷/內銷: 
+      <select name="export" id="export">
+          <option value="E" <?php if($row['CTP_EXPORT']=='E'){echo 'selected';}?>>外銷</option>
+          <option value="I" <?php if($row['CTP_EXPORT']=='I'){echo 'selected';}?>>內銷</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td>備註:
+      <input name="postcript" type="text" id="postcript" size="40" value="<?php echo $row['CTP_DESC'];?>"></td>
+      <td><p>產品類別:
+          <label for="ctp_class"></label>
+          <select name="ctp_class" id="ctp_class">
+            <option value="O" <?php if($row['CTP_CLASS']=='O'){echo 'selected';}?>>OEM</option>
+            <option value="T" <?php if($row['CTP_CLASS']=='T'){echo 'selected';}?>>TYS</option>
+          </select>
+      </p>
+      <p>銷售單位 
+        <select name="ctp_unit" id="ctp_unit">
+          <option value="KG" <?php if(trim($row['CTP_UNIT'])=='KG'){echo 'selected';}?>>KG</option>
+          <option value="L" <?php if(trim($row['CTP_UNIT'])=='L'){echo 'selected';}?>>L</option>
+        </select>
+      </p></td>
+    </tr>
+    <tr>
+      <td>可用Lorry 編號
+      (請用分號隔開不同Lorry 編號)
+        <textarea name="lyno" cols="50" rows="20" maxlength="-1"><?php echo trim($row['ly']).trim($row['ly1']);?></textarea></td>
+    <td>
+      <p>
+        <input type="checkbox" name="fill" id="fill" <?php if($row['CTP_FILL']=='Y'){echo 'checked';}?>>充填&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="checkbox" name="analyze" id="analyze" <?php if($row['CTP_ANALYZE']=='Y'){echo 'checked';}?>>分析&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="checkbox" name="block3" id="block3" <?php if($row['CTP_SAMPLE_MODE']=='Y'){echo 'checked';}?>>前中後取樣
+        </p>
+      <p>
+        <input type="checkbox" name="changedm" id="changedm" <?php if($row['CTP_CHANGE_DM']=='Y'){echo 'checked';}?>>
+        接受他家廠商回收桶&nbsp;
+        <input type="checkbox" name="rewash" id="rewash" <?php if($row['CTP_REWASH']=='Y'){echo 'checked';}?>>回收桶清洗
+      </p>
+      <p>
+        <input type="checkbox" name="sambefore" id="sambefore" <?php if($row['CTP_SAMPLE_BEFORE']=='Y'){echo 'checked';}?>>
+        先行樣品
+        <input type="checkbox" name="coabefore" id="coabefore" <?php if($row['CTP_COA_BEFORE']=='Y'){echo 'checked';}?>>
+        先行COA
+      </p>
+      有效月數:
+      <input name="validmon" type="text" id="validmon" size="6" value="<?php echo $row['CTP_VALID_MON'];?>">
+      &nbsp;&nbsp;&nbsp;殘存月數
+      <input name="rem_mon" type="text" id="rem_mon" size="6" value="<?php echo $row['CTP_REMNANT_MON'] ?>"></td></tr>
+    </table>
+    <table width="640" border="2">
+    	<tr>
+    		<td align="center">分析樣品數(全項) ： <input type="text" name="smp_total" size="4" value="<?php echo $row['smp_total'];?>">
+    			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;分析樣品數(常規) ： <input type="text" name="smp_reg" size="4" value="<?php echo $row['smp_reg'];?>"></td>
+    	</tr>
+    <table width="640" border="2">
+    <tr>
+      <td align="center">隨貨樣品</td>
+      <td align="center">先行樣品</td>
+    </tr>
+    <tr>
+      <td>TFA瓶數：
+      <input name="out_tfa" type="text" id="out_tfa" size="5" value="<?php echo $row['CTP_OUT_SMP_TFA'] ?>">&nbsp;&nbsp;&nbsp;PE瓶數：
+      <input name="out_pe" type="text" id="out_pe" size="5" value="<?php echo $row['CTP_OUT_SMP_PE'] ?>"></td>
+      <td>Partical瓶數：
+        <input name="bef_tfa" type="text" id="bef_tfa" size="5" value="<?php echo $row['CTP_BEF_SMP_TFA'] ?>">
+      &nbsp;&nbsp;&nbsp;Metel瓶數：
+      <input name="bef_pe" type="text" id="bef_pe" size="5" value="<?php echo $row['CTP_BEF_SMP_PE'] ?>"></td>
+    </tr>
+  	</table>
+  <table width="640" border="1"><tr><td align="center">條碼設定</td></tr></table>
+  <table width="640" border="1">
+		<tr><td width="320">客戶條碼一 
+	      	<input name="barcode1" type="text" id="barcode1" size="12" value="<?php echo $row['CTP_CUSTBAR1'] ?>"> 出貨需驗證<input type="checkbox" name="outcheck1" <?php echo $CTP_CUSTBAR1_CHECK; ?>></td>
+        	<td width="320">DRUM BARCODE 設定
+        	<input name="barcodedrum" type="text" id="barcodedrum" size="12" value="<?php echo $row['CTP_PRINT_FMT'] ?>"></td></tr>
+        <tr><td width="320">客戶條碼二 
+	      	<input name="barcode2" type="text" id="barcode2" size="12" value="<?php echo $row['CTP_CUSTBAR2'] ?>"></td>
+        	<td width="320">Lorry HOSE BARCODE
+        	  <input name="lorry_hose_barcode" type="text" id="lorry_hose_barcode" size="12" value="<?php echo $row['CTP_BIGHOSEBAR'] ?>"></td></tr>
+        <tr><td width="320">客戶條碼三 
+	      	<input name="barcode3" type="text" id="barcode3" size="12" value="<?php echo $row['CTP_CUSTBAR3'] ?>"></td>
+        	<td width="320">HOSE BARCODE 碼數 
+					<input name="hose_barcode" type="text" id="hose_barcode" size="12" value="<?php echo $row['CTP_BIGHOSEBAR_Length'] ?>"></td></tr>
+				<tr>
+        	<td>客戶料號1<input type="text" name="cust_prod_no1" size="12" value="<?php echo $row['CTP_CUST_PROD_NO1'] ?>"></td>
+        	<td>客戶料號2<input type="text" name="cust_prod_no2" size="12" value="<?php echo $row['CTP_CUST_PROD_NO2'] ?>"></td>
+        </tr>
+        <tr>
+          <td width="320"><p>限制Drum使用次數
+	      	<input name="limit" type="text" id="limit" size="10" value="<?php echo $row['CTP_ExportCountLimit'] ?>">
+	      	( 0 代表新桶)</p>
+            <?php space(54)?>(-1 代表無限制)</p></td>
+        	<td width="320" align="center">
+            <p>
+       	    <input type="submit" name="delete" id="delete" value=" 刪除 " onClick="return confirm('確定刪除?')">
+       	    <input type="submit" name="new" id="new" value=" 新增 ">
+       	    <input type="submit" name="save" id="save" value=" 儲存 " onClick="return confirm('確定儲存?')">
+            <input type="submit" name="leave" id="leave" value=" 離開 ">
+            </p>
+            </td></tr>
+  </table>
+</form>
+<?php } ?>
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+
+if(isset($_POST["new"])){
+		$ulink= 'index.php?url=new_cust_prod&cid='.$_GET['cid'];
+		echo '<script>document.location.href="'.$ulink.'";</script>';		
+	}
+if(isset($_POST["leave"])){
+		$ulink= 'index.php?url=prod_cust';
+		echo '<script>document.location.href="'.$ulink.'";</script>';		
+	}
+if(isset($_POST["save"])){
+//	echo '<BR>'.$_POST['lyno'].'<BR>';
+//	break;
+if($_POST['outcheck1']=='on'){$ck1=1;}else{$ck1=0;}
+		$query="UPDATE        CUSTOMER_PRODUCTS SET CTP_CUSTBAR1_CHECK = '".$ck1."',smp_reg = '".trim($_POST['smp_reg'])."',CTP_UNIT = '".trim($_POST['ctp_unit'])."',smp_total = '".trim($_POST['smp_total'])."',             
+					 CTP_EXPORT ='".$_POST['export']."', CTP_CLASS ='".$_POST['ctp_class']."', CTP_SEL_LY_TOTO ='".$_POST['lyno']."',
+					 CTP_DESC ='".$_POST['postcript']."', CTP_FILL ='".cx($_POST['fill'])."', CTP_ANALYZE ='".cx($_POST['analyze'])."', 
+                     CTP_VALID_MON ='".$_POST['validmon']."', CTP_REMNANT_MON ='".$_POST['rem_mon']."', CTP_CHANGE_DM ='".cx($_POST['changedm'])."', 
+                     CTP_REWASH ='".cx($_POST['rewash'])."', CTP_SAMPLE_BEFORE ='".cx($_POST['sambefore'])."', CTP_COA_BEFORE ='".cx($_POST['coabefore'])."', 
+                     CTP_OUT_SMP_PE ='".$_POST['out_pe']."', CTP_OUT_SMP_TFA ='".$_POST['out_tfa']."', CTP_BEF_SMP_PE ='".$_POST['bef_pe']."', 
+                          CTP_BEF_SMP_TFA ='".$_POST['bef_tfa']."', CTP_CUSTBAR1 ='".$_POST['barcode1']."', CTP_CUSTBAR2 ='".$_POST['barcode2']."', 
+						  CTP_CUSTBAR3 ='".$_POST['barcode3']."', CTP_PRINT_FMT ='".$_POST['barcodedrum']."', CTP_BIGHOSEBAR ='".$_POST['lorry_hose_barcode']."', 
+						  CTP_BIGHOSEBAR_Length ='".$_POST['hose_barcode']."', CTP_ExportCountLimit ='".$_POST['limit']."', CTP_SAMPLE_MODE ='".cx($_POST['block3'])."', 
+						  CTP_CUST_PROD_NO1 ='".$_POST['cust_prod_no1']."', CTP_CUST_PROD_NO2 ='".$_POST['cust_prod_no2']."'
+WHERE         (CTD_CUST_NO = '".$_GET['cid']."') and (PDD_PROD_NO='".$_GET['pid']."')";	
+//echo $query."<BR>";
+$result=mssql_query($query);
+//break;
+if($result){ my_msg("saved..");}
+}
+
+
+if(isset($_POST["delete"])){
+	$query="DELETE FROM dbo.CUSTOMER_PRODUCTS
+WHERE         (CTD_CUST_NO = '".$_GET['cid']."') AND (PDD_PROD_NO = '".$_GET['pid']."')";
+$result=mssql_query($query);
+jumpto('index.php?url=prod_cust');
+}
+function cx($c){
+	if($c=='on'){return 'Y';}
+	else{return 'N';}
+}
+?>

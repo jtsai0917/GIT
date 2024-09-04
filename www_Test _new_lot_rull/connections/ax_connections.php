@@ -1,0 +1,23 @@
+<?php  
+session_start();
+
+$_SESSION['AX_DB']=$myServer = "10.181.140.16";
+
+  $_SESSION['AX_DB']=$myServer = "10.181.140.16\MSSQLSRV16";
+//$myServer="localhost";
+
+$myUser = "sa"; 
+$myPass = "2Iairiol!@#";
+
+
+$myDB = "MicrosoftDynamicsAX_Prod";
+
+
+//connection to the database
+$ax_dbhandle = mssql_connect($myServer, $myUser, $myPass);
+//  or die("Couldn't connect to SQL Server on $myServer");
+
+//select a database to work with
+$ax_selected = mssql_select_db($myDB, $ax_dbhandle);
+ // or die("Couldn't open database $myDB");
+?>

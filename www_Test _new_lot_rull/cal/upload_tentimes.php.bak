@@ -1,0 +1,83 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+上傳 < <?php echo $_GET['lotno']; ?> > 報告
+<form action="" method="post" enctype="multipart/form-data" name="form1" id="form1">
+	檢驗報告上傳：
+      <input type="file" name="file" id="file" />
+<input type="submit" name="upload" id="upload" value="送出"/>   <BR>上傳檔名請不要用特殊字元 (EX: # @ ! % & $)
+</form>
+<?php
+	session_start();
+	include("../connections/conn.php");
+	include("../lib/fun.php");
+	include("../lib/jtsai.php");
+	include "../PHPEXCEL/Classes/PHPExcel.php";
+	include "../PHPEXCEL/Classes/PHPExcel/IOFactory.php";
+	
+	if(isset($_POST['upload'])){  // 上傳並讀取檔案
+		
+		if($_GET['ani_groupname']=='比重'){
+			$fps='density';
+		}else{
+			$fps=$_GET['ani_groupname'];
+		}
+		$fullpath="../reports/tentimes/".$fps."/";
+		if (file_exists($fullpath)){
+		}else{
+			mkdir($fullpath);
+		}
+		
+		$ext = end(explode('.', $_FILES["file"]["name"]));
+		$filename=$_GET['lotno']."_".$fps.".".$ext;
+		echo $fullpath.$filename."<BR>";
+		move_uploaded_file($_FILES["file"]["tmp_name"],$fullpath.$filename);
+		$reader= PHPExcel_IOFactory::createReaderForFile($fullpath.$filename);
+		$reader->setReadDataOnly(true);
+
+		$excel= $reader->load($fullpath.$filename);	
+		
+		$sheet = $excel->getActiveSheet(0); //讀取第一個工作表(編號從 0 開始)
+		echo '<form action="" method="post" ><table width="800" border="1">
+		<tr bgcolor="gray"><td></td><td>CL</td><td>NO3</td><td>PO4</td><td>SO4</td></tr>';
+		for($i=0;$i < 10;$i++){
+			$x=$i+8;
+			$cl = trim($sheet->getCellByColumnAndRow(2,$x)->getValue());
+			$no3 = trim($sheet->getCellByColumnAndRow(3,$x)->getValue());
+			$po4 = trim($sheet->getCellByColumnAndRow(4,$x)->getValue());
+			$so4 = trim($sheet->getCellByColumnAndRow(5,$x)->getValue());
+			echo "<tr><td>".($i+1)."</td><td>".$cl ."</td><td>" . $no3."</td><td>" .$po4."</td><td>".$so4."</td></tr>";
+			echo '<input type="hidden" name="c1[]" value="'.$cl.'">';
+			echo '<input type="hidden" name="c2[]" value="'.$no3.'">';
+			echo '<input type="hidden" name="c3[]" value="'.$po4.'">';
+			echo '<input type="hidden" name="c4[]" value="'.$so4.'">';
+		}
+		
+		echo '</table>';
+		echo '<input type="submit" name="save" value="儲存"></form>';
+
+	}
+	if(isset($_POST['save'])){
+		for($i=0;$i < 10;$i++){
+			$c1=$_POST['c1'][$i];
+			$c2=$_POST['c2'][$i];
+			$c3=$_POST['c3'][$i];
+			$c4=$_POST['c4'][$i];
+		//	echo $c1.":".$c2.":".$c3.":".$c4."<BR>";
+			$query="INSERT INTO ".$_GET['table']." (TestDate, CHK1, CHK2, LotNo, SerialNo, SampleNo, CL, CHK3, CHK4,NO3, CHK6, PO4, SO4, Tester, Operator, Ok,AnalyzeTime)
+VALUES          (CONVERT(DATETIME, '".date("Y-m-d")."', 102), '1', '1', '".$_GET['lotno']."', ".($i+1).", 'DL".($i+1)."', ".$c1.", '1', '1',".$c2.", '1', ".$c3.", ".$c4.", 
+                            '".$_SESSION['uname']."', '".$_SESSION['uname']."', '1', '".date("Ymdhis")."')";
+			$result=mssql_query($query);
+		}
+		
+	}
+?>
+
+
+
+
+
+
+
+
+
+
+

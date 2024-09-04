@@ -1,0 +1,377 @@
+<?php
+session_start();
+$_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
+	include("../connections/conn.php");
+	include("../lib/fun.php");
+	include("../lib/jtsai.php");
+	include("../PHPEXCEL/Classes/PHPExcel.php");
+	include("../PHPEXCEL/Classes/PHPExcel/IOFactory.php");
+	auth('9-01',$_SESSION['aut']);
+	lasturl();
+	datepick();
+?>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<form action="<?php echo $loginFormAction; ?>" method="post" enctype="multipart/form-data" name="form1" id="form1">
+<table border="1" width="1200" bgcolor="#CCCCCC">
+    <tr><td>出荷決定書(台南倉)檔匯入：
+<input type="file" name="file" id="file" />
+<input type="submit" name="upload" id="upload" value="  確  認  " />
+<input type="submit" name="import" id="import" value="  匯入全部  " />
+<a href="../prodout/Tainan_out.xlsx" target="new"</a>Excel匯入範本檔下載
+</td></tr></table>
+<BR />
+
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+$aa='';
+$t=$x=$r=0;
+if(isset($_POST["upload"]))
+{ 
+	for($i=0;$i<=count($_SESSION['values'])+1;$i++)
+	{
+	unset($_SESSION['OAF_ORDER_DATE_'.$i],$_SESSION['OPM_ORDER_NO_'.$i],$_SESSION['cust_no2_'.$i],$_SESSION['cust_order_no_'.$i],$_SESSION['pid_'.$i],$_SESSION['lot_'.$i],$_SESSION['order_qty_'.$i],$_SESSION['package_'.$i],$_SESSION['package_'.$i],$_SESSION['unit_'.$i],$_SESSION['intersect_'.$i]);
+	}
+	unset($_SESSION['values']);
+	$path="./tmp/";
+	$filename='tmp_out.xlsx';
+	$_SESSION['fullpath']=$fullpath="../prodout/tmp/tmp_out.xlsx";
+	if (file_exists($path))
+	{
+	
+	} 
+	else {
+		mkdir($path);
+		}
+	move_uploaded_file($_FILES["file"]["tmp_name"],$path.$filename);
+}	
+
+	$reader = PHPExcel_IOFactory::createReader('Excel2007'); 
+	$reader->setReadDataOnly(true);
+	$excel = $reader->load('../prodout/tmp/tmp_out.xlsx');
+	$sheet = $excel->getActiveSheet(0);
+	$colString = $sheet->getHighestColumn();
+	$highestColumns = PHPExcel_Cell::columnIndexFromString($colString);
+	$highestRows = $sheet->getHighestRow();
+	datepickmore($highestRows);
+	for($y=2;$y<=$highestRows;$y++)
+	{
+		for($x=0;$x<$highestColumns;$x++)
+		{
+		if($x==0){$_SESSION['values'][$y][$x]=date('Y/m/d',\PHPExcel_Shared_Date::ExcelToPHP($sheet->getCellByColumnAndRow($x,$y)->getValue()));}
+		else{
+		$_SESSION['values'][$y][$x]=trim($sheet->getCellByColumnAndRow($x,$y)->getValue());}
+		//echo $x.'='.$_SESSION['values'][$y][$x].',';
+		}
+	}
+echo '<table width="1240" border="1">';
+echo '<tr bgcolor="#CCCCCC">
+	<td>訂貨日</td>
+	<td>訂單號碼</td>
+	<td>送貨客戶</td>
+	<td>客戶名稱</td>
+	<td>銷帳客戶</td>
+	<td>客戶訂單</td>
+	<td>料號</td>
+	<td>品名</td>
+	<td>LOT</td>
+	<td>預交量</td>
+	<td>包裝</td>
+	<td>桶量</td>
+	<td>單位</td>
+	<td>預交日</td>
+	<td>台南倉暫出</td></tr>';
+	for($i=2;$i<$y;$i++){
+		if(trim($_SESSION['values'][$i][0])<>''){
+			$_SESSION['values'][$i][24]='V';
+			if($_SESSION['order_qty_'.$i]=='' and $_SESSION['package_'.$i]==''){
+			$_SESSION['values'][$i][25]=$_SESSION['values'][$i][6]/$_SESSION['values'][$i][7];}
+			else{
+				if($_SESSION['order_qty_'.$i]!='' and $_SESSION['package_'.$i]=='')
+				{
+					$_SESSION['package_'.$i]=$_SESSION['values'][$i][7];
+				}
+				elseif($_SESSION['order_qty_'.$i]=='' and $_SESSION['package_'.$i]!='')
+				{
+					$_SESSION['order_qty_'.$i]=$_SESSION['values'][$i][6];
+				}
+				$_SESSION['values'][$i][25]=$_SESSION['order_qty_'.$i]/$_SESSION['package_'.$i];
+				}
+				
+		$color='style="background-color:#C9FFC9"';
+		if($_SESSION['OAF_ORDER_DATE_'.$i]==''){
+		$OAF_ORDER_DATE=trim($_SESSION['values'][$i][0]);}
+		else{$OAF_ORDER_DATE=$_SESSION['OAF_ORDER_DATE_'.$i];}
+
+		if($_SESSION['OPM_ORDER_NO_'.$i]==''){
+		$OPM_ORDER_NO=trim($_SESSION['values'][$i][1]);}
+		else{$OPM_ORDER_NO=$_SESSION['OPM_ORDER_NO_'.$i];}
+		
+		if($_SESSION['cust_no2_'.$i]==''){
+		$cust_no2=trim($_SESSION['values'][$i][2]);}
+		else{$cust_no2=$_SESSION['cust_no2_'.$i];}
+		
+		if($_SESSION['OPM_ORDER_NO_'.$i]==''){
+		$cust_order_no=trim($_SESSION['values'][$i][1]);}
+		else{$cust_order_no=$_SESSION['cust_order_no_'.$i];}
+		
+		if($_SESSION['pid_'.$i]==''){
+		$pid=trim($_SESSION['values'][$i][3]);}
+		else{$pid=$_SESSION['pid_'.$i];}
+		
+		if($_SESSION['lot_'.$i]==''){
+		$lot=trim($_SESSION['values'][$i][4]);}
+		else{$lot=$_SESSION['lot_'.$i];}
+		
+		if($_SESSION['order_qty_'.$i]==''){
+		$order_qty=trim($_SESSION['values'][$i][6]);}
+		else{$order_qty=$_SESSION['order_qty_'.$i];}
+		
+		if($_SESSION['package_'.$i]==''){
+		$package=trim($_SESSION['values'][$i][7]);}
+		else{$package=$_SESSION['package_'.$i];}
+		
+		if($_SESSION['package_'.$i]==''){
+		$package=trim($_SESSION['values'][$i][7]);}
+		else{$package=$_SESSION['package_'.$i];}
+		
+		if($_SESSION['unit_'.$i]==''){
+		$_SESSION['unit_'.$i]=trim($_SESSION['values'][$i][5]);
+		$unit=trim($_SESSION['values'][$i][5]);}
+		else{$unit=$_SESSION['unit_'.$i];}
+		
+		if($_SESSION['unit_'.$i]=='KG'){$show=' selected ';}else{$show='';}
+		if($_SESSION['unit_'.$i]=='L'){$show1=' selected ';}else{$show1='';}
+		
+		if($_SESSION['intersect_'.$i]==''){
+		$intersect=trim($_SESSION['values'][$i][0]);}
+		else{$intersect=$_SESSION['intersect_'.$i];}
+		echo 
+		'<td><input name="OAF_ORDER_DATE_'.$i.'" '.$color.' id="Datepicker'.$i.'" value="'.$OAF_ORDER_DATE.'" size="8" onchange="set_date_session(this.name,this.value)"></td>
+		<td><input name="OPM_ORDER_NO_'.$i.'" '.$color.' value="'.$OPM_ORDER_NO.'" size="10" onchange="set_date_session(this.name,this.value)"></td>
+		<td><input name="cust_no2_'.$OPM_ORDER_NO.'" '.$color.'  value="'.trim($cust_no2).'" size="5" onchange="set_date_session(this.name,this.value)"><input type="submit" name="custno'.$i.'" value="選擇" onclick="'.jumpcust($i).'"></td>
+		<td>'.get_cust_name(trim($cust_no2)).'</td>
+		<td>TAINAN</td>
+		<td>'.$OPM_ORDER_NO.'</td>
+		<td><input name="pid_'.$i.'" '.$color.' value="'.trim($pid).'" size="6" onchange="set_date_session(this.name,this.value)"><input type="submit" name="pidno'.$i.'" value="選擇" onclick="'.jumppid($i).'"></td>
+		<td>'.get_prod_name(trim($pid)).'</td>
+		<td><input name="lot_'.$i.'" '.$color.' value="'.$lot.'" size="15" onchange="set_date_session(this.name,this.value)"></td>
+		<td><input name="order_qty_'.$i.'" '.$color.' value="'.(int)$order_qty.'" size="1" onchange="set_date_session(this.name,this.value)"></td>
+		<td><input name="package_'.$i.'" '.$color.' value="'.$package.'" size="1" onchange="set_date_session(this.name,this.value)"></td>
+		<td>'.trim($_SESSION['values'][$i][25]).'</td>
+		<td><select name="unit_'.$i.'" '.$color.'  onchange="set_date_session(this.name,this.value)" >
+		<option value="KG" '.$show.' >KG</option>
+		<option value="L" '.$show1.' >L</option>
+		</select></td>
+		<td><input name="intersect_'.$i.'" '.$color.' id="Datepicker_'.$i.'" size="8" value="'.$intersect.'" onchange="set_date_session(this.name,this.value)"></td>
+		<td align="center">'.trim($_SESSION['values'][$i][24]).'</td></tr>';}
+	}
+echo '</table>';
+
+if(isset($_POST["import"]))
+{ 	
+	$times=count($_SESSION['values'])+2;
+	$a=array();
+	/////寫入各訂單的出荷料號
+	for($i=2;$i<$times;$i++)
+	{
+		$order_no=$_POST['OPM_ORDER_NO_'.$i];  ///第一筆大項的訂單號碼
+		$query="select * from OUT_DECISION where OPM_PO_NO LIKE '%".$order_no."%'";
+		$result=mssql_query($query);
+		$Numrows=mssql_num_rows($result);
+		if($Numrows<>''){
+			echo "From_OutProduct_NG: ".$order_no.' 訂單重複</br>';
+			continue;
+			}
+		$X=1;
+		$order_no1='';
+		if($_SESSION[$order_no]==1){continue;}
+			$x=count($_SESSION['values']);
+			for($I=1;$I<=$x;$I++)
+			{
+				//echo $i.','.trim($order_no).','.$order_no1.'<br>';
+				$A=$I+1;
+				$order_no1=$_POST['OPM_ORDER_NO_'.$A];
+				if(trim($order_no)<>'' and (trim($order_no)==$order_no1 or ($i==2 and $I==1)))
+				{
+				$pid=$_POST['pid_'.$A];
+				$package=$_POST['package_'.$A];
+				$unit=$_POST['unit_'.$A];
+				$order_qty=$_POST['order_qty_'.$A];
+				$lot=$_POST['lot_'.$A];
+				$DRUM=trim($_SESSION['values'][$A][25]);
+				
+				$OAF_ORDER_DATE=$_POST['OAF_ORDER_DATE_'.$A];
+				$OAF_ORDER_DATE1=(substr($OAF_ORDER_DATE,0,4)-1911).'/'.substr($OAF_ORDER_DATE,5,5);
+				$cust_no=$_POST['cust_no2_'.$A];
+				$li=literkg1(trim($pid));
+				if($unit=='KG'){
+				$sao=(int)trim($order_qty)/$li;///換算L的算算式
+				$sas=(int)trim($order_qty);
+				}
+				else{	 
+				$sas=(int)trim($order_qty)*$li;///換算KG的算算式
+				$sao=(int)trim($order_qty);
+				} 
+				$query="INSERT INTO OUT_PRODUCT
+								(OPM_ORDER_NO, OPD_SERIAL_NO, OPD_LOT_NO, PDD_PROD_NO, OAF_PACKAGE, OPD_ACC_UNIT, OPD_QTY_DRUM, OPD_QTY_LITER, OPD_QTY_KG, OPD_INWARD_DATE, OAF_ACC_ID)
+						VALUES          ('".$order_no."',".$X.",'".$lot."','".$pid."','".$package."','".$unit."',".$DRUM.",'".$sao."','".$sas."',
+						'".date("Ymd")."','')";
+				echo "OUT_PRODUCT : ".$query."<BR><BR>";
+				$result=mssql_query($query);
+				/////匯入出荷計畫書
+				if($X<10){$X1='000'.$X;}
+				elseif($X>=10){$X1='00'.$X;}
+				elseif($X>=100){$X1='0'.$X;}
+				if($X==1)
+				{
+				$query1="INSERT INTO OUT_PLAN_FROM_FILE
+								(OPM_ORDER_NO, OAF_SERIAL_NO, OAF_ORDER_DATE, OAF_DELI_CUST_NO, OAF_DELI_CUST_NAME, 
+								OAF_ORDER_CUST_NO, OAF_ORDER_CUST_NAME, OAF_DEP_NO, OAF_CUST_ORDER_NO, OAF_MONETARY, 
+								OAF_EXCHANGE_RATE, OAF_CONTACT_MAN, OAF_CONTACT_TEL, OAF_DELI_ADDR, PDD_PROD_NO, 
+								OAF_ORDER_QTY, OAF_UNIT, OAF_PRICE, OAF_PACKAGE, OAF_ETA_DATE, OAF_PROD_NAME, 
+								OAF_PACKAGE_DESC, OAF_EXCERPT, OAF_ACC_ID, OAF_MEMO)
+						VALUES          ('".$order_no."','".$X."','".$OAF_ORDER_DATE1."','".$cust_no."','".get_cust_name($cust_no)."','TAINAN','台南倉','','".$order_no."','','0','','','','".$pid."','".$order_qty."','".$unit."','0','".$package."','".$OAF_ORDER_DATE1."','".get_prod_name($pid)."','','','".$order_no.'-'.$X1."','')";
+				$result1=mssql_query($query1);
+				}
+				echo $query1.'<br>';
+				if($result1){echo "From_OutProduct_OK:".$I.'</br>';}
+				$X++; 
+				}
+			}
+			array_push($a,$order_no);
+			$_SESSION[$order_no]=1;
+			//echo $order_no.'<br>';
+	}
+	//echo '<br><br>';
+	////新增出荷決定書簽核
+	for($i=2;$i<(count($a)+2);$i++)
+	{
+			$order_no=$a[$i-2];  ///第一筆大項的訂單號碼
+			$cust_no=$_POST['cust_no2_'.$order_no];
+			$intersect=$_POST['intersect_'.$i];
+			if($i==2){
+			$today=date("Ymd");}
+			$query="select top 1 OTD_NO from OUT_DECISION where (OTD_NO like '".$today."5%') order by OTD_NO DESC";
+			$result=mssql_query($query);
+			$numrows=mssql_num_rows($result);
+			while($row=mssql_fetch_array($result))
+			{
+				$otd_no=$row['OTD_NO'];
+			}
+			if($numrows>0){$otd_no=$otd_no+1;}
+			else{$otd_no=$today.'5001';}
+			$sa_no_decision=create_sag_out_decision();
+			if($OTD!=$otd_no){
+			$query="update OUT_PRODUCT set OTD_NO='".$otd_no."' where OPM_ORDER_NO='".$order_no."'";
+			$result=mssql_query($query);
+			}
+			$OPM_STOCK='TYS';
+			////新增出荷計畫書至資料庫
+			$query="INSERT INTO OUT_PLAN
+                            (OPM_ORDER_NO, OPM_PO_NO, OPM_CREATE_DATE, OPM_ETA_DATE, CTD_CUST_NO, 
+                            OPM_PMAN1,OPM_SIGN_PRINT,OPM_TAINAN_CACHE,OPM_TAICHUNG_CACHE, OPM_STOCK)
+					VALUES          ('".$order_no."','".$order_no."','".date("YmdHis")."','".des($intersect)."','".$cust_no."','".$_SESSION['uid']."','Y','Y','N','".$OPM_STOCK."')";
+			echo $query;
+			$result=mssql_query($query);
+			//if($result){echo 'YES';}
+			////新增出荷決定書至資料庫
+			$query="INSERT INTO OUT_DECISION
+								(OTD_INVOICE_NO, OPM_ORDER_NO, OTD_NO, OPM_PO_NO, CTD_CUST_NO, OTD_CREATE_DATE, 
+								OPM_ETA_DATE, SAG_NO, OPM_TAINAN_CACHE, OPM_STOCK)
+					VALUES          ('','".$order_no."','".$otd_no."','".$order_no."','".$cust_no."','".date("YmdHis")."',
+					'".des($intersect)."160000','".$sa_no_decision."','Y','".$OPM_STOCK."')";
+			echo "<BR>".$query."<BR>";
+			$result=mssql_query($query);
+			$OTD=$otd_no;
+			unset($_SESSION[$a[$i-2]]);
+	}
+	for($i=0;$i<=count($_SESSION['values'])+1;$i++)
+	{
+	unset($_SESSION['OAF_ORDER_DATE_'.$i],$_SESSION['OPM_ORDER_NO_'.$i],$_SESSION['cust_no2_'.$i],$_SESSION['cust_order_no_'.$i],$_SESSION['pid_'.$i],$_SESSION['lot_'.$i],$_SESSION['order_qty_'.$i],$_SESSION['package_'.$i],$_SESSION['package_'.$i],$_SESSION['unit_'.$i],$_SESSION['intersect_'.$i]);
+	}
+	unset($_SESSION['values'],$_SESSION['NO'],$_SESSION['pass'],$_SESSION['num']);
+	unlink('../prodout/tmp/tmp_out.xlsx');
+}
+
+function Datepickmore($a)
+{
+	
+echo '
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+  <link rel="stylesheet" href="/css/jquery-ui.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <script src="/css/datepicker-zh-TW.js"></script>
+  <script type="text/javascript">
+    $(function() {';
+	for($i=2;$i<=$a;$i++)
+	{
+	$A='$( "#Datepicker'.$i.'" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+	  altFormat : "yy/mm/dd",
+      dateFormat :"yy/mm/dd"
+    });';
+	$B='$( "#Datepicker_'.$i.'" ).datepicker({
+      changeMonth: true,
+      changeYear: true,
+	  altFormat : "yy/mm/dd",
+      dateFormat :"yy/mm/dd"
+    });';
+	echo $B;
+	echo $A;
+	}
+echo  '  });
+  function set_date_session(nam,val){
+	window.open("../backend.php?name="+nam+"&value="+val)  
+	window.location.href="'.$_SESSION['urln1'].'";
+  }
+</script>
+</head>';
+}
+function jumpcust($i)
+{
+	if(isset($_POST['custno'.$i])){
+	$_SESSION['pass']=1;
+	$_SESSION['num']=$i;
+	jumpto('../cust_no.php');}
+}
+function jumppid($i)
+{
+	if(isset($_POST['pidno'.$i])){
+	$_SESSION['pass']=1;
+	$_SESSION['num']=$i;
+	jumpto('../pdd_prod_no.php');}
+}
+function create_sag_out_decision()
+{
+		$cbt_no='2-03';
+		$query="INSERT INTO SIGN_AGREE
+                            (CBT_NO, SAG_CREATE_TIME, SAG_CREATE_MAN, SAG_COMFIRM_COUNT)
+				VALUES          ('".$cbt_no."','".date("YmdHis")."','".$_SESSION['uid']."','1')";	
+		//echo $query."<BR>";
+		$result=mssql_query($query);
+		$query="select TOP (1) SAG_NO from SIGN_AGREE order by SAG_NO desc";
+		//echo $query;
+		$result=mssql_query($query);
+		while($row=mssql_fetch_array($result))
+		{
+			$sa_no_decision =$row['SAG_NO'];
+		}
+		$query="SELECT          CBT_CFM1,CBT_NO
+				FROM              CAPABILITY_DATA
+				WHERE (CBT_NO='".$cbt_no."')";
+		$result=mssql_query($query);
+		while($row=mssql_fetch_array($result))
+		{
+			$cfm1=$row['CBT_CFM1'];
+		}
+		$aa=explode(";",$cfm1);
+		for($i=1;$i<=count($aa);$i++){
+			$query="INSERT INTO SIGN_AGREE_ITEM (SAG_NO,SAI_SERIAL_NO,AUT_NO) VALUES ('".$sa_no_decision."',".$i.",'".$aa[$i-1]."')" ;
+			$result=mssql_query($query);
+		}
+		$T=$sa_no_decision;
+		return $T;
+}
+?>

@@ -1,0 +1,931 @@
+<?php 
+session_start();
+include("../lib/fun.php");
+include("../checkuser.php");
+include("../lib/jtsai.php");
+include("../connections/conn.php");
+include("../PHPEXCEL/Classes/PHPExcel.php");
+include("../PHPEXCEL/Classes/PHPExcel/IOFactory.php");
+lasturl();
+datepick(); 
+//echo "S";
+?>
+<form name="form1" method="post" enctype="multipart/form-data" action="<?php echo $loginFormAction; ?>">
+  <label for="textfield"></label>
+
+		<table bgcolor="#CCCCCC" border="1">
+        <tr><td>
+ 		巡檢日期 <span class="d1">
+        <input name="datepicker7" type="text" id="datepicker7" size="10" value="<?php echo $_SESSION['datepicker7'] ?>" onchange="set_date_session(this.name,this.value)" >
+        ~
+        <input name="datepicker8" type="text" id="datepicker8" size="10" value="<?php echo $_SESSION['datepicker8'] ?>" onchange="set_date_session(this.name,this.value)" >
+       
+         品名：<span class="d1">
+        <input type="button" name="X" id="X" value="X" onClick="window.open('../erase_prod.php ', '_self');">
+        <input name="pid" type="text" id="pid" size="10" onchange="set_date_session(this.name,this.value)" value="<?php 
+		if ($_GET['pid']){
+			echo $_GET['pid'];
+			$_SESSION['pid']=$_GET['pid'];
+		}
+		elseif($_SESSION['pid']){
+			echo $_SESSION['pid'];
+		}
+		else{
+		echo '';
+		}
+		?>" >
+        <input type="button" name="pdd_no" id="pdd_no" value="查詢巡檢項目" onClick="window.open('../PRODUCE/utt_tag_no.php ', '_self');" >
+        <input name="pdd_chemical2" type="text" id="pdd_chemical2" size="16" value="<?php 
+		if ($_GET['pname']){
+			echo $_GET['pname'];
+			$_SESSION['pname']=$_GET['pname'];
+		}
+		elseif($_SESSION['pname']){
+			echo $_SESSION['pname'];
+		}
+		else{
+		echo '';
+		}
+		?>" readonly>
+        巡檢表：
+        <select name="form">
+         <?php
+		$query="select * from UTT_FORM_DATA order by Form";
+		$result=mssql_query($query);
+		while($row=mssql_fetch_array($result)){
+		if(trim($row['index'])==$_SESSION['form']){$show1=' selected ';}else{$show1='';}
+		echo '<option value="'.trim($row['index']).'" '.$show1.'>'.trim($row['Form']).'</option>';
+		if($_SESSION['form']==''){$_SESSION['form']=trim($row['index']);}
+		}
+		$query="select * from UTT_FORM_DATA where [index]='".$_SESSION['form']."'";
+		$result=mssql_query($query);
+		$row=mssql_fetch_array($result);
+		$_SESSION['way']=trim($row['way']);
+		?>
+        </select>
+
+         第幾次巡檢：
+        <select name="sn"  onchange="set_date_session(this.name,this.value)">
+         <?php
+		 if($i==$_SESSION['sn']){$show=' selected ';}else{$show='';}
+		echo '<option value="0" '.$show.'>全部</option>';
+		 for($i=1;$i<7;$i++){
+		if($i==$_SESSION['sn']){$show1=' selected ';}else{$show1='';}
+		echo '<option value="'.$i.'" '.$show1.'>'.$i.'</option>';
+		}
+		?>
+        </select>
+        <input type="submit" name="search" id="search" value="搜尋">
+        <input type="submit" name="print" id="print" value="列印">
+        <input type="hidden" name="mm_insert" id="mm_insert" value="form1">
+        <input type="submit" name="keyin" id="keyin" value="MCTW資料輸入">
+        <input type="submit" name="keyin_HIC" id="keyin_HIC" value="HIC資料輸入">
+
+        </span></td></table>
+
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+$_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
+if(isset($_POST['print']))
+{
+	$objPHPExcel = new PHPExcel();
+	$objPHPExcel = PHPExcel_IOFactory::load("../PRODUCE/tag_no_spec.xlsx");
+	$objPHPExcel-> setActiveSheetIndex(0);
+
+	if($_SESSION['pid']<>'')
+	{
+		
+		//echo '<table width="1000" border="1" align="left">';
+		//echo '<tr bgcolor="#CCCCCC"><td>TAG_NO</td><td>項目名稱</td><td>數值</td><td>SPEC</td><td>巡檢日期時間</td><td>巡檢人員</td><td>合格/不合格</td></tr>';
+		$query="select US.*,UA.project,UA.spec from UTT_record_spec US left join UTT_TAGNO_DATA UA ON US.TAG_NO=UA.TAG_NO where US.TAG_NO='".$_SESSION['pid']."' and Date >=  '".dateform1($_SESSION['datepicker7'])."0000' and Date<='".dateform1($_SESSION['datepicker8'])."9999' order by date";
+//		echo $query."<BR>";
+		$result=mssql_query($query);$Num=2;
+		while($row1=mssql_fetch_array($result))
+		{
+			
+			
+		$ENG='A';
+		$styleThinBlackBorderOutline = array(  
+					   'borders' => array (  
+							 'outline' => array (  
+								   'style' => PHPExcel_Style_Border::BORDER_THIN,   //?置border?式 
+								   //'style' => PHPExcel_Style_Border::BORDER_THICK,  另一种?式  
+							),  
+					  ),  
+				);
+		$pass=trim($row1['pass']);
+					if($pass=='O'){$pass='合格';$BG='';}
+					elseif($pass=='△'){$pass='';$BG='';}
+					else{$pass='不合格';$BG='bgcolor="#FFFF66"';}
+				//	echo '<tr '.$BG.'><td>'.$row1['TAG_NO'].'</td><td>'.$row1['project'].'</td><td>'.$row1['Data'].'</td><td>'.$row1['spec'].'</td><td>'.$row1['Date'].'</td><td>'.getusername($row1['saveuid']).'</td><td>'.$pass.'</td></tr>';	
+		if($pass=='不合格')
+		{
+			
+		$objPHPExcel->getActiveSheet()->getStyle($ENG.$Num)->getFill()->applyFromArray(array('type' => PHPExcel_Style_Fill::FILL_SOLID,'startcolor' => array('rgb' =>'FFFF30'))); 
+		}
+		
+		$objPHPExcel->getActiveSheet()->setCellValue('A'.$Num, iconv("big5","utf-8",trim($row1['TAG_NO'])));
+		$objPHPExcel->getActiveSheet()->getStyle('A'.$Num)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+		$objPHPExcel->getActiveSheet()->setCellValue('B'.$Num, iconv("big5","utf-8",trim($row1['project'])));
+		$objPHPExcel->getActiveSheet()->getStyle('B'.$Num)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+		$objPHPExcel->getActiveSheet()->getStyle('B'.$Num)->getAlignment()->setWrapText(true);//自動換行
+		$objPHPExcel->getActiveSheet()->setCellValue('C'.$Num, iconv("big5","utf-8",trim($row1['Data'])));
+		$objPHPExcel->getActiveSheet()->getStyle('C'.$Num)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+		$objPHPExcel->getActiveSheet()->setCellValue('D'.$Num, iconv("big5","utf-8",trim($row1['spec'])));
+		$objPHPExcel->getActiveSheet()->getStyle('D'.$Num)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+		$objPHPExcel->getActiveSheet()->setCellValue('E'.$Num, iconv("big5","utf-8","'".trim($row1['Date'])));
+		$objPHPExcel->getActiveSheet()->getStyle('E'.$Num)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+		$objPHPExcel->getActiveSheet()->setCellValue('F'.$Num, iconv("big5","utf-8",getusername(trim($row1['saveuid']))));
+		$objPHPExcel->getActiveSheet()->getStyle('F'.$Num)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+		
+		$Num++;
+		}
+	//	echo '</table>';
+	
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+		
+		$objWriter->save('..//PRODUCE/Download/'.$_SESSION['pid'].'_'.des($_SESSION['datepicker7']).'.xlsx');
+		
+		$objPHPExcel->disconnectWorksheets();
+//		echo "SSS";
+	}
+	else
+	{
+		$query2="select * from UTT_FORM_DATA where [index]='".$_SESSION['form']."'";
+//		echo $query2."<BR>";
+		$result2=mssql_query($query2);
+		$row2=mssql_fetch_array($result2);
+		$link=trim($row2['link']);
+		$sn=trim($row2['sn']);
+		$sn1=trim($row2['sn1']);
+		$way=trim($row2['way']);
+		$reader = PHPExcel_IOFactory::createReader('Excel2007'); 
+		$PHPExcel = $reader->load("..".$link);
+		$sheet = $PHPExcel->getSheet(0);
+		$highestRow = $sheet->getHighestRow ();// 獲取當頁最大行數
+		$highestColumn = $sheet->getHighestColumn ();// 獲取當頁最大列數 
+		
+		if($way=='B')///橫式
+		{
+			echo "橫式";
+			
+			$highColumn=PHPExcel_Cell::columnIndexFromString($highestColumn);
+			$Num=PHPExcel_Cell::columnIndexFromString(substr($sn,0,1))-1; //A->1
+			$Num1=preg_replace('/[^\d]/','',$sn);
+			for($i=$Num;$i<=$highColumn;$i++)
+			{
+				$val=$sheet->getCellByColumnAndRow($i,$Num1)->getValue();
+				//echo $val.','.$i.','.$Num1.'<br>';
+				$val=trim($val);
+				if($val==''){continue;}
+				$EN=PHPExcel_Cell::stringFromColumnIndex($i); //0->A
+				$column[$val]=$EN.$Num1;
+				$_SESSION[$val]=0;
+				//echo '第一行:'.$EN.$Num1.':'.$val.'<br>';
+			}
+			$Num=PHPExcel_Cell::stringFromColumnIndex($Num-1);
+			$timetitle=$Num.($Num1+4); ///時間欄位
+			if($sn1<>'')
+			{
+				$Num=PHPExcel_Cell::columnIndexFromString(substr($sn1,0,1))-1;//A->1
+				$Num1=preg_replace('/[^\d]/','',$sn1);
+				for($i=$Num;$i<=$highColumn;$i++)
+				{
+					$val=$sheet->getCellByColumnAndRow($i,$Num1)->getValue();
+					$val=trim($val);
+					if($val==''){continue;}
+					$EN=PHPExcel_Cell::stringFromColumnIndex($i); //0->A
+					$column[$val]=$EN.$Num1;
+					$_SESSION[$val]=1;
+					//echo '第二行:'.$EN.$Num1.':'.$val.'<br>';
+				}
+				$Num=PHPExcel_Cell::stringFromColumnIndex($Num-1);
+				$timetitle1=$Num.($Num1+4); ///時間欄位
+			}
+		}
+		else///直式
+		{
+			echo "直式";
+			$Num=PHPExcel_Cell::columnIndexFromString(substr($sn,0,1))-1;//A->1
+			$Num1=preg_replace('/[^\d]/','',$sn);
+			for($i=$Num1;$i<=$highestRow;$i++)
+			{
+				$val=$sheet->getCellByColumnAndRow($Num,$i)->getValue();
+				$val=trim($val);
+				if($val==''){continue;}
+				$EN=PHPExcel_Cell::stringFromColumnIndex($Num); //0->A
+				$column[$val]=$EN.$i;
+				$_SESSION[$val]=0;
+				//echo '第一行:'.$EN.$i.':'.$val.','.$sn[$val].'<br>';
+			}
+
+			$Num=PHPExcel_Cell::stringFromColumnIndex($Num+4);
+			$timetitle=$Num.($Num1-1); ///時間欄位
+			if($sn1<>'')
+			{
+				$Num=PHPExcel_Cell::columnIndexFromString(substr($sn1,0,1))-1;//A->1
+				$Num1=preg_replace('/[^\d]/','',$sn1);
+				//echo $Num.','.$Num1;break;
+				for($i=$Num1;$i<=$highestRow;$i++)
+				{
+					$val=$sheet->getCellByColumnAndRow($Num,$i)->getValue();
+					$val=trim($val);
+					if($val==''){continue;}
+					$EN=PHPExcel_Cell::stringFromColumnIndex($Num); //0->A
+					$column[$val]=$EN.$i;
+					//echo $EN.','.trim($row3['sn']).'<br>';
+					$_SESSION[$val]=1;
+					//echo '第二行:'.$EN.$i.':'.$val.','.$sn[$val].'<br>';
+				}
+				$Num=PHPExcel_Cell::stringFromColumnIndex($Num+4);
+				$timetitle1=$Num.($Num1-1); ///時間欄位
+			}
+		}
+		
+		///
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel = PHPExcel_IOFactory::load("..".$link);
+		$objPHPExcel-> setActiveSheetIndex(0);
+		$num=preg_replace('/[^\d]/','',$timetitle);
+		$eng=ereg_replace("[0-9]","",$timetitle);	
+		$num1=preg_replace('/[^\d]/','',$timetitle1);
+		$eng1=ereg_replace("[0-9]","",$timetitle1);	
+		if($_SESSION['way']=='A'){$form='form1';}else{$form='form';}
+		if($_SESSION['time1']<>'' and $_SESSION['time2']<>'')
+		{
+			$time1=$_SESSION['time1'];$time2=$_SESSION['time2'];
+		}
+		else
+		{
+			$time1='0000';$time2='9999';
+		}
+		$Datetime="substring(date,1,8)>= '".dateform1($_SESSION['datepicker7'])."' and substring(date,1,8)<='".dateform1($_SESSION['datepicker8'])."' and substring(date,9,4)>='".$time1."' and substring(date,9,4)<='".$time2."'";
+		$query2="SELECT distinct Date from UTT_CHECK_DATA UD left join UTT_TAGNO_DATA UN ON UD.TAG_NO=UN.TAG_NO where ".$Datetime." and ".$form."=".$_SESSION['form']." order by date";
+		//echo $query2.'<BR>';
+		$result2=mssql_query($query2);
+		$Numrows=mssql_num_rows($result2);$PASS=0;$i=0;$count=0;$times=3;
+		if($Numrows==0){my_msg('查無資料');}
+		
+		$morning='<input type="submit" name="morning" value="早">';
+		$afternoon='<input type="submit" name="afternoon" value="中">';
+		$night='<input type="submit" name="night" value="晚">';
+		while($row2=mssql_fetch_array($result2))
+	{
+		$query="select FD.Form,FD.filename,FD.link,FD.sn,FD.sn1,FD.way,TD.TAG_NO,TD.project,TD.spec,rs.Data,rs.pass,rs.Date,rs.saveuid from UTT_FORM_DATA FD LEFT JOIN UTT_TAGNO_DATA TD ON   FD.[index]=TD.".$form." left join UTT_record_spec rs on  TD.TAG_NO=rs.TAG_NO  where FD.[index]='".$_SESSION['form']."' AND Date ='".$row2[0]."'";
+		echo $query."<BR>";
+		$filename1="TMP.xlsx";
+		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+		$objWriter->save($filename1);
+		unset($objPHPExcel);
+		unset($objWriter);
+		$result=mssql_query($query);$title=1;
+		while($row1=mssql_fetch_array($result))
+		{
+	//		echo "start<BR>";
+			$objPHPExcel = new PHPExcel();
+			$objPHPExcel = PHPExcel_IOFactory::load("TMP.xlsx");
+			$objPHPExcel-> setActiveSheetIndex(0);
+			$styleThinBlackBorderOutline = array(  
+					   'borders' => array (  
+							 'outline' => array (  
+								   'style' => PHPExcel_Style_Border::BORDER_THIN,   //?置border?式 
+								   //'style' => PHPExcel_Style_Border::BORDER_THICK,  另一种?式  
+							),  
+					  ),  
+				);
+					$pass=trim($row1['pass']);
+					if($pass=='O'){$pass='合格';$BG='';}
+					elseif($pass=='△'){$pass='';$BG='';}
+					else{$pass='不合格';$BG='bgcolor="#FFFF66"';}
+					//echo '<tr '.$BG.'><td>'.$row1['TAG_NO'].'</td><td>'.$row1['project'].'</td><td>'.$row1['Data'].'</td><td>'.$row1['spec'].'</td><td>'.$row1['Date'].'</td><td>'.getusername($row1['saveuid']).'</td><td>'.$pass.'</td><td bgcolor="#FAFAFA" align="center">'.getusername($director1).'</td><td  bgcolor="#FAFAFA" align="center">'.getusername($director2).'</td></tr>';
+					$COLUMN=$column[trim($row1['TAG_NO'])];
+					//echo trim($row1['TAG_NO']).'='.$COLUMN.'='.trim($row1['Data']).'<br>';
+					if($way=='A')
+					{//直式
+						if($PASS==0 and $sn1==''){
+						$A=PHPExcel_Cell::columnIndexFromString(ereg_replace("[0-9]","",$COLUMN))+3;}
+						else
+						{
+								//echo trim($row1['TAG_NO']).':'.$_SESSION[trim($row1['TAG_NO'])].'<br>';
+							if($PASS==0)
+							{
+								$query3="select * from UTT_FORM_DATA where [index]=".$_SESSION['form']."";
+								$result3=mssql_query($query3);
+								$row3=mssql_fetch_array($result3);
+								$A=PHPExcel_Cell::columnIndexFromString(ereg_replace("[0-9]","",trim($row3['sn'])))+3;
+								$B=PHPExcel_Cell::columnIndexFromString(ereg_replace("[0-9]","",trim($row3['sn1'])))+3;
+							}
+						}
+						//echo $row1['TAG_NO'].':'.$_SESSION[trim($row1['TAG_NO'])].'<br>';
+						if($_SESSION[trim($row1['TAG_NO'])]==0){
+						$ENG=PHPExcel_Cell::stringFromColumnIndex($A);}
+						else
+						{
+							if($_SESSION[trim($row1['TAG_NO'])]==1){
+							$ENG=PHPExcel_Cell::stringFromColumnIndex($B);
+							}
+						}
+						$Num=preg_replace('/[^\d]/','',$COLUMN);
+					//echo trim($row1['TAG_NO']).':'.$ENG.$Num.'='.$row1['Data'].'<BR>';
+						if($pass=='不合格'){$color='FFFF30';}
+						else{$color='FAFAFA';}
+						$objPHPExcel->getActiveSheet()->getStyle($ENG.$Num)->getFill()->applyFromArray(array('type' => PHPExcel_Style_Fill::FILL_SOLID,'startcolor' => array('rgb' =>$color))); 
+						$objPHPExcel->getActiveSheet()->setCellValue($ENG.$Num, iconv("big5","utf-8",trim($row1['Data'])));
+						$objPHPExcel->getActiveSheet()->getStyle($ENG.$Num)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+					}
+					else//橫式
+					{
+						$ENG=ereg_replace("[0-9]","",$COLUMN);
+						//$ENG=PHPExcel_Cell::stringFromColumnIndex($COLUMN);
+						if($PASS==0 and $sn1==''){
+						$Num1=preg_replace("/[^\d]/","",$COLUMN)+4;}
+						else
+						{
+							if($PASS==0)
+							{
+								$query3="select * from UTT_FORM_DATA where [index]=".$_SESSION['form']."";
+								$result3=mssql_query($query3);
+								$row3=mssql_fetch_array($result3);
+								$A=preg_replace("/[^\d]/","",trim($row3['sn']))+4;
+								$B=preg_replace("/[^\d]/","",trim($row3['sn1']))+4;
+							}
+						}
+						if($sn1<>''){
+							if($_SESSION[trim($row1['TAG_NO'])]==0)
+							{
+								$Num1=$A;
+							}
+							else
+							{
+								$Num1=$B;
+							}
+						}
+						//echo trim($row1['TAG_NO']).':'.$ENG.$Num1.'='.$row1['Data'].','.$pass.'<BR>';
+						if($pass=='不合格'){$color='FFFF30';}
+						else{$color='FAFAFA';}
+						$objPHPExcel->getActiveSheet()->getStyle($ENG.$Num1)->getFill()->applyFromArray(array('type' => PHPExcel_Style_Fill::FILL_SOLID,'startcolor' => array('rgb' =>$color))); 	
+						$objPHPExcel->getActiveSheet()->setCellValue($ENG.$Num1, iconv("big5","utf-8",trim($row1['Data'])));
+						$objPHPExcel->getActiveSheet()->getStyle($ENG.$Num1)->applyFromArray($styleThinBlackBorderOutline); ///畫儲存格外框
+					}
+					//echo $A;
+					//$objPHPExcel->getActiveSheet()->setCellValue($COLUMN, iconv("big5","utf-8",'=SUM(H6:H36)'));
+				$title++;
+			//}
+			$PASS++;
+			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+			$objWriter->save($filename1);
+			unset($objPHPExcel);
+			unset($objWriter);
+	//		echo "endding<BR>";
+		}
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel = PHPExcel_IOFactory::load("TMP.xlsx");
+		$objPHPExcel-> setActiveSheetIndex(0);
+	//		echo "SSS";
+			
+		$query1="select distinct way from UTT_FORM_DATA FD LEFT JOIN UTT_TAGNO_DATA TD ON   FD.[index]=TD.".$form." left join UTT_record_spec rs on  TD.TAG_NO=rs.TAG_NO  where FD.[index]='".$_SESSION['form']."' AND Date ='".$row2[0]."' and way='A'";
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		$Numrows=mssql_num_rows($result1);
+	//	echo "SSS1<BR>";
+		if($Numrows==''){
+		$query3="select distinct form1 from UTT_TAGNO_DATA where form='".$_SESSION['form']."'";
+		$result3=mssql_query($query3);
+		$row3=mssql_fetch_array($result3);
+		$SIGN1=trim($row3[0]);
+		}
+		else{$SIGN1=$_SESSION['form'];}
+		$reverse="reverse(substring(reverse(SAG_NO),1,charindex('_',reverse(SAG_NO)) - 1))";
+		$query4="select * from UTT_DATA_SIGN where SUBSTRING(SAG_NO,1,CHARINDEX('_',SAG_NO)-1)='".trim($SIGN1)."' and  SUBSTRING(".$reverse.",1,12)='".trim($row2[0])."'"; 
+		//echo $query4.'<br>';
+		$result4=mssql_query($query4);
+		while($row4=mssql_fetch_array($result4)){
+		$SIGN1=trim($row4['SIGN1']);
+		$Remark1=trim($row4['Remark1']);
+		$SIGN2=trim($row4['SIGN2']);
+		$Remark2=trim($row4['Remark2']);
+		}
+		$query4="select FD.Form,FD.filename,FD.link,FD.sn,FD.sn1,FD.way,TD.TAG_NO,TD.project,TD.spec,rs.Data,rs.pass,rs.Date,rs.saveuid from UTT_FORM_DATA FD LEFT JOIN UTT_TAGNO_DATA TD ON   FD.[index]=TD.".$form." left join UTT_record_spec rs on  TD.TAG_NO=rs.TAG_NO  where FD.[index]='".$_SESSION['form']."' AND Date ='".$row2[0]."'";
+		$result4=mssql_query($query4);
+		$row4=mssql_fetch_array($result4);
+	//	echo "SSS2<BR>";
+		if($_SESSION['way']=='A')
+		{
+			//echo $_SESSION['form'];
+			//echo $highestColumn; ////橫的
+			//echo $highestRow; ////直
+			$Eng=PHPExcel_Cell::columnIndexFromString(ereg_replace("[0-9]","",$COLUMN));
+			$Eng1=PHPExcel_Cell::columnIndexFromString(ereg_replace("[0-9]","",$COLUMN))+$times;
+			$SIGNENG=PHPExcel_Cell::stringFromColumnIndex($Eng);
+			$SIGNENG1=PHPExcel_Cell::stringFromColumnIndex($Eng1);
+			
+			$SIGNNUM=$highestRow+1;
+			//echo $SIGNENG1.$SIGNNUM.'<br>';
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8","巡檢人員"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG1.$SIGNNUM, iconv("big5","utf-8",getusername(trim($row4['saveuid']))));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG1.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNNUM++;
+			//echo $SIGNENG1.$SIGNNUM.'<br>';
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8","主任簽核"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG1.$SIGNNUM, iconv("big5","utf-8",getusername($SIGN1)));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG1.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNNUM++;
+			//echo $SIGNENG1.$SIGNNUM.'<br>';
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8","主任備註"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG1.$SIGNNUM, iconv("big5","utf-8",$Remark1));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG1.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNNUM++;
+			//echo $SIGNENG1.$SIGNNUM.'<br>';
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8","主管簽核"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG1.$SIGNNUM, iconv("big5","utf-8",getusername($SIGN2)));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG1.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNNUM++;
+			//echo $SIGNENG1.$SIGNNUM.'<br>';
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8","主管備註"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG1.$SIGNNUM, iconv("big5","utf-8",$Remark2));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG1.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNENG1++;
+			$times++;
+
+			$objPHPExcel->getActiveSheet()->setCellValue($eng.$num, iconv("big5","utf-8","'".trim($row2[0])));
+			$objPHPExcel->getActiveSheet()->getStyle($eng.$num)->getAlignment()->setWrapText(true);//自動換行
+			$objPHPExcel->getActiveSheet()->getStyle($eng.$num)->applyFromArray($styleThinBlackBorderOutline);  ///畫儲存格外框
+			if($timetitle1<>'')
+			{
+				$objPHPExcel->getActiveSheet()->setCellValue($eng1.$num1, iconv("big5","utf-8","'".trim($row2[0])));
+				$objPHPExcel->getActiveSheet()->getStyle($eng1.$num1)->getAlignment()->setWrapText(true);
+				$objPHPExcel->getActiveSheet()->getStyle($eng1.$num1)->applyFromArray($styleThinBlackBorderOutline);  ///畫儲存格外框
+				/*
+				$ENGILSH=$eng1;
+				$ENGILSH++;
+				$objPHPExcel->getActiveSheet()->insertNewColumnBefore($ENGILSH,1);
+				*/
+			}
+			$ENGILSH=$eng;
+			$ENGILSH++;
+			$objPHPExcel->getActiveSheet()->insertNewColumnBefore($ENGILSH,1);
+			if($sn1<>''){$eng1++;}
+			$eng++;$eng1++;$B++;
+		}
+		else
+		{
+			$Eng=ereg_replace("[0-9]","",$COLUMN);
+			$Eng++;
+			//$Num=PHPExcel_Cell::columnIndexFromString($COLUMN);
+			$Num=PHPExcel_Cell::columnIndexFromString($highestColumn)-3;
+			$SIGNENG=$Eng;
+			$SIGNNUM=$num;
+			//echo $SIGNENG.$num.'<br>';
+			//$Num=PHPExcel_Cell::columnIndexFromString($highestColumn)-3;
+			//$SIGNENG=PHPExcel_Cell::stringFromColumnIndex($Num);
+			//$SIGNNUM=$num;
+			//echo $SIGNENG.$num.'<br>';
+			
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.'4', iconv("big5","utf-8","巡檢人員"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.'4')->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8",getusername(trim($row4['saveuid']))));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.'4', iconv("big5","utf-8","主任簽核"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.'4')->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8",getusername($SIGN1)));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.'4', iconv("big5","utf-8","主任備註"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.'4')->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8",$Remark1));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.'4', iconv("big5","utf-8","主管簽核"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.'4')->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8",getusername($SIGN2)));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			$SIGNENG++;
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.'4', iconv("big5","utf-8","主管備註"));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.'4')->applyFromArray($styleThinBlackBorderOutline); 
+			$objPHPExcel->getActiveSheet()->setCellValue($SIGNENG.$SIGNNUM, iconv("big5","utf-8",$Remark2));
+			$objPHPExcel->getActiveSheet()->getStyle($SIGNENG.$SIGNNUM)->applyFromArray($styleThinBlackBorderOutline); 
+			
+			
+			
+			
+			
+			
+			$objPHPExcel->getActiveSheet()->setCellValue($eng.$num, iconv("big5","utf-8","'".trim($row2[0])));
+			$objPHPExcel->getActiveSheet()->getStyle($eng.$num)->applyFromArray($styleThinBlackBorderOutline);  ///畫儲存格外框
+			$objPHPExcel->getActiveSheet()->getStyle($eng.$num)->getAlignment()->setWrapText(true);//自動換行
+			if($timetitle1<>'')
+			{
+				$objPHPExcel->getActiveSheet()->setCellValue($eng1.$num1, iconv("big5","utf-8","'".trim($row2[0])));
+				$objPHPExcel->getActiveSheet()->getStyle($eng1.$num1)->applyFromArray($styleThinBlackBorderOutline);  ///畫儲存格外框
+				$objPHPExcel->getActiveSheet()->getStyle($eng1.$num1)->getAlignment()->setWrapText(true);//自動換行
+				//$objPHPExcel->getActiveSheet()->insertNewRowBefore(($num1+1),1);
+			}
+			$objPHPExcel->getActiveSheet()->insertNewRowBefore(($num+1),1);
+			if($sn1<>''){$num1++;}
+			$num++;$num1++;$B++;
+		}
+	//	echo "SSS3<BR>";
+		$A++;$B++;$Num1++;
+	}
+}
+	//echo '</table>';
+	
+	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
+//	$A=explode("(",formname($_SESSION['form']));
+	$filename="M".date("YmdHis").".xlsx";
+	echo $filename."<BR>";
+//	$_SESSION['filename']=$A[0].'('.des($_SESSION['datepicker7']).').xlsx';
+	$objWriter->save('../PRODUCE/Download/'.$filename);
+	
+	$A=explode("(",formname($_SESSION['form']));
+	$path_root=$_SERVER['HTTP_HOST'];
+	if($_SESSION['pid']=='')
+	{
+		echo '<script>document.location.href="http://'.$path_root.'/PRODUCE/Download/'.$filename.'";</script>';
+		if($_SESSION['way']=='A'){$form='form1';}else{$form='form';}
+		$query="SELECT distinct UD.TAG_NO from UTT_CHECK_DATA UD left join UTT_TAGNO_DATA UN ON UD.TAG_NO=UN.TAG_NO where ".$form."=".$_SESSION['form']."";
+		$result=mssql_query($query);
+		while($row=mssql_fetch_array($result))
+		{
+			unset($_SESSION[trim($row[0])]);
+		}
+	}
+	else
+	{
+		echo '<script>document.location.href="http://'.$path_root.'/PRODUCE/Download/'.$_SESSION['pid'].'_'.des($_SESSION['datepicker7']).'.xlsx";</script>';
+	}
+	unset($_SESSION['time1'],$_SESSION['time2']);
+}
+
+
+
+
+if(isset($_POST['keyin']) or isset($_POST['keyin_HIC']))
+{
+	if(isset($_POST['keyin_HIC'])){$_SESSION['HIC']=1;}else{unset($_SESSION['HIC']);}
+	jumpto("/PRODUCE/UTT_check_input.php?form=".trim($_POST['form']));
+}
+if(isset($_POST['morning']))
+{
+	$_SESSION['time1']='0800';
+	$_SESSION['time2']='1600';
+}
+if(isset($_POST['afternoon']))
+{
+	$_SESSION['time1']='1600';
+	$_SESSION['time2']='2359';
+}
+if(isset($_POST['night']))
+{
+	$_SESSION['time1']='0000';
+	$_SESSION['time2']='0800';
+}
+//echo $_SESSION['pass'];
+if($_GET['remark']<>'' and ($_SESSION['pass']==1 or $_SESSION['pass']==2) or isset($_POST['cancel1']) or isset($_POST['cancel2']))  //批次簽核與取消的部分
+{
+	$remark=$_GET['remark'];
+	if($remark=='empty'){$remark='';}
+	for($i=0;$i<count($_SESSION['SAG_NO']);$i++){
+	$query="select distinct form1 from UTT_TAGNO_DATA  WHERE form1=".$_SESSION['form'];
+	$result=mssql_query($query);
+	$row=mssql_fetch_array($result);
+	$Numrows=mssql_num_rows($result);
+	if($Numrows==0)
+	{
+		$query1="select distinct form1 from UTT_TAGNO_DATA  WHERE form=".$_SESSION['form'];
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		$form1=trim($row1[0]);
+	}
+	else
+	{
+		$form1=trim($row[0]);
+	}	
+	if($_SESSION['pass']==1)
+	{
+		$query1="select SIGN1 from UTT_DATA_SIGN where SAG_NO='".$form1."_".$_SESSION['SAG_NO'][$i]."'";
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		if(trim($row1[0])==''){
+		$query="update UTT_DATA_SIGN set SIGN1='".$_SESSION['uid']."',Remark1='".$remark."',sign_time1='".date(YmdHis)."',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$form1."_".$_SESSION['SAG_NO'][$i]."'";
+		}
+	}
+	elseif($_SESSION['pass']==2)
+	{
+		$query1="select SIGN2 from UTT_DATA_SIGN where SAG_NO='".$form1."_".$_SESSION['SAG_NO'][$i]."'";
+		//echo $query1;
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		if(trim($row1[0])==''){
+		$query="update UTT_DATA_SIGN set SIGN2='".$_SESSION['uid']."',Remark2='".$remark."',sign_time2='".date(YmdHis)."',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$form1."_".$_SESSION['SAG_NO'][$i]."'";
+		}
+	}
+	elseif(isset($_POST['cancel1']))
+	{
+		$query="update UTT_DATA_SIGN set SIGN1='',Remark1='',sign_time1='',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$form1."_".$_SESSION['SAG_NO'][$i]."'";
+	}
+	elseif(isset($_POST['cancel2']))
+	{
+		$query="update UTT_DATA_SIGN set SIGN2='',Remark2='',sign_time2='',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$form1."_".$_SESSION['SAG_NO'][$i]."'";
+	}
+	$result=mssql_query($query);
+	//echo $query.'<br>';
+	}
+	$url='/PRODUCE/index.php?url=UTT_check';
+	my_msg('簽核完成!',$url);
+}
+
+	if($_SESSION['sign']<>'')////單次簽核的部分
+	{
+		$PASS=substr($_SESSION['sign'],0,3);
+		$A=substr($_SESSION['sign'],3,1);
+		$sign=substr($_SESSION['sign'],4);
+		//echo $PASS.','.$sign.','.$A;
+		if($PASS=='sig')
+		{
+			if($A=='A'){	
+			$query="update UTT_DATA_SIGN set SIGN1='".$_SESSION['uid']."',Remark1='".$remark."',sign_time1='".date(YmdHis)."',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$sign."'";
+			}
+			else
+			{
+			$query="update UTT_DATA_SIGN set SIGN2='".$_SESSION['uid']."',Remark2='".$remark."',sign_time2='".date(YmdHis)."',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$sign."'";
+			}
+		}
+		else
+		{
+			if($A=='A'){
+			$query="update UTT_DATA_SIGN set SIGN1='',Remark1='',sign_time1='',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$sign."'";
+			}
+			else
+			{
+			$query="update UTT_DATA_SIGN set SIGN2='',Remark2='',sign_time2='',saveuid='".$_SESSION['uid']."',savetime='".date(YmdHis)."' where SAG_NO='".$sign."'";
+			}
+		}
+		//echo $query;
+		mssql_query($query);
+		unset($_SESSION['sign']);
+		$url='/PRODUCE/index.php?url=UTT_check';
+		my_msg('簽核完成!',$url);
+	}
+	for($i=0;$i<count($_SESSION['SIGN']);$i++)
+	{ 
+		if(isset($_POST[$_SESSION['SIGN'][$i]]))
+		{
+			$PASS=substr($_SESSION['SIGN'][$i],0,3);
+			$_SESSION['sign']=$_SESSION['SIGN'][$i];
+			unset($_SESSION['SIGN']);
+			if($PASS=='sig'){
+			remark();}
+			else
+			{
+				refresh();
+			}
+		}
+		$_SESSION['pass']=1;
+	}
+	
+if(isset($_POST['search']) or isset($_POST['morning']) or isset($_POST['afternoon']) or isset($_POST['night']) or $_SESSION['pass']<>'')
+{
+	if(isset($_POST['search'])){unset($_SESSION['SIGN'],$_SESSION['pass']);}
+	if($_SESSION['pass1']<>''){unset($_SESSION['SIGN'],$_SESSION['pass']);break;}
+	if($_SESSION['pass']==''){
+	$_SESSION['form']=$_POST['form'];}
+	unset($_SESSION['SAG_NO'],$_SESSION['pass']);
+	if($_SESSION['pid']<>'')
+	{
+		echo '<table width="1000" border="1" align="left">';
+		echo '<tr bgcolor="#CCCCCC"><td>TAG_NO</td><td>項目名稱</td><td>數值</td><td>SPEC</td><td>巡檢日期時間</td><td>巡檢人員</td><td>合格/不合格</td></tr>';
+		$query="select US.*,UA.project,UA.spec from UTT_record_spec US left join UTT_TAGNO_DATA UA ON US.TAG_NO=UA.TAG_NO where US.TAG_NO='".$_SESSION['pid']."' and Date >=  '".dateform1($_SESSION['datepicker7'])."0000' and Date<='".dateform1($_SESSION['datepicker8'])."9999' order by date";
+	//	echo $query."<BR>";
+		$result=mssql_query($query);$Num=2;
+		while($row1=mssql_fetch_array($result))
+		{
+		$pass=trim($row1['pass']);
+					if($pass=='O'){$pass='合格';$BG='';}
+					elseif($pass=='△'){$pass='';$BG='';}
+					else{$pass='不合格';$BG='bgcolor="#FFFF66"';}
+					echo '<tr '.$BG.'><td>'.$row1['TAG_NO'].'</td><td>'.$row1['project'].'</td><td>'.$row1['Data'].'</td><td>'.$row1['spec'].'</td><td>'.$row1['Date'].'</td><td>'.getusername($row1['saveuid']).'</td><td>'.$pass.'</td></tr>';	
+
+
+		}
+		echo '</table>';
+		
+		
+	}
+	else
+	{
+		$num=preg_replace('/[^\d]/','',$timetitle);
+		$eng=ereg_replace("[0-9]","",$timetitle);	
+		$num1=preg_replace('/[^\d]/','',$timetitle1);
+		$eng1=ereg_replace("[0-9]","",$timetitle1);	
+		if($_SESSION['way']=='A'){$form='form1';}else{$form='form';}
+		if($_SESSION['time1']<>'' and $_SESSION['time2']<>'')
+		{
+			$time1=$_SESSION['time1'];$time2=$_SESSION['time2'];
+		}
+		else
+		{
+			$time1='0000';$time2='9999';
+		}
+		$Datetime="substring(date,1,8)>= '".dateform1($_SESSION['datepicker7'])."' and substring(date,1,8)<='".dateform1($_SESSION['datepicker8'])."' and substring(date,9,4)>='".$time1."' and substring(date,9,4)<='".$time2."'";
+		$query2="SELECT distinct Date from UTT_CHECK_DATA UD left join UTT_TAGNO_DATA UN ON UD.TAG_NO=UN.TAG_NO where ".$Datetime." and ".$form."=".$_SESSION['form']." order by date";
+	//	echo $query2.'<BR>';
+		//break;
+		$result2=mssql_query($query2);
+		$row2=mssql_fetch_array($result2);
+		$Numrows=mssql_num_rows($result2);$PASS=0;$i=0;$count=0;
+		if($Numrows==0){my_msg('查無資料');}
+		$sign1=hr_duteies($_SESSION['uid']);   ////批次簽核部分
+		
+		/////////批次取消部分
+		$query1="select distinct way from UTT_FORM_DATA FD LEFT JOIN UTT_TAGNO_DATA TD ON   FD.[index]=TD.".$form." left join UTT_record_spec rs on  TD.TAG_NO=rs.TAG_NO  where FD.[index]='".$_SESSION['form']."' AND Date ='".$row2[0]."' and way='A'";
+		//echo $query1;
+		$result1=mssql_query($query1);
+		$Numrows=mssql_num_rows($result1);
+		if($Numrows==0){
+		$query3="select distinct form1 from UTT_TAGNO_DATA where form='".$_SESSION['form']."'";
+		$result3=mssql_query($query3);
+		$row3=mssql_fetch_array($result3);
+		$SIGN1=trim($row3[0]);
+		}
+		else{$SIGN1=$_SESSION['form'];}
+		$reverse="reverse(substring(reverse(SAG_NO),1,charindex('_',reverse(SAG_NO)) - 1))";
+		$query4="select * from UTT_DATA_SIGN where SUBSTRING(SAG_NO,1,CHARINDEX('_',SAG_NO)-1)='".$SIGN1."' and  SUBSTRING(".$reverse.",1,8)>=  '".dateform1($_SESSION['datepicker7'])."' and substring(".$reverse.",1,8)<='".dateform1($_SESSION['datepicker8'])."' and SUBSTRING(".$reverse.",9,4)>='".$time1."' and SUBSTRING(".$reverse.",9,4)<='".$time2."'"; 
+		//echo $query4;
+		$result4=mssql_query($query4);
+		$Numrow4=mssql_num_rows($result4);$signcount=0;$signcount1=0;
+		while($row4=mssql_fetch_array($result4))
+		{
+			if(trim($row4['SIGN1'])<>''){$signcount++;}	
+			if(trim($row4['SIGN2'])<>''){$signcount1++;}	
+		}
+		//echo $signcount1.','.$signcount.','.$Numrow4;
+		if(substr($_SESSION['uid'],1)=='319' or substr($_SESSION['uid'],1)=='029' or substr($_SESSION['uid'],1)=='525'  or substr($_SESSION['uid'],1)=='903' or substr($_SESSION['uid'],1)=='066' or substr($_SESSION['uid'],1)=='1048' or substr($_SESSION['uid'],1)=='1263' or substr($_SESSION['uid'],1)=='900' or substr($_SESSION['uid'],1)=='1038' or substr($_SESSION['uid'],1)=='1044' or substr($_SESSION['uid'],1)=='1103' or substr($_SESSION['uid'],1)=='1100' or substr($_SESSION['uid'],1)=='1065')
+		{
+			if($signcount==$Numrow4){
+				if($signcount1<$Numrow4 and $signcount1!=0){$sign1[0]='';}
+				elseif($signcount1==0){$sign1[0]='<input type="submit" name="cancel1" value="批次取消" style="background-color:red;">';}
+				else{
+				$sign1[0]='<input type="submit" name="cancel1" value="批次取消" style="background-color:red;">';}
+			}
+			if($signcount1==$Numrow4){$sign1[1]='<input type="submit" name="cancel2" value="批次取消" style="background-color:red;">';$sign1[0]='';}
+		}
+		///////////////
+		
+		$morning='<input type="submit" name="morning" value="早">';
+		$afternoon='<input type="submit" name="afternoon" value="中">';
+		$night='<input type="submit" name="night" value="晚">';
+		echo '<table width="1200" border="1" align="left">';
+		//echo $sing1[0].','.$sing[1];
+		/*
+		if($sing1[0]==''){$sign1='';}else{$sign2=$sign1[1];}
+		if($sing1[1]==''){$sign1=$sign1[0];}else{$sign2='';}
+		*/
+		echo '<tr  bgcolor="#CCCCCC"><td colspan="4"  align="center" valign="center"><strong>簽核作業</strong></td><td align="center">'.$morning.' '.$afternoon.' '.$night.'</td><td colspan="2"><td align="center">'.$sign1[0].'</td><td align="center">'.$sign1[1].'</td></tr>';
+		$query2="SELECT distinct Date from UTT_CHECK_DATA UD left join UTT_TAGNO_DATA UN ON UD.TAG_NO=UN.TAG_NO where ".$Datetime." and ".$form."=".$_SESSION['form']." order by date";
+		$result2=mssql_query($query2);
+		while($row2=mssql_fetch_array($result2))
+	{
+		$_SESSION['SAG_NO'][$i]=trim($row2[0]);
+		$i++;
+		$query="select FD.Form,FD.filename,FD.link,FD.sn,FD.sn1,FD.way,TD.TAG_NO,TD.project,TD.spec,rs.Data,rs.pass,rs.Date,rs.saveuid from UTT_FORM_DATA FD LEFT JOIN UTT_TAGNO_DATA TD ON   FD.[index]=TD.".$form." left join UTT_record_spec rs on  TD.TAG_NO=rs.TAG_NO  where FD.[index]='".$_SESSION['form']."' AND Date ='".$row2[0]."'";
+		//echo $query;
+		$result=mssql_query($query);$title=1;
+		$query1="select distinct way from UTT_FORM_DATA FD LEFT JOIN UTT_TAGNO_DATA TD ON   FD.[index]=TD.".$form." left join UTT_record_spec rs on  TD.TAG_NO=rs.TAG_NO  where FD.[index]='".$_SESSION['form']."' AND Date ='".$row2[0]."' and way='A'";
+		$result1=mssql_query($query1);
+		$Numrows=mssql_num_rows($result1);
+		if($Numrows==''){
+		$query3="select distinct form1 from UTT_TAGNO_DATA where form='".$_SESSION['form']."'";
+		$result3=mssql_query($query3);
+		$row3=mssql_fetch_array($result3);
+		$sign1=trim($row3[0]);
+		}
+		else{$sign1=$_SESSION['form'];}
+		
+		$query1="select * from UTT_DATA_SIGN where SAG_NO='".trim($sign1)."_".trim($row2[0])."'";
+		//echo $query1.'<br>';
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		
+		if($_SESSION['uid']=='H1071' or $_SESSION['uid']=='H1172' or $_SESSION['uid']=='H1199'){$director=1;}
+		elseif($_SESSION['uid']=='H1005' or $_SESSION['uid']=='H1041' or $_SESSION['uid']=='H1100' or $_SESSION['uid']=='H1103'){$director=2;}
+		else{$director='';}
+		if($_SESSION['director']==1 or $_SESSION['director']==2 or $director<>'')
+		{
+			if(trim($row1['SIGN1'])=='' and trim($row1['SIGN2'])=='')
+			{
+				$SIGN1='<input type="submit" value="簽核" name="sigA'.$sign1.'_'.trim($row2[0]).'" style="background-color:green;">';
+				$SIGN2='';
+				//echo $count.','.trim($row2[0]).'<br>';
+				$_SESSION['SIGN'][$count]='sigA'.$sign1.'_'.trim($row2[0]);
+				$count++;
+			}
+			if(trim($row1['SIGN1'])<>'' and trim($row1['SIGN2'])=='')
+			{
+				if($_SESSION['uid']==trim($row1['SIGN1']) or $_SESSION['director']==1 or $director==1){
+				$SIGN1='<input type="submit" value="取消簽核" name="canA'.$sign1.'_'.trim($row2[0]).'" style="background-color:red;">';
+				$_SESSION['SIGN'][$count]='canA'.$sign1.'_'.trim($row2[0]);
+				$count++;
+				}
+				if($_SESSION['director']==1 or $director==1){
+				$SIGN2='<input type="submit" value="簽核" name="sigB'.$sign1.'_'.trim($row2[0]).'" style="background-color:green;">';
+				$_SESSION['SIGN'][$count]='sigB'.$sign1.'_'.trim($row2[0]);
+				$count++;
+				}
+			}
+			if(trim($row1['SIGN1'])<>'' and trim($row1['SIGN2'])<>'')
+			{
+				if($_SESSION['director']==1 or $director==1){
+				$SIGN1='';
+				}
+				$SIGN2='<input type="submit"  value="取消簽核" name="canB'.$sign1.'_'.trim($row2[0]).'" style="background-color:red;">';
+				$_SESSION['SIGN'][$count]='canB'.$sign1.'_'.trim($row2[0]);
+				$count++;
+			}
+			//echo $count.','.$_SESSION['SIGN'][$count].'<br>';
+			$director1=trim($row1['SIGN1']);
+			$director2=trim($row1['SIGN2']);
+		}
+		else
+		{
+			$director1=trim($row1['SIGN1']);
+			$director2=trim($row1['SIGN2']);
+
+		}
+		echo '<tr bgcolor="#CCCCCC"><td>TAG_NO</td><td>項目名稱</td><td>數值</td><td>SPEC</td><td>巡檢日期時間</td><td>巡檢人員</td><td>合格/不合格</td><td>主任簽核:'.$SIGN1.'</td><td>主管簽核:'.$SIGN2.'</td></tr>';
+		while($row1=mssql_fetch_array($result))
+		{
+					$pass=trim($row1['pass']);
+					if($pass=='O'){$pass='合格';$BG='';}
+					elseif($pass=='△'){$pass='';$BG='';}
+					else{$pass='不合格';$BG='bgcolor="#FFFF66"';}
+					echo '<tr '.$BG.'><td>'.$row1['TAG_NO'].'</td><td>'.$row1['project'].'</td><td>'.$row1['Data'].'</td><td>'.$row1['spec'].'</td><td>'.$row1['Date'].'</td><td>'.getusername($row1['saveuid']).'</td><td>'.$pass.'</td><td bgcolor="#FAFAFA" align="center">'.getusername($director1).'</td><td  bgcolor="#FAFAFA" align="center">'.getusername($director2).'</td></tr>';
+					$COLUMN=$column[trim($row1['TAG_NO'])];
+					//echo trim($row1['TAG_NO']).'='.$COLUMN.'='.trim($row1['Data']).'<br>';
+		}
+	}
+}
+	echo '</table>';
+} ///$_POST['search']
+if(isset($_POST['sign1']))
+{
+$_SESSION['pass']='1';
+remark();
+}
+if(isset($_POST['sign2']))
+{
+$_SESSION['pass']='2';
+remark();
+}
+if(isset($_POST['cancel1']))
+{
+$_SESSION['pass']='A';
+}
+if(isset($_POST['cancel2']))
+{
+$_SESSION['pass']='B';
+}
+function remark()
+{
+	echo '<script>
+	var name=prompt("備註(如無須填入直接按確定)",""); 
+	if(name==""){location.href="index.php?url=UTT_check&remark=empty";}else{location.href="index.php?url=UTT_check&remark=" + name;}
+	</script>';
+}
+function dateform1($d1)  //2017/01/01 => 20170101
+{	
+	$rt=str_replace("/","",$d1);
+	return $rt;
+}
+function formname($d1)  
+{	
+	$query="select * from UTT_FORM_DATA where [index]='".$d1."'";
+	$result=mssql_query($query);
+	$row=mssql_fetch_array($result);
+	$rt=trim($row['Form']);
+	return $rt;
+}
+function hr_duteies($val)
+{
+	require_once("../connections/conn_hr.php");
+	$query2="select duties from EMPLOYEE_DATA where empno='".$val."'";
+	$result2=mssql_query($query2);
+	$row2=mssql_fetch_array($result2);
+	$sign1=array();
+	if(trim($row2[0])>=7 and trim($row2[0])<17 or substr($_SESSION['uid'],1)=='589'){$_SESSION['director']=2;$sign1[0]='<input type="submit" name="sign1" value="批次簽核" style="background-color:green;">';}
+	if(substr($_SESSION['uid'],1)=='319' or substr($_SESSION['uid'],1)=='029' or substr($_SESSION['uid'],1)=='066' or substr($_SESSION['uid'],1)=='1048' or substr($_SESSION['uid'],1)=='1303' or substr($_SESSION['uid'],1)=='1263' or substr($_SESSION['uid'],1)=='1103' or substr($_SESSION['uid'],1)=='1044' or substr($_SESSION['uid'],1)=='1041' or substr($_SESSION['uid'],1)=='1100' or substr($_SESSION['uid'],1)=='1065'){$_SESSION['director']=1;$sign1[1]='<input type="submit" name="sign2" value="批次簽核" style="background-color:green;">';
+	$sign1[0]='<input type="submit" name="sign1" value="批次簽核" style="background-color:green;">';
+	}
+	// include("../connections/conn.php");
+	return $sign1;
+	
+}
+?>
+</table>
+</br>

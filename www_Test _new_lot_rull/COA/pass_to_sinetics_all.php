@@ -1,0 +1,240 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php
+session_start();
+// auth('9-11',$_SESSION['aut']);
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+datepick();
+echo 
+'<form name="d1" action="" method="post">
+Key in Lot NO 可以覆蓋舊的拋轉資料，選日期區間的話只要sinetics已有資料，將不會重新上傳
+<BR>開始日期：<input type="text" name="datepicker1" id="datepicker1" size="8" onchange="set_date_session(this.name,this.value)" value="'.$_SESSION['datepicker1'].'">
+～
+結束日期：<input type="text" name="datepicker2" id="datepicker2" size="8" onchange="set_date_session(this.name,this.value)"  value="'.$_SESSION['datepicker2'].'">
+<BR>
+輸入要拋轉的 LotNo： <input type="text" name="lotno" size="16" value="'.$_SESSION['lotno'].'" onchange="set_date_session(this.name,this.value)" >';
+
+	$query="SELECT DISTINCT 
+                            d.OPM_ORDER_NO AS OrderNo, q.LotNo, AnalyzeDesign.AND_LOT_NO, p.OTD_NO, d.CTD_CUST_NO, 
+                            AnalyzeDesign.AND_APPLY_DATE AS pdate, PRODUCT_DATA.PDD_TYPE, AnalyzeDesign.CTD_CUST_NO as cno 
+FROM              PRODUCT_DATA INNER JOIN
+                            AnalyzeDesign ON PRODUCT_DATA.PDD_PROD_NO = AnalyzeDesign.AND_GOODS LEFT OUTER JOIN
+                            OUT_PRODUCT AS p INNER JOIN
+                            OUT_DECISION AS d ON p.OPM_ORDER_NO = d.OPM_ORDER_NO ON 
+                            AnalyzeDesign.AND_LOT_NO = p.OPD_LOT_NO LEFT OUTER JOIN
+                            QC_LotData AS q ON AnalyzeDesign.AND_LOT_NO = q.LotNo　WHERE　(AND_NEED_NO < 150) ";
+if(trim($_SESSION['lotno'])<>''){
+	$query.= " AND (AnalyzeDesign.AND_LOT_NO = '".$_SESSION['lotno']."')";
+}
+else{
+	if(isset($_SESSION['datepicker1'])<>''){
+		$query.=" and AND_SMP_DATETIME >='".dod($_SESSION['datepicker1'])."000000'" ;
+	}
+	if(isset($_SESSION['datepicker2'])<>''){
+		$query.=" and AND_SMP_DATETIME <='".dod($_SESSION['datepicker2'])."235959'" ;
+	}
+}
+	$query.= " ORDER BY q.LotNo";
+	
+	echo $query."<BR>";
+	$i=1;
+	if(trim($_SESSION['lotno'])<>''){
+	//	echo "PATH1";
+			$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	$_SESSION['PDD_TYPE']=$PDD_TYPE=trim($row[6]);
+		
+		if($PDD_TYPE=='DM' or $PDD_TYPE=='BTL'){
+			dm_sn(trim($_SESSION['lotno']));
+		}
+	echo ' <input type="submit" name="get" value="確定"/><br>';
+	if($row[3]==''){echo "查無出貨列表<BR>";}
+	if($row[0]==''){echo "查無出荷決定書<BR>";}
+	if($row[1]==''){echo "查無拋轉資料<BR>";}
+	if($row[2]==''){echo "查無分析資料<BR>";}
+if(isset($_POST['get'])){
+	echo '<table border="1" width=""/><tr>';
+	$query="SELECT AnalyzeDesign.AND_ITEM, AnalyzeDesign.CTD_CUST_NO, AnalyzeDesign.AND_GOODS, PRODUCT_DATA.PDD_CHEMICAL, PRODUCT_DATA.PDD_TYPE FROM AnalyzeDesign INNER JOIN PRODUCT_DATA ON 
+	AnalyzeDesign.AND_GOODS = PRODUCT_DATA.PDD_PROD_NO WHERE (AND_LOT_NO = '".$_POST['lotno']."') ";
+echo $query."<BR>";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	$str= $row[0];
+	$CUST_NO= $row[1];
+	$AND_GOOD= $row[2];
+	$CHEMICAL= $row[3];
+	if(trim($CUST_NO)==''){$CUST_NO='C00001';}
+	$query="SELECT  
+                            ELEMENT_FORM.ELF_FORM, QC_Spec.ShowMode, AnalyzeItem.ANI_DATAFIELD, AnalyzeItem.ANI_NICKNAME, QC_Spec.ItemName,
+                            AnalyzeItem.ANI_GROUPNAME, QC_Spec.ItemUnit, QC_CustProdSpec.CustNo 
+FROM              AnalyzeItem INNER JOIN
+                            ELEMENT_FORM ON AnalyzeItem.ANI_INDEX = ELEMENT_FORM.ELM_ID INNER JOIN
+                            QC_Spec ON AnalyzeItem.ANI_FULLNAME = QC_Spec.ItemName INNER JOIN
+                            QC_CustProdSpec ON QC_Spec.SpecNo = QC_CustProdSpec.SpecNo AND 
+                            QC_Spec.SpecVer = QC_CustProdSpec.SpecVer WHERE (QC_CustProdSpec.CustNo = '".$CUST_NO."') AND (QC_CustProdSpec.ProdNo = '".$AND_GOOD."') 
+                            AND (ELEMENT_FORM.PDD_CHEMICAL = '".$CHEMICAL."') order by ANI_GROUPNAME";
+//	echo $query."<BR>";
+	$result=mssql_query($query);
+	$i=1;
+	echo '<table width="800" border="1"><tr><td>序</td><td>分析群組</td><td>項目</td><td>項目名稱</td><td>紀錄表</td><td>欄位名</td><td>樣品瓶號</td><td>報告值</td><td>單位</td><td>Test Date</td><td>報告時間</td></tr>';
+	while($rows=mssql_fetch_array($result)){
+		$custno=$row['CustNo'];
+	//	echo $rows['ANI_DATAFIELD'].":".$rows['ELF_FORM'].":".$_POST['lotno']."<BR>";
+		$AA=A1($rows['ANI_DATAFIELD'],$rows['ELF_FORM'],$_POST['lotno'],$_POST['selected_group']);
+		if( $AA[2]<>''){
+			$val1=number_format(trim($AA[1]),6,'.','');
+			echo '<tr><td>'.$i.'</td><td>'.$rows['ANI_GROUPNAME'].'</td><td>'.$rows['ANI_NICKNAME'].'</td><td>'.$rows['ItemName'].'</td><td>'.$rows['ELF_FORM'].'</td><td>'.$rows['ANI_DATAFIELD'].'</td><td>'.$AA[2].'</td><td>'.$val1.'</td><td>'.$rows['ItemUnit'].'</td><td>'.$AA[3].'</td><td>'.$AA[0].'</td></tr>
+			
+			<input type="hidden" name="lno'.$i.'" value="'.$_POST['lotno'].'"><input type="hidden" name="testdate'.$i.'" value="'.$AA[3].'"><input type="hidden" name="sample_no'.$i.'" value="'.$AA[2].'"><input type="hidden" name="item'.$i.'" value="'.$rows['ANI_NICKNAME'].'"><input type="hidden" name="value'.$i.'" value="'.$val1.'"><input type="hidden" name="ELF_FORM'.$i.'" value="'.$rows['ELF_FORM'].'"><input type="hidden" name="ANI_DATAFIELD'.$i.'" value="'.$rows['ANI_DATAFIELD'].'"><input type="hidden" name="ELF_FORM'.$i.'" value="'.$rows['ELF_FORM'].'"><input type="hidden" name="itemname'.$i.'" value="'.$rows['ItemName'].'"><input type="hidden" name="itemname'.$i.'" value="'.$rows['ItemName'].'"><input type="hidden" name="itemunit'.$i.'" value="'.$rows['ItemUnit'].'"><input type="hidden" name="ok'.$i.'" value="'.$AA[4].'"><input type="hidden" name="Tester'.$i.'" value="'.$AA[5].'"><input type="hidden" name="Operator'.$i.'" value="'.$AA[6].'"><input type="hidden" name="anatime'.$i.'" value="'.$AA[0].'">
+			';
+			$i++;
+		}
+	}
+	echo '<input type="hidden" name="count" value="'.$i.'"><input type="hidden" name="cstno" value="'.$CUST_NO.'"><input type="hidden" name="AND_GOOD" value="'.$AND_GOOD.'"><input type="hidden" name="CHEMICAL" value="'.$CHEMICAL.'">';
+	
+	echo "客戶：".get_cust_name($CUST_NO)."  (".$CUST_NO.")" ;
+	echo '<BR><input type="submit" name="trans" value="拋轉"><BR>';
+	$aa=explode(',',$str,-1);
+	for($k=0;$k<count($aa);$k++){
+		$aa[$k];
+//		echo "<BR>";
+	}
+	echo '</tr></table><BR><BR>';
+	}
+ }
+else{
+	echo ' <input type="submit" name="get_" value="確定"/><br>';
+}
+echo '</form>';
+
+if(isset($_POST['trans'])){
+	echo '轉檔中..';
+	for($i=1;$i < $_POST['count'];$i++){
+		$query="select count(LotNo) as num from QC_LotData where LotNo='".$_POST['lno'.$i]."'";
+		$result=mssql_query($query);
+		$rown=mssql_fetch_row($result);
+		if($rown[0]=0 or trim($_POST['lotno']<>'')){
+			$query="INSERT INTO QC_LotData
+								(ID, LotNo, SampleNo, TestDate, TestData, OrgTable, OrgField, ProdNo, Chemical, CustNo, ItemName, ItemUnit, OK, 
+								Tester, Operator, AnalyzeTime, state, createuser,createts)
+	SELECT          MAX(ID + 1) AS Expr1, '".$_POST['lno'.$i]."' AS Expr2, '".$_POST['sample_no'.$i]."' AS Expr3, '".$_POST['testdate'.$i]."' AS Expr4, '".$_POST['value'.$i]."' AS Expr5, 
+								'".$_POST['ELF_FORM'.$i]."' AS Expr6, '".$_POST['ANI_DATAFIELD'.$i]."' AS Expr7, '".$_POST['AND_GOOD'.$i]."' AS Expr8, '".$_POST['CHEMICAL'.$i]."' AS Expr9, '".$_POST['cstno'.$i]."' AS Expr10, '".$_POST['itemname'.$i]."' AS Expr11, '".$_POST['itemunit'.$i]."' AS Expr12, ".$_POST['ok'.$i]." AS Expr13, '".$_POST['Tester'.$i]."' AS Expr14, '".$_POST['Operator'.$i]."' AS Expr15, '".$_POST['anatime'.$i]."' AS Expr16, 'n' AS Expr17, 'adm' AS Expr18, '".date("Y/m/d")."' AS Expr19 
+	FROM              QC_LotData AS QC_LotData_1"; 
+//		echo "<BR>".$query."<BR>";
+		$result1=mssql_query($query);
+		}
+		else{
+			echo $_POST['lno'.$i]."資料已經存在<BR>";
+		}
+	}
+}
+
+function A1($field, $table, $lotno,$selected_group){
+if(substr(trim($lotno),-4,1)=='D' or substr(trim($lotno),-4,1)=='B'){
+	$querya="SELECT TOP (1) ".$table.".AnalyzeTime, ".$table.".[".$field."], ".$table.".SampleNo, CONVERT(varchar(100), ".$table.".TestDate, 111)
+	 AS Expr1, ".$table.".Ok, ".$table.".Tester, ".$table.".Operator, Sample_All.SMA_DRUMNO 
+	 FROM ".$table." INNER JOIN Sample_All ON ".$table.".SampleNo = Sample_All.SMA_ID AND ".$table.".LotNo = Sample_All.SMA_LOT 
+	 WHERE (".$table.".LotNo = '".$lotno."') AND (".$table.".Ok = 1)";
+	 if($_SESSION['PDD_TYPE']=='DM' or $_SESSION['PDD_TYPE']=='BTL'){
+	 		$querya.="and SMA_DRUMNO='".$selected_group."'";
+	 }
+	  
+	 $querya.="ORDER BY   ".$table.".AnalyzeTime DESC";	
+}
+else{
+	$querya="SELECT top(1) AnalyzeTime, ".$field. ", SampleNo,  CONVERT(varchar(100), TestDate, 111), Ok, Tester, Operator FROM ".$table." WHERE (LotNo = '".$lotno."') 
+	AND (Ok = 1)";	
+	if($_SESSION['PDD_TYPE']=='DM' or $_SESSION['PDD_TYPE']=='BTL'){
+	 		$querya.="and SMA_DRUMNO='".$selected_group."'";
+	 }
+	  
+	 $querya.="ORDER BY   ".$table.".AnalyzeTime DESC";	
+}
+//	echo $querya."<BR>";
+	$resulta=mssql_query($querya);
+	$A1=mssql_fetch_array($resulta);
+	return $A1;
+}
+
+function A2($field, $table, $lotno){
+	if(substr(trim($lotno),-4,1)=='D' or substr(trim($lotno),-4,1)=='B'){
+	$querya="SELECT TOP (1) ".$table.".AnalyzeTime, ".$table.".[".$field."], ".$table.".SampleNo, CONVERT(varchar(100), ".$table.".TestDate, 111)
+	 AS Expr1, ".$table.".Ok, ".$table.".Tester, ".$table.".Operator, Sample_All.SMA_DRUMNO 
+	 FROM ".$table." INNER JOIN Sample_All ON ".$table.".SampleNo = Sample_All.SMA_ID AND ".$table.".LotNo = Sample_All.SMA_LOT 
+	 WHERE (".$table.".LotNo = '".$lotno."') AND (".$table.".Ok = 1)";
+	 $querya.="ORDER BY   ".$table.".AnalyzeTime DESC";	
+}
+else{
+	$querya="SELECT top(1) AnalyzeTime, ".$field. ", SampleNo,  CONVERT(varchar(100), TestDate, 111), Ok, Tester, Operator FROM ".$table." WHERE (LotNo = '".$lotno."') 
+	AND (Ok = 1)";	
+	 $querya.="ORDER BY   ".$table.".AnalyzeTime DESC";	
+}
+//	echo $querya."<BR>";
+	$resulta=mssql_query($querya);
+	$A1=mssql_fetch_array($resulta);
+	return $A1;
+}
+function dm_sn($lotno){
+	echo '<select name="selected_group" id="selected_group"  onchange="set_date_session(this.name,this.value)">';
+	$queryx="SELECT DISTINCT Sample_All.SMA_DRUMNO as aaa FROM Sample_All INNER JOIN AnalyzeDesign ON Sample_All.SMA_LOT = AnalyzeDesign.AND_LOT_NO INNER JOIN PRODUCT_DATA ON AnalyzeDesign.AND_GOODS = PRODUCT_DATA.PDD_PROD_NO
+						WHERE          (Sample_All.SMA_LOT = '".$lotno."')";
+	$resultx=mssql_query($queryx);
+	while($rowx=mssql_fetch_array($resultx)){
+		if($rowx['aaa']==$_SESSION['selected_group']){$select='selected';}
+		else{$select='';}
+		echo '<option value="'.$rowx['aaa'].'" '.$select.'>'.$rowx['aaa'].'</option>';
+	}
+	echo '</select>';
+}
+if(isset($_POST['get_'])){
+			$i=1;
+	//		echo '<table width="800" border="1"><tr><td>序</td><td>LotNo</td><td>分析群組</td><td>項目</td><td>項目名稱</td><td>紀錄表</td><td>欄位名</td><td>樣品瓶號</td><td>報告值</td><td>單位</td><td>Test Date</td><td>報告時間</td></tr>';
+	
+		$result=mssql_query($query);
+		echo "資料搜尋中....<BR>";
+		while($row=mssql_fetch_array($result)){
+			$CUST_NO= $row['CTD_CUST_NO'];
+			$query2="SELECT AnalyzeDesign.AND_ITEM, AnalyzeDesign.CTD_CUST_NO, AnalyzeDesign.AND_GOODS, PRODUCT_DATA.PDD_CHEMICAL,AND_LOT_NO FROM AnalyzeDesign INNER JOIN PRODUCT_DATA ON 
+			AnalyzeDesign.AND_GOODS = PRODUCT_DATA.PDD_PROD_NO WHERE (AND_LOT_NO = '".$row['AND_LOT_NO']."')";
+//		 echo $query2."<BR>";
+			$result2=mssql_query($query2);
+			$row2=mssql_fetch_row($result2);
+			$str= $row2[0];
+			$lotno=$row2[4];
+			$AND_GOOD= $row2[2];
+			$CHEMICAL= $row2[3];
+			if(trim($CUST_NO)==''){$CUST_NO='C00001';}
+			$query3="SELECT  
+		                            ELEMENT_FORM.ELF_FORM, QC_Spec.ShowMode, AnalyzeItem.ANI_DATAFIELD, AnalyzeItem.ANI_NICKNAME, QC_Spec.ItemName,
+		                            AnalyzeItem.ANI_GROUPNAME, QC_Spec.ItemUnit, QC_CustProdSpec.CustNo 
+		FROM              AnalyzeItem INNER JOIN
+                            ELEMENT_FORM ON AnalyzeItem.ANI_INDEX = ELEMENT_FORM.ELM_ID INNER JOIN
+                            QC_Spec ON AnalyzeItem.ANI_FULLNAME = QC_Spec.ItemName INNER JOIN
+                            QC_CustProdSpec ON QC_Spec.SpecNo = QC_CustProdSpec.SpecNo AND 
+                            QC_Spec.SpecVer = QC_CustProdSpec.SpecVer WHERE (QC_CustProdSpec.CustNo = '".$CUST_NO."') AND (QC_CustProdSpec.ProdNo = '".$AND_GOOD."') 
+                            AND (ELEMENT_FORM.PDD_CHEMICAL = '".$CHEMICAL."') order by ANI_GROUPNAME";
+      //                   echo $query3."<BR>";
+			$result3=mssql_query($query3);
+			
+			while($rows=mssql_fetch_array($result3)){
+				$custno=$rows['CustNo'];
+				$AA=A1($rows['ANI_DATAFIELD'],$rows['ELF_FORM'],$row['AND_LOT_NO'],$_POST['selected_group']);
+				if( $AA[2]<>''){
+					$val1=number_format(trim($AA[1]),6,'.','');
+					echo '<tr><td>'.$i.'</td><td>'.$row['AND_LOT_NO'].'</td><td>'.$rows['ANI_GROUPNAME'].'</td><td>'.$rows['ANI_NICKNAME'].'</td><td>'.$rows['ItemName'].'</td><td>'.$rows['ELF_FORM'].'</td><td>'.$rows['ANI_DATAFIELD'].'</td><td>'.$AA[2].'</td><td>'.$val1.'</td><td>'.$rows['ItemUnit'].'</td><td>'.$AA[3].'</td><td>'.$AA[0].'</td></tr><input type="hidden" name="lno'.$i.'" value="'.$row['AND_LOT_NO'].'">';
+					echo '<input type="hidden" name="lno'.$i.'" value="'.$row['AND_LOT_NO'].'"><input type="hidden" name="testdate"'.$i.'" value="'.$AA[3].'"><input type="hidden" name="sample_no'.$i.'" value="'.$AA[2].'"><input type="hidden" name="item'.$i.'" value="'.$rows['ANI_NICKNAME'].'"><input type="hidden" name="value'.$i.'" value="'.$val1.'"><input type="hidden" name="ELF_FORM'.$i.'" value="'.$rows['ELF_FORM'].'"><input type="hidden" name="ANI_DATAFIELD'.$i.'" value="'.$rows['ANI_DATAFIELD'].'"><input type="hidden" name="ELF_FORM'.$i.'" value="'.$rows['ELF_FORM'].'"><input type="hidden" name="itemname'.$i.'" value="'.$rows['ItemName'].'"><input type="hidden" name="itemname'.$i.'" value="'.$rows['ItemName'].'"><input type="hidden" name="itemunit'.$i.'" value="'.$rows['ItemUnit'].'"><input type="hidden" name="ok'.$i.'" value="'.$AA[4].'"><input type="hidden" name="Tester'.$i.'" value="'.$AA[5].'"><input type="hidden" name="Operator'.$i.'" value="'.$AA[6].'"><input type="hidden" name="anatime'.$i.'" value="'.$AA[0].'">';
+					echo '<input type="hidden" name="cstno'.$i.'" value="'.$CUST_NO.'"><input type="hidden" name="AND_GOOD'.$i.' value="'.$AND_GOOD.'"><input type="hidden" name="CHEMICAL'.$i.' value="'.$CHEMICAL.'">';
+					$i++;
+				}
+			}
+			echo '<input type="hidden" name="count" value="'.$i.'">';
+			
+		//	echo "客戶：".get_cust_name($CUST_NO)."  (".$CUST_NO.")" ;
+			$aa=explode(',',$str,-1);
+			
+		}
+		echo '<BR><form name="d2" action="" method="post"><input type="submit" name="trans" value="拋轉"></form><BR>';
+		echo "搜尋完成，共: ".count($aa)."筆資料";
+}
+?>

@@ -1,0 +1,434 @@
+<?php
+	session_start();
+	include("../connections/conn.php");
+	include("../lib/fun.php");
+	auth('9-01',$_SESSION['aut']);
+	lasturl();
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>產品基本資料</title>
+<script language="JavaScript" type="text/javascript">
+<!--
+function checkform1 ( form )
+{
+  // ** START **
+  if (form1.pid4.value == "") {
+    alert( "請輸入比重" );
+    form1.pid4.focus();
+    return false ;
+  }
+  // ** END **
+  if (form1.pid5.value == "") {
+    alert( "請輸入濃度" );
+    form1.pid5.focus();
+    return false ;
+  }
+  // ** END **
+  return true ;
+}
+</script>
+</head>
+
+<body>
+查詢 
+<form id="form1" name="form1" method="post"  onsubmit="return checkform1(this);" action="<?php echo $loginFormAction; ?>">
+  <table width="800" border="1">
+    <tr>
+      <td width="800">產品名稱：<span class="d1">
+      <input type="button" name="X" id="X" value="X" onclick="window.open('../erase_prod.php ', '_self');" />
+      <input name="pdd_chemical1" type="text" id="pdd_chemical1" size="10" value="<?php 
+		if ($_GET['pid']){
+			echo $_GET['pid'];
+			$_SESSION['pid']=$_GET['pid'];
+		}
+		elseif($_SESSION['pid']){
+			echo $_SESSION['pid'];
+		}
+		else{
+		echo '';
+		}
+		?>" readonly="readonly" />
+      <input type="button" name="pdd_no" id="pdd_no" value="查詢品名" onclick="window.open('../main.php?url=pdd_prod_no ', '_self');" />
+      <input name="pdd_chemical2" type="text" id="pdd_chemical2" size="16" value="<?php 
+		if ($_GET['pname']){
+			echo $_GET['pname'];
+			$_SESSION['pname']=$_GET['pname'];
+		}
+		elseif($_SESSION['pname']){
+			echo $_SESSION['pname'];
+		}
+		else{
+		echo '';
+		}
+		?>" readonly="readonly" />
+      <?php space(35) ?>
+      <label for="sup1"></label>
+<input type="submit" name="load" id="load" value=" 產品資料 " />
+      <input type="submit" name="normal" id="normal" value=" 常規設定 " />
+      <input type="submit" name="new" id="new" value=" 新增 " /></span></td>
+    </tr>
+  </table>
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+if(isset($_POST["all"])){
+		if($_SESSION['select_all']==''){$_SESSION['select_all']='Y';}
+		if($_SESSION['select_all']=='Y'){$_SESSION['select_all']='';}
+	}
+if(isset($_POST["load"])){
+	include("../connections/conn.php");
+	$query="SELECT          PDD_PROD_NO, PDD_TYPE, PDD_DRUM_KG, PDD_STYLE, PDD_PACKAGE, PDD_CHEMICAL, PDD_PROD_NAME, PDD_DRUM_LITER, 
+                            PDD_PROD_SHORT_NAME, PDD_UNIT, PDD_CLASS, PDD_MINIMAL, PDD_LITER_KG, PDD_CONSISTENCY, PDD_PROD_SHORT_NAME, PDD_SHOW 
+	FROM              dbo.PRODUCT_DATA
+	WHERE          (PDD_PROD_NO = '".$_POST['pdd_chemical1']."')";
+	$result = mssql_query($query);
+	while($row = mssql_fetch_array($result)){
+		function select($t1,$c1){
+			if($row['c1']==$t1)
+			{return 'selected="selected"';}
+		}
+		 $return1=_is_ani(trim($row['PDD_PROD_NO']));
+		 if($return1=='TYPE_PROD'){$ck1='checked';}
+		 if($return1=='TYPE_ANALY'){$ck2='checked';}
+		 if($return1=='TYPE_RAW'){$ck3='checked';}
+
+	//	 my_msg($return1);
+	if(trim($row['PDD_DRUM_KG'])=='' or trim($row['PDD_DRUM_KG'])==NULL)
+	{
+		$sss=NULL;	
+	}
+	else
+	{
+		$sss=trim($row['PDD_DRUM_KG']);
+	}
+	echo '</br>
+    基本資料
+    <table width="800" border="1">
+    <tr>
+      <td width="150">料號：
+        <label for="pid"></label>
+      <input name="pid" type="text" id="pid" size="10" value="'.$row['PDD_PROD_NO'].'" readonly="readonly"></td>
+      <td width="200">品名：
+      <input type="text" name="pname" id="pname" value="'.$row['PDD_PROD_NAME'].'"></td>
+      <td width="330">簡稱：
+        <input name="shortname" type="text" id="shortname" size="10" value="'.$row['PDD_PROD_SHORT_NAME'].'">桶槽檢驗碼：<input name="showname" type="text" id="showname" size="10" value="'.$row['PDD_SHOW'].'"> <BR> 桶槽檢驗碼，如: S9D200(硫酸DRUM) Lorry 無須設定</td>
+    </tr>
+    <tr>
+      <td>產品類型：
+        <label for="pdt"></label>
+        <select name="pdt" id="pdt">
+          <option value="'.$row['PDD_TYPE'].'">'.$row['PDD_TYPE'].'</option>
+          <option value="DM">DM</option>
+          <option value="LY">LY</option>
+          <option value="BTL">BTL</option>
+          <option value="TOTO">TOTO</option>
+      </select></td>
+      <td>荷姿：
+      <input name="style" type="text" id="style" size="10" value="'.$row['PDD_STYLE'].'">
+      <BR>藥品名：  
+      <input name="chemical" type="text" id="chemical" size="10"  value="'.$row['PDD_CHEMICAL'].'"></td>
+      <td>單位：
+        <label for="unit"></label>
+        <select name="unit" id="unit">
+          <option value="'.$row['PDD_UNIT'].'">'.$row['PDD_UNIT'].'</option>
+          <option value="L">L</option>
+          <option value="KG">KG</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td>產品類別：
+        <label for="pdclass"></label>
+        <select name="pdclass" id="pdclass">
+          <option value="'.$row['PDD_CLASS'].'">'.$row['PDD_CLASS'].'</option>
+          <option value="成品">成品</option>
+          <option value="商品">商品</option>
+		  		<option value="解析">解析</option>
+          <option value="原料">原料</option>
+      </select></td>
+      <td>比重：
+        <input name="pid4" type="text" id="pid4" size="10"   value="'.$row['PDD_LITER_KG'].'">
+        <?php space(3);?><BR>濃度：  
+      <input name="pid5" type="text" id="pid5" size="10"   value="'.$row['PDD_CONSISTENCY'].'"></td>
+      <td>
+		桶重量：<input name="pid6" type="text" id="pid6" size="10" value="'.$sss.'">KG
+		桶容量：<input name="pid_l" type="text" id="pid_l" size="10" value="'.$row['PDD_DRUM_LITER'].'">  L
+      </td>
+    </tr>
+  </table>
+  <table width="800" border="1">
+  	<tr>
+    <td width="440">包裝型態：
+      <input name="pid2" type="text" id="pid2" size="20"   value="'.$row['PDD_PACKAGE'].'"></td>
+    <td width="360">
+        <input type="submit" name="delete" id="delete" value=" 刪除 " onClick="return confirm('."'確定刪除?'".')" />
+        <input type="submit" name="new" id="new" value=" 新增 " />
+        <input type="submit" name="save" id="save" value=" 儲存 " onClick="return confirm('."'確定儲存?'".')"/>
+	</td>
+	<tr>
+	<td><input type="radio" name="prod" value="1" '.$ck1.'>製品<input type="radio" name="prod" value="2" '.$ck2.' >解析<input type="radio" name="prod" value="3" '.$ck3.'>受入';
+	echo '<td>'."分類:";
+	echo select_camical($row['PDD_PROD_NO']);
+    echo '</tr>';
+    
+}}
+function _is_ani($prodno){
+	$query="SELECT TYPE_PROD, TYPE_ANALY, TYPE_RAW FROM PRODUCT_TYPE WHERE (PDD_PROD_NO = N'".$prodno."')";
+//	echo $query."<BR>";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	if(trim($row[0])=='Y'){return 'TYP_PROD';}
+	if(trim($row[1])=='Y'){return 'TYPE_ANALY';}
+	if(trim($row[2])=='Y'){return 'TYPE_RAW';}
+}
+if(isset($_POST["save"])){
+	if($_POST['pid_l']==''){
+		$_POST['pid_l']='NULL';	
+	}
+	if($_POST['pid6']=='' or $_POST['pid6']==0){
+		$_POST['pid6']='NULL';	
+	}
+	$query="UPDATE          dbo.PRODUCT_DATA
+SET                   PDD_TYPE = '".$_POST['pdt']."', PDD_DRUM_KG =".$_POST['pid6'].", 
+PDD_STYLE ='".$_POST['style']."', PDD_PACKAGE ='".$_POST['pid2']."', PDD_CHEMICAL ='".$_POST['chemical']."',
+                             PDD_PROD_NAME ='".$_POST['pname']."', PDD_PROD_SHORT_NAME ='".$_POST['shortname']."', PDD_UNIT ='".$_POST['unit']."'
+							 , PDD_CLASS ='".$_POST['pdclass']."', PDD_LITER_KG ='".$_POST['pid4']."', PDD_CONSISTENCY ='".$_POST['pid5']."', PDD_SHOW ='".$_POST['showname']."',
+							  PDD_DRUM_LITER = ".$_POST['pid_l']." where (PDD_PROD_NO='".$_POST['pid']."')";
+//echo "<BR>".$query."<BR>";							 
+$result = mssql_query($query);
+if($_POST['prod']==1){$type1='TYPE_PROD';}
+if($_POST['prod']==2){$type1='TYPE_ANALY';}
+if($_POST['prod']==3){$type1='TYPE_RAW';}
+echo "TYPE:".$type1."<BR>";
+$querydel=" select count(PDD_PROD_NO) as aa from product_type where (PDD_PROD_NO='".$_POST['pid']."')";
+// echo $querydel."<BR>";
+$resultdel = mssql_query($querydel);
+$row1=mssql_fetch_row($resultdel);
+$num=$row[0];
+
+$query1="UPDATE PRODUCT_TYPE set TYPE_PROD='',TYPE_ANALY='',TYPE_RAW=''  where (PDD_PROD_NO='".$_POST['pid']."')";
+$result1 = mssql_query($query1);
+if($num > 0 ){
+	if($_POST['prod']!='')
+{
+	$query1="UPDATE PRODUCT_TYPE set ".$type1."='Y' ,department='".$_POST['type']."'  where (PDD_PROD_NO='".$_POST['pid']."')";
+}
+if($_POST['prod']=='')
+{
+	$query1="UPDATE PRODUCT_TYPE set department='".$_POST['type']."'  where (PDD_PROD_NO='".$_POST['pid']."')";
+}
+
+}
+else{
+//	echo "ELSE";
+	$query1="INSERT INTO PRODUCT_TYPE
+                            (PDD_PROD_NO, ".$type1.", department)
+VALUES          (N'".$_POST['pid']."', N'Y', N'".$_POST['type']."')";
+}
+// echo $query1."<BR>";
+	$result1 = mssql_query($query1);
+	if($result){echo "完成存檔";}
+
+
+
+}
+
+if(isset($_POST["new"])){
+	echo '</br>
+    基本資料
+    <table width="800" border="1">
+    <tr>
+      <td width="150">*料號：
+        <label for="pid"></label>
+      <input name="pid" type="text" id="pid" size="10" value="'.$row['PDD_PROD_NO'].'"></td>
+      <td width="320">*品名：
+      <input type="text" name="pname" id="pname" value="'.$row['PDD_PROD_NAME'].'"></td>
+      <td width="330">*簡稱：
+        <input name="shortname" type="text" id="shortname" size="10" value="'.$row['PDD_PROD_SHORT_NAME'].'">桶槽檢驗碼：<input name="showname" type="text" id="showname" size="10" value="'.$row['PDD_SHOW'].'"> <BR> 桶槽檢驗碼，如: S9D200(硫酸DRUM) Lorry 無須設定</td>
+    </tr>
+    <tr>
+      <td>*產品類型：
+        <label for="pdt"></label>
+        <select name="pdt" id="pdt">
+          <option value="'.$row['PDD_TYPE'].'">'.$row['PDD_TYPE'].'</option>
+          <option value="DM">DM</option>
+          <option value="LY">LY</option>
+          <option value="BTL">BTL</option>
+          <option value="TOTO">TOTO</option>
+      </select></td>
+      <td>荷姿：
+      <input name="style" type="text" id="style" size="10" value="'.$row['PDD_PACKAGE'].'">
+      *藥品名：  
+      <input name="chemical" type="text" id="chemical" size="10"  value="'.$row['PDD_CHEMICAL'].'"></td>
+      <td>*單位：
+        <label for="unit"></label>
+        <select name="unit" id="unit">
+          <option value="'.$row['PDD_UNIT'].'">'.$row['PDD_UNIT'].'</option>
+          <option value="L">L</option>
+          <option value="KG">KG</option>
+      </select></td>
+    </tr>
+    <tr>
+      <td>*產品類別：
+        <label for="pdclass"></label>
+        <select name="pdclass" id="pdclass">
+          <option value="'.$row['PDD_CLASS'].'">'.$row['PDD_CLASS'].'</option>
+          <option value="成品">成品</option>
+          <option value="商品">商品</option>
+          <option value="解析">解析</option>
+          <option value="原料">原料</option>
+      </select></td>
+      <td>*比重：
+        <input name="pid4" type="text" id="pid4" size="10"   value="'.$row['PDD_LITER_KG'].'">
+        <?php space(3);?><BR>*濃度：  
+      <input name="pid5" type="text" id="pid5" size="10"   value="'.$row['PDD_CONSISTENCY'].'">(輸入整數)</td>
+      <td>
+		桶重量：<input name="pid6" type="text" id="pid6" size="10" value="'.$row['PDD_DRUM_KG'].'">KG
+		<BR>桶容量：<input name="pid_l" type="text" id="pid_l" size="10" value="'.$row['PDD_DRUM_LITER'].'">  L
+      </td>
+    </tr>
+  </table>
+  <table width="800" border="1">
+  	<tr>
+    <td width="440">包裝型態：
+      <input name="pid2" type="text" id="pid2" size="20"   value="'.$row['PDD_PACKAGE'].'"></td>
+    <td width="360">
+    	<input type="submit" name="normal" id="normal" value=" 常規 " />
+        <input type="submit" name="savenew" id="save" value=" 儲存 " onClick="return confirm('."'確定儲存?'".')"/>
+	</td>
+	
+	<tr>
+	<td><input type="radio" name="prod" value="1">製品<input type="radio" name="prod" value="2">解析<input type="radio" name="prod" value="3">受入';
+	echo '<td>'."分類:";
+	echo select_camical($row['PDD_PROD_NO']);
+	
+
+    echo '</tr>';
+	
+}
+
+if(isset($_POST["savenew"])){
+	include("../connections/conn.php");
+	$query="INSERT INTO dbo.PRODUCT_DATA
+                            (PDD_PROD_NO,PDD_TYPE, PDD_DRUM_KG, PDD_STYLE, PDD_PACKAGE, PDD_CHEMICAL, PDD_PROD_NAME, 
+                            PDD_PROD_SHORT_NAME, PDD_UNIT, PDD_CLASS, PDD_LITER_KG, PDD_CONSISTENCY, PDD_DRUM_LITER, PDD_SHOW)
+VALUES          ('".$_POST['pid']."','".$_POST['pdt']."', '".$_POST['pid6']."', '".$_POST['pdclass']."', '".$_POST['style']."', '".$_POST['chemical']."', 
+'".$_POST['pname']."', '".$_POST['shortname']."', '".$_POST['unit']."', '".$_POST['pdclass']."', '".$_POST['pid4']."', '".$_POST['pid5']."','".$_POST['pid_l']."','".$_POST['showname']."')";
+$_SESSION['oopd']= $query;
+$result = mssql_query($query);
+
+if($_POST['prod']==1){$type1='TYPE_PROD';}
+if($_POST['prod']==2){$type1='TYPE_ANALY';}
+if($_POST['prod']==3){$type1='TYPE_RAW';}
+if($_POST['prod']=='')
+{
+	$query1="INSERT INTO  PRODUCT_TYPE (PDD_PROD_NO,department) VALUES ('".$_POST['pid']."','".$_POST['type']."')";
+}
+if($_POST['prod']<>'')
+{
+	$query1="INSERT INTO  PRODUCT_TYPE (PDD_PROD_NO,department,".$type1.") VALUES ('".$_POST['pid']."','".$_POST['type']."','Y')";
+}
+//$_SESSION['$query1']=$query1;
+	$result1 = mssql_query($query1);
+
+if($result){echo "完成新增";}
+$_SESSION['pid']=$_POST['pid'];
+$_SESSION['pname']=$_POST['pname'];
+refresh();
+}
+
+if(isset($_POST["delete"])){
+	include("../connections/conn.php");
+	$query="DELETE FROM dbo.PRODUCT_DATA
+where (PDD_PROD_NO='".$_POST['pid']."')";
+$result = mssql_query($query);
+
+$query="DELETE FROM dbo.PRODUCT_TYPE
+where (PDD_PROD_NO='".$_POST['pid']."')";
+$result = mssql_query($query);
+if($result){echo "完成刪除";}
+}
+
+if(isset($_POST["normal"]) or isset($_POST['all'])){
+include("../connections/conn.php");
+echo '<table width="800" border="1">
+  <tr>
+    <td width="40" align="center" bgcolor="greay">選擇<input type="submit" name="all" id="all" value=" 全選 " /></td>
+    <td width="200" align="center" bgcolor="yellow">ANI_ID</td>
+    <td width="200" align="center" bgcolor="yellow">簡稱</td>
+    <td width="200" align="center" bgcolor="yellow">全名</td>
+	<td width="160" align="center"><input type="submit" name="saveregu" id="saveregu" value=" 儲存常規項目 " /></td>
+  </tr>
+  </table>
+<table width="640" border="1">';
+$query="SELECT          AnalyzeItem.ANI_GROUPNAME, AnalyzeItem.ANI_NICKNAME, AnalyzeItem.ANI_FULLNAME, AnalyzeItem.ANI_ID, 
+                            AnalyzeItem.ANI_INDEX, PRODUCT_DATA.PDD_PROD_NO
+FROM              AnalyzeItem INNER JOIN
+                            ELEMENT_FORM ON AnalyzeItem.ANI_INDEX = ELEMENT_FORM.ELM_ID INNER JOIN
+                            PRODUCT_DATA ON ELEMENT_FORM.PDD_CHEMICAL = PRODUCT_DATA.PDD_CHEMICAL
+WHERE          (PRODUCT_DATA.PDD_PROD_NO = '".$_SESSION['pid']."') order by AnalyzeItem.ANI_INDEX";
+		$_SESSION['test']=$query;
+
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+while($row = mssql_fetch_array($result))
+{ 
+	if($_SESSION['select_all']=='Y'){$checked_='checked="checked"';}
+	else{$checked_=ifregularanalyze($row['ANI_ID'],$_POST['pdd_chemical1']);}
+//	echo $checked_.'<br>';
+  echo '<tr>
+    <td align="center" width="40"><input type="checkbox" name="pselect[]" id="pselect" value="'.$row['ANI_ID'].'" '.$checked_.'/></td>
+    <td align="center" width="200">'.$row['ANI_ID'].'</td>
+    <td align="center" width="200">'.$row['ANI_NICKNAME'].'</td>
+    <td align="center" width="200">'.$row['ANI_FULLNAME'].'</td>
+  </tr>';
+}
+echo '</table>';
+}
+
+if(isset($_POST["saveregu"])){
+	include("../connections/conn.php");
+	$query="DELETE FROM dbo.RegularAnalyzeItem where (PROD_NO = '".$_POST['pdd_chemical1']."')";
+	$result = mssql_query($query);
+ 	$pselect=$_POST['pselect']; 
+	$i=count($pselect);
+for($x=0;$x<$i;$x++){
+//	echo $x.":".$pselect[$x]."</br>";
+$q="(PROD_NO = '".$_POST['pid']."')";
+$query="INSERT INTO dbo.RegularAnalyzeItem
+                            (PROD_NO, ANI_ID)
+VALUES          ('".$_POST['pdd_chemical1']."', '".$pselect[$x]."')";
+$result = mssql_query($query);
+}
+}
+
+function select_camical($pid)
+{
+	$query1="select distinct department from product_type where department!='' ";
+	$result1 = mssql_query($query1);
+	
+	echo '	<select name="type">';
+	echo '<option value="" >'." ".'</option>';
+	$nn=trim(ck1($pid));
+	while($row1=mssql_fetch_array($result1))
+	{
+		if($nn==trim($row1['department'])){$present='selected="selected"';}
+		else{$present='';}
+		echo '<option value="'.$row1['department'].'" '.$present.'>'.$row1['department'].'</option>';
+	}
+	echo '</select>';
+}
+
+function ck1($pid)
+{
+	$query="select department from product_type where PDD_PROD_NO='".$pid."'";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	return $row[0];	
+}
+
+?>
+</form>
+</body>
+</html>

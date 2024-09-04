@@ -1,0 +1,508 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php 
+session_start();
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+remurl("redir");
+$_SESSION['lot_no']=$_GET['lot_no'];
+$table=$_GET['efm'];
+if(!isset($_SESSION['userid'])){$_SESSION['userid']=$_GET['first'];}
+/////////////////////////取得分析項目表單////////////////////////////
+$_SESSION['retir']=$rev=$_SERVER['REQUEST_URI'];	
+$query="SELECT DISTINCT ELEMENT_FORM.ELF_FORM,AnalyzeItem.ANI_NICKNAME, AnalyzeItem.ANI_FULLNAME
+FROM              ELEMENT_FORM INNER JOIN
+                            AnalyzeItem ON ELEMENT_FORM.ELM_ID = AnalyzeItem.ANI_INDEX
+WHERE          (ELEMENT_FORM.ELF_FORM = '".$_GET['efm']."') AND (ELEMENT_FORM.PDD_CHEMICAL = '".$_GET['pdd_chemical']."') AND (AnalyzeItem.ANI_GROUPNAME = '".$_GET['ani_groupname']."')";
+
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+while($row = mssql_fetch_array($result)){
+$ani_nick=$row['ANI_NICKNAME'];
+$ani_full=$row['ANI_FULLNAME'];
+}
+
+include("../connections/conn.php");
+$query="SELECT          FILLPLAN_OUT_DECIDE.FDM_LOT_NO, FILLPLAN_OUT_DECIDE.CTD_CUST_NO, 
+                            CUSTOMER_DATA.CTD_CUST_NAME
+FROM              FILLPLAN_OUT_DECIDE INNER JOIN
+                            CUSTOMER_DATA ON FILLPLAN_OUT_DECIDE.CTD_CUST_NO = CUSTOMER_DATA.CTD_CUST_NO
+WHERE          (FILLPLAN_OUT_DECIDE.FDM_LOT_NO = '".$_GET['lot_no']."')";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+
+while($row = mssql_fetch_array($result)){
+	$cust_no=$row['CTD_CUST_NO'];
+	$cust_name=$row['CTD_CUST_NAME'];
+}
+$query="SELECT  AnalyzeDesign.AND_APPLY_DATE
+FROM             AnalyzeDesign
+WHERE          (AnalyzeDesign.AND_LOT_NO = '".$_GET['lot_no']."')";
+//echo $query;
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+
+//echo $query;
+while ($row=mssql_fetch_array($result)){
+	$dt=$row['AND_APPLY_DATE'];
+}
+
+
+?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<style type="text/css">
+.red {
+	color: #F00;
+}
+.blue {
+	color: #00F;
+}
+#form1 table tr td p {
+	color: #F00;
+	font-size: 16px;
+}
+</style>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>輸入分析結果</title>
+<style type="text/css">
+.centet {
+	text-align: center;
+}
+#form1 table tr td {
+	text-align: center;
+}
+dd {
+	text-align: left;
+}
+#form1 table tr td {
+	text-align: left;
+}
+.a18 {
+	font-size: 18px;
+}
+</style>
+ <script type="text/javascript">
+         <!--
+            function getConfirmation(){
+               var retVal = confirm("確定要刪除選取的檔案 ?");
+               if( retVal == true ){
+                  return true;
+               }
+               else{
+                  return false;
+               }
+            }
+         //-->
+      </script>
+</head>
+
+<body>
+<form action="<?php echo $loginFormAction; ?>" method="post" enctype="multipart/form-data" name="form1" id="form1">
+  <p>
+    <input type="hidden" name="operator" id="operator" value="" />
+  編輯</p>
+  <table width="1200" border="1"><tr><td width="400">
+  <?php 
+  $pdd=new get_from_lot_no;
+  $pdd->lid=$_GET['lot_no'];
+  $pdd->cid();
+  $_SESSION['cid']=trim($pdd->cid);
+  if($pdd->pdd_type==''){$pdd->cid=='C00001';$cust_name=get_cust_name($_SESSION['cid']);$cust_no=$_SESSION['cid'];
+  if(substr($_GET['lot_no'],5,3)=='HIC'){$pdd->cid='C00000';$cust_name=get_cust_name($pdd->cid);$cust_no=$pdd->cid;}
+  $_SESSION['cid']=$pdd->cid;
+  echo '客戶：'.get_cust_name($pdd->cid)."&nbsp;&nbsp;&nbsp;&nbsp;".$cust_no."</br>";
+  echo "表單：".$_GET['efm']."#".$table."</br>";
+	echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+  $_SESSION['select_cust']=$cust_no;
+  }
+  
+  if (trim($pdd->pdd_type)=='LY'){
+	  if($pdd->cid=='C00001'){$cust_name=get_cust_name($_SESSION['cid']);$cust_no=$_SESSION['cid'];}
+  echo '客戶：'.get_cust_name($pdd->cid)."&nbsp;&nbsp;&nbsp;&nbsp;".$cust_no."</br>";
+  echo "表單：".$table."</br>";
+	echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+  $_SESSION['select_cust']=$cust_no;
+  } 
+  elseif((trim($pdd->pdd_type)=='BTL') or (trim($pdd->pdd_type)=='DM')){
+	$query="SELECT        FILLPLAN_DRUM_CUSTOMER.CTD_CUST_NO, 
+                          CUSTOMER_DATA.CTD_CUST_NAME
+FROM             FILLPLAN_DRUM_CUSTOMER INNER JOIN
+                          CUSTOMER_DATA ON 
+                          FILLPLAN_DRUM_CUSTOMER.CTD_CUST_NO = CUSTOMER_DATA.CTD_CUST_NO
+WHERE         (FDM_LOT_NO = '".$_GET['lot_no']."')";
+$result=mssql_query($query);  
+$numRows = mssql_num_rows($result);
+if($numRows>1){
+	  echo '選擇客戶:<select name="co0" id="co0">';
+while($row=mssql_fetch_array($result)){
+		echo '<option value="'.$row['CTD_CUST_NO'].'">'.$row['CTD_CUST_NO']."--".$row['CTD_CUST_NAME'].'</option>';
+		$cust_no=$_SESSION['select_cust']=$row['CTD_CUST_NO'];
+	}
+	echo '</select>';
+	echo '<input type="submit" name="select_cust" id="select_cust" value="取得客規" /></br>';
+	echo '客戶：'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</br>";
+	echo "表單：".$table."</br>";
+	echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+  }
+  elseif($numRows==1){
+	  while($row=mssql_fetch_array($result)){
+	  $_SESSION['select_cust']=$row['CTD_CUST_NO'];
+			echo '客戶：'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</br>";
+			echo "表單：".$table."</br>";
+			echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+	  }}
+	elseif($numRows<1){
+			$_SESSION['select_cust']=$pdd->cid;
+			echo '客戶：'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</br>";
+			echo "表單：".$table."</br>";
+			echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+	  }
+  }
+  ?>
+  </td>
+  <td><?php $itemunit=showcust_spec($cust_no,$_GET['pdd_prod_no'],$_GET['ani_groupname']) ; ?></td></tr></table>
+  <table width="1200" border="1">
+    <tr class="centet">
+      <td width="200" bgcolor="#CCCCCC">依賴日期: <?php echo ddd($dt)." 00:00:00";?></td>
+      <td width="100" bgcolor="#CCCCCC">Lot NO：
+      <input name="LotNo" type="text" id="LotNo" value="<?php echo $_GET['lot_no']?>" size="14" readonly /></td>
+      <td width="300" bgcolor="#CCCCCC"> 序號：
+      <input name="SerialNo" type="text" id="SerialNo" value="<?php 
+	  $query="SELECT          ".$table.".*
+FROM              ".$table." 
+WHERE          (LotNo  = '".$_GET['lot_no']."')";
+
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+$field= mssql_num_fields($result);
+$sn=$numRows+1;
+echo $sn;
+	   ?>" size="4" />
+       前端處理人員:
+       <input name="x5" type="submit" value="X" />
+       <input name="Operator2" type="hidden" id="Operator2" value="<?php echo $_GET['operator'];?>" size="10" readonly />
+       <input name="op" type="text" value="<?php echo $_SESSION['userid'];?>" size="10"  />
+       <input type="submit" name="an_first" id="button3" value=" 工號  " onClick="window.open('index.php?url=select_user', '_self');" />
+      <input name="opname" type="text" value="<?php echo get_uname($_SESSION['userid']);?>" size="10"  /></td></tr><tr>
+      <td width="200" bgcolor="#CCCCCC">取樣瓶號碼：
+      <input name="SampleNo" type="text" id="SampleNo" value="<?php echo $_GET['smpno'];?>" size="10" /></td>
+      <td width="200" bgcolor="#CCCCCC">測試人員：
+      <input name="Tester" type="text" id="Tester" value="<?php echo $_SESSION['uname']?>" size="10" readonly /></td>
+      <td width="200" bgcolor="#CCCCCC"> Operator:
+      <input name="Operator" type="text" id="Operator" value="<?php echo $_GET['operator'];?>" size="10" readonly />
+    </td>
+    </tr>
+  </table>
+    
+    
+<table width="1200" border="1">
+    <tr>
+    <td width="100" bgcolor="#CCCCCC">項目</td>
+    <td width="50" bgcolor="#CCCCCC">輸入值</td>
+    <td width="100" bgcolor="#CCCCCC">客規</td>
+    <td width="50" bgcolor="#CCCCCC">DL</td>
+    <td width="50" bgcolor="#CCCCCC">USL</td>
+    <td width="100" bgcolor="#CCCCCC">再分析</td>
+    <td width="100" bgcolor="#CCCCCC">項目</td>
+    <td width="50" bgcolor="#CCCCCC">輸入值</td>
+    <td width="100" bgcolor="#CCCCCC">客規</td>
+    <td width="50" bgcolor="#CCCCCC">DL</td>
+    <td width="50" bgcolor="#CCCCCC">USL</td>
+    <td width="100" bgcolor="#CCCCCC">再分析</td>
+    </tr>
+    
+    <tr class="centet">  
+<?php
+include("../connections/conn.php");
+$query="SELECT DISTINCT COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."')";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+$i=0;
+while($row = mssql_fetch_array($result)){
+	$disc=trim(get_disc($row['COLUMN_NAME'],$table,$_GET['pdd_prod_no']));
+	
+if (($row['COLUMN_NAME']!='FacterDate') &&($row['COLUMN_NAME']!='LotNo') && ($row['COLUMN_NAME']!='CHK5') && ($row['COLUMN_NAME']!='CHK6') && ($row['COLUMN_NAME']!='CHK7') && 
+($row['COLUMN_NAME']!='CHK8') && ($row['COLUMN_NAME']!='CHK1') && ($row['COLUMN_NAME']!='CHK2') && ($row['COLUMN_NAME']!='CHK3') && ($row['COLUMN_NAME']!='CHK4') && ($row['COLUMN_NAME']!=
+'Ok') && ($row['COLUMN_NAME']!='AnalyzeTime') && ($row['COLUMN_NAME']!='AnalyzeTime') && ($row['COLUMN_NAME']!='AnaManager') && ($row['COLUMN_NAME']!='Tester') && ($row['COLUMN_NAME']!='Operator')
+ && ($row['COLUMN_NAME']!='SampleNo') && ($row['COLUMN_NAME']!='SerialNo') && ($row['COLUMN_NAME']!='TestDate') && ($disc!='X') && ($disc!='x')){
+	$i=$i+1;
+?>
+      <td><?php echo '<font color="#0000FF">'.$disc.'</font>';?> ：</td><td><input name="<?php echo $row['COLUMN_NAME'];?>" type="text" id="<?php echo $row['COLUMN_NAME'];?>" size="6" value=
+	  <?php $query1="select [".$row['COLUMN_NAME']."] from ".$table." where (LotNo='".$_GET['lot_no']."') and (AnalyzeTime='".$_GET['ani_time']."')";
+$result1 = mssql_query($query1);
+while($row1 = mssql_fetch_array($result1)){
+echo '"'.trim($row1[$row['COLUMN_NAME']]).'"';
+}
+	  list ($spec,$dl,$usl,$again)=get_test_spec($row['COLUMN_NAME'],$_GET['pdd_prod_no'],$cust_no,$_GET['ani_groupname']); 
+	  ?>
+      ></td><td><?php echo $spec;?></td><td><?php echo $dl;?></td><td><?php echo $usl;?></td><td><?php echo $again;?></td>
+<?php
+
+if (fmod($i,2)==0){echo '</tr><tr class="centet">' ;}
+else {echo '</td>';}}
+?>
+<?php } ?>
+</table>
+<table width="1200" border="1">
+    <tr class="centet" >
+
+      <td height="29" width="300">單位：<?php echo $itemunit?></td>
+      <td width="300">合否判定
+      <input type="checkbox" name="Ok" id="Ok" <?php if($_GET['Ok']=="1"){echo "checked";}?>/>
+      <input type="hidden" name="CHK1" id="CHK1" value="1" />
+      <input type="hidden" name="CHK2" id="CHK2" value="1" />
+      <input type="hidden" name="CHK3" id="CHK3" value="1" />
+      <input type="hidden" name="CHK4" id="CHK4" value="1" />
+      <input type="hidden" name="CHK5" id="CHK5" value="1" />
+      <input type="hidden" name="CHK6" id="CHK6" value="1" />
+      <input type="hidden" name="CHK7" id="CHK7" value="1" />
+      <input type="hidden" name="CHK8" id="CHK8" value="1" />
+      <input type="hidden" name="AnaManager" id="AnaManager" value="none" />
+      <input type="hidden" name="TestDate" id="TestDate" value="<?php echo ddd($dt)." 00:00:00";?>" />
+      <input type="hidden" name="AnalyzeTime" id="AnalyzeTime" value="<?php echo date("YmdHis") ?>" />
+
+      </td>
+      <td width="600">
+      <input type="submit" name="renew" id="renew" value="更 新 " onClick="return confirm('確定更新?')"/>
+      <input type="hidden" name="MM_insert" value="form1">
+	 
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="button" name="button" id="button" value=" 離開  " onClick="window.close();" />    
+      <input type="button" name="button2" id="button2" value=" 重  整 " onClick="window.open('<?php echo $rev;?>','_self');" />
+      <?php if ($_GET['ani_groupname']=="TM") {
+		  echo '<input type="button" name="TM" id="TM" value="取得分析資料" onClick="window.open('."'/cal/ctm.php?pdd_chemical=".$_GET['pdd_chemical']."&ani_groupname=".$_GET['ani_groupname']."&lot_no=".$_GET['lot_no']."&cust_no=".$cust_no."&pid=".$_GET['pdd_prod_no']."', '_self');".'"'.' />';
+	  }?>
+      <?php 
+			$d=strtotime("-3 Days"); $evn= date("YmdHis",$d);
+			$ani_time=$_GET['ani_time'];
+			if($ani_time>=$evn){
+	  	  	echo '<input type="submit" name="submit2" id="submit2" value=" 刪 除 " onclick="return confirm("確定刪除?")"/>';
+			
+			}
+	  ?>
+	  </td>
+    </tr>
+    <?php
+session_start();
+include ("../connections/conn.php");
+$query="SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."')";
+$result = mssql_query($query);
+?>
+</table>
+<table width="1200" border="1">
+  <tr>
+    <td><p><br />
+      重新上傳檢驗報告</p>
+      <p>(取代舊報告)：
+  <input type="file" name="file" id="file" />
+        <input type="checkbox" name="keep_sample2" />
+        (樣品不合格)
+        <input type="submit" name="upload" id="upload" value="送出" />
+        上傳檔名請不要用特殊字元 (EX: # @ ! % &amp; $)<br />
+        <br />
+      </p></td>
+  </tr>
+</table>
+<table width="1200" border="1">
+  <tr>
+    <td><br />
+      <input type="radio" name="RadioGroup1" value="1" />
+      再確認&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="radio" name="RadioGroup1" value="2" />
+      再取樣&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="submit" name="retester" value="變更/儲存"/>
+      <br />
+      <br /></td>
+  </tr>
+</table>
+<table width="1200" border="1">
+  <tr>
+    <td><br />
+      取樣人員: <?php sampler();?> 
+      <input type="submit" name="submit12" value="變更/儲存"/>
+      <br />
+      <br /></td>
+  </tr>
+</table>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</form>
+
+</body>
+</html>
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+if(isset($_POST['upload'])){
+	$query="SELECT FILE_PATH FROM FILE_REPORTS WHERE (FILE_LOT_NO = '".$_GET['lot_no']."') AND (FILE_UPLOAD_TIME = '".$_GET['ani_time']."') AND (ANI_GROUP = '".$_GET['ani_groupname']."')";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	$fullpath=$row[0];
+	unlink("..".$fullpath);
+	
+	move_uploaded_file($_FILES["file"]["tmp_name"],"..".$fullpath);
+	$fullpath1="/var/www/www_Test".$fullpath;
+	chmod($fullpath1,777);
+							
+}
+if (isset($_POST["submit12"])) 
+{   
+	$query="UPDATE sampler SET sampler = N'".$_POST['sampler']."' WHERE (lotno = '".$_GET['lot_no']."') AND (ani_group = N'".$_GET['ani_groupname']."') AND (sample_id = N'".$_POST['SampleNo']."') "; 
+	echo $query;
+	$result=mssql_query($query);
+	echo "更改取樣人員為".$_POST['sampler'];
+}
+if (isset($_POST["renew"])) 
+{  
+	if ($_POST['Ok']=="on"){$_POST['Ok']=1;}
+	else {$_POST['Ok']=0;}
+	include ("../connections/conn.php");
+	$query="UPDATE ani_result_group SET result = '".$_POST['Ok']."' WHERE (lot_no = N'".$_GET['lot_no']."') and ani_group = '".$_GET['ani_groupname']."'";  
+//	echo $query."<BR>";
+	$result=mssql_query($query);
+	if($_POST['Ok']==1)
+	{
+		$queryup="update analyze_fail set seriano='V' 
+		 where (Lot_No = '".$_GET['lot_no']."') and (AnalyzeTime = '".$_GET['ani_time']."')";
+		 	$resultup = mssql_query($queryup);
+	}
+	$query="SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."')";
+	$result = mssql_query($query);
+	$numRows = mssql_num_rows($result);
+	$q1="update ".$table." SET SampleNo='".$_POST['SampleNo']."', ";
+	$q2='';
+	while($row = mssql_fetch_array($result))
+	{
+		if (($row['COLUMN_NAME']!='FacterDate') &&($row['COLUMN_NAME']!='LotNo') && ($row['COLUMN_NAME']!='CHK5') && ($row['COLUMN_NAME']!='CHK6') && ($row['COLUMN_NAME']!='CHK7') && 
+		($row['COLUMN_NAME']!='CHK8') && ($row['COLUMN_NAME']!='CHK1') && ($row['COLUMN_NAME']!='CHK2') && ($row['COLUMN_NAME']!='CHK3') && ($row['COLUMN_NAME']!='CHK4') && ($row['COLUMN_NAME']!=
+		'Ok') && ($row['COLUMN_NAME']!='AnalyzeTime') && ($row['COLUMN_NAME']!='SampleNo') && ($row['COLUMN_NAME']!='AnaManager') && ($row['COLUMN_NAME']!='Tester') && ($row['COLUMN_NAME']!='Operator'))
+			{
+				if($row['COLUMN_NAME']=='TestDate'){$q2=$q2."[TestDate]='".date("Y-m-d")."',";}
+//				elseif($row['DATA_TYPE']=='smalldatetime') {$q2=$q2.'['.$row['COLUMN_NAME']."]='".ddt($_POST[$row['COLUMN_NAME']])."',";}
+				elseif($row['DATA_TYPE']=='smalldatetime') {
+					if ($_POST[$row['COLUMN_NAME']]==''){$_POST[$row['COLUMN_NAME']] = '';}
+					if ($_POST[$row['COLUMN_NAME']]=='NULL'){$_POST[$row['COLUMN_NAME']] = '';}
+					$q2=$q2.'['.$row['COLUMN_NAME']."]='".short_date($_POST[$row['COLUMN_NAME']])."',";
+				}
+				elseif($_POST[$row['COLUMN_NAME']]<>''){$q2=$q2.'['.$row['COLUMN_NAME']."]='".$_POST[$row['COLUMN_NAME']]."',";}
+			}
+	}//end while
+	$query1=$q1.$q2.'[Ok]='.$_POST['Ok'];
+	$query1=$query1." where  (LotNo = '".$_GET['lot_no']."') AND (SampleNo = '".$_GET['smpno']."') AND (AnalyzeTime='".$_GET['ani_time']."')";
+	//echo $query1;
+	$result = mssql_query($query1);
+	$query2="update Sample SET SMP_ID='".$_POST['SampleNo']."' where SMP_ID='".$_GET['smpno']."'";
+	$result2 = mssql_query($query2);
+	$query2="update Sample_All SET SMA_ID='".$_POST['SampleNo']."' where SMA_ID='".$_GET['smpno']."'";
+	$result2 = mssql_query($query2);
+	if (!$result)
+	{
+		print("SQL statement failed with error:\n");
+		print("   ".mssql_get_last_message()."\n");
+	} 
+	$query="select count(*) as numrow from analyze_first WHERE          
+	(lot_no = '".$_GET['lot_no']."') AND (create_time = '".$_GET['ani_time']."')";
+	$result = mssql_query($query);
+	$numRows = mssql_num_rows($result);
+	if($numRows>0){
+					$query="UPDATE          analyze_first
+							SET                   first = '".$_SESSION['userid']."'
+							WHERE          (lot_no = '".$_GET['lot_no']."') AND (create_time = '".$_GET['ani_time']."')";
+							$result = mssql_query($query);
+							$query="UPDATE          analyze_first1
+							SET                   first = '".$_SESSION['userid']."'
+							WHERE          (lot_no = '".$_GET['lot_no']."') AND (create_time = '".$_GET['ani_time']."')";
+							$result = mssql_query($query);
+							
+	}
+	else{
+		$query="INSERT INTO dbo.analyze_first
+                          (lot_no, sample_no, create_time, ps, create_user,first,ani_group,chemical,need_no)
+		VALUES         ('".$_GET['lot_no']."', '".$_POST['SampleNo']."', '".$_GET['ani_time']."', 'Y', '".$_SESSION['uid']."','".$_POST['op']."','".$_GET['ani_groupname']."','".$_GET['pdd_chemical']."',".$_SESSION['needno'].")";
+	$result=mssql_query($query);
+	$query="INSERT INTO dbo.analyze_first1
+                          (lot_no, sample_no, create_time, ps, create_user,first,ani_group,chemical,need_no)
+		VALUES         ('".$_GET['lot_no']."', '".$_POST['SampleNo']."', '".$_GET['ani_time']."', 'Y', '".$_SESSION['uid']."','".$_POST['op']."','".$_GET['ani_groupname']."','".$_GET['pdd_chemical']."',".$_SESSION['needno'].")";
+	$result=mssql_query($query);
+	}
+}///end renew
+
+if (isset($_POST["submit2"])) 
+{
+	$query="DELETE FROM ani_result_group WHERE (createtime = N'".$_GET['ani_time']."')  and ani_group = '".$_GET['ani_groupname']."'";  
+	$result=mssql_query($query);
+	$query="delete from RE_TEST where (LotNo = '".$_GET['lot_no']."') and (AnalyzeTime = '".$_GET['ani_time']."') and ani_group='".$_GET['ani_groupname']."' ";
+	$result=mssql_query($query);
+	
+	$query="delete from ".$table." where (LotNo = '".$_GET['lot_no']."') and (AnalyzeTime = '".$_GET['ani_time']."')";
+	$queryfail="delete from analyze_fail where (Lot_No = '".$_GET['lot_no']."') and (AnalyzeTime = '".$_GET['ani_time']."')";
+	$querygg="delete from analyze_first where (lot_no='".$_GET['lot_no']."') and (create_time='".$_GET['ani_time']."')";
+	
+	//-----現在刪除的時候判斷
+//---------如果檔案還再 就不刪除工時 只刪除數據
+
+	$queryf="select * from dbo.FILE_REPORTS where FILE_LOT_NO='".$_GET['lot_no']."' and FILE_UPLOAD_TIME='".$_GET['ani_time']."'";
+	$resultf = mssql_query($queryf);
+	$numRowsf = mssql_num_rows($resultf);
+	if($numRowsf>0)
+	{}
+	else
+	{
+		$querygg1="delete from analyze_first1 where (lot_no='".$_GET['lot_no']."') and (create_time='".$_GET['ani_time']."')";
+	}
+	$resultx = mssql_query($query);
+	$resultfa = mssql_query($queryfail);
+	$resultgg = mssql_query($querygg);
+	$resultgg1 = mssql_query($querygg1);
+	if($resultx){my_msg(" 已刪除 ",$_SESSION['lasturl']);}
+}
+
+
+
+
+if(isset($_POST['an_first']))
+{
+	$query="SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."')";
+	$result=mssql_query($query);
+	$numRows = mssql_num_rows($result);
+	if($numRows>0)
+	{
+		while($row=mssql_fetch_array($result))
+		{
+			$_SESSION[$row['COLUMN_NAME']]=$_POST[$row['COLUMN_NAME']];
+			jumpto("./index.php?url=select_user");
+		}
+	}
+}
+
+function get_disc($itm,$efm,$pid)
+{
+	$query="select disc FROM ani_excel_location WHERE (pid = '".$pid."') AND (item = '".$itm."') AND (efm = '".$efm."')";
+	
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	if(trim($row[0])=='NULL'){	return $itm ;}
+	else {return $row[0];}
+}
+
+if(isset($_POST['retester'])){
+	$query="UPDATE RE_TEST SET Type = ".$_POST['RadioGroup1']." WHERE (AnalyzeTime = N'".$_GET['ani_time']."') AND (LotNo = N'".$_GET['lot_no']."')";   
+	$result=mssql_query($query);
+	echo "<br>  更新完成 ... ";
+}
+
+
+function sampler(){
+	echo '<select name="sampler" id="sampler">';
+	echo '<option value=""></option>';
+	$query="SELECT EMPLOYEE_DATA.EMP_NO as empno, EMPLOYEE_DATA.EMP_NAME as empna, DEPARTMENT_DATA.DEP_NO, DEPARTMENT_DATA.DEP_NAME FROM EMPLOYEE_DATA INNER JOIN DEPARTMENT_DATA ON EMPLOYEE_DATA.DEP_NO = DEPARTMENT_DATA.DEP_NO WHERE (DEPARTMENT_DATA.DEP_NO = 'EP')"; 	
+	$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		echo '<option value="'.$row['empno'].'">'.$row['empna'].'</option>';
+	}
+	echo '</select> :';
+}
+?>

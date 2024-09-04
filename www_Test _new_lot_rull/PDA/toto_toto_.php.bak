@@ -1,0 +1,76 @@
+<?php   ///last edit by jtsai 2018-03-09 
+session_start();
+unset($_SESSION['urln1']);
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+datepick();
+$pwa= substr($uurrll=$_SERVER['REQUEST_URI'],5);
+
+	$query="SELECT  FID_SAM_COUNT, FID_FILL_BEGIN_DATE, FID_FILL_END_DATE FROM FILL_INDICATE WHERE   (FDM_LOT_NO = '".$_POST['fod_lot']."')";
+	$result0=mssql_query($query);
+	$row=mssql_fetch_row($result0);
+	$cnt=$row[0];
+if(trim($row[1])<>'' and trim($row[2])<>''){
+	my_msg($_SESSION['fod_lot']." 已充填過...","index.php");
+}
+elseif(trim($row[1])<>''){
+	jumpto("toto_toto__.php");	
+}	
+?><head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<style type="text/css">
+body,td,th {
+	font-size:20px;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+</style>
+</head>
+
+<a href="fill.php"><img src="../pics/TYS.jpg" alt="" width="50" height="28" /></a>人員：<?php echo $_SESSION['uname']?>
+<form name="form1" method="post" action="toto_toto_.php">
+<input type="hidden" name="fod_lot" value="<?php echo $_GET['fod_lot'];?>" />
+<input type="hidden" name="stock_lot" value="<?php echo $_GET['stock_lot'];?>" />
+
+<font color="#FF00FF" >CAL 在庫 TOTO 轉 出荷 TOTO 移液作業</font><BR>
+重量確認
+<table width="400" border="1">
+  <tr><td width="200">在庫 LOT NO:<BR /><?php echo $_SESSION['stock_lot'];?> </td><td width="200">出荷 LOT NO: <?php echo $_SESSION['fod_lot'];?> </td></tr>
+
+<tr><td width="200">在庫 TOTO NO: <BR /><input type="text" name="stock_toto" size="10" style="font-size:20px" <?php echo $str1;?> id="stock_toto" value="<?php echo $_SESSION['stock_toto'];?>"></td><td width="200">出荷 TOTO NO: <BR /><input type="text" name="fod_toto" size="10" style="font-size:20px" <?php echo $str2;?>  id="fod_lot" value="<?php echo $_SESSION['fod_toto'];?>"></td></tr>
+<tr><td>TOTO 外觀/期限檢查<BR>在庫用: <input type="checkbox" name="T2M_W_I_CHK_SURFACE"  checked/></td><td>TOTO 外觀/期限檢查<BR>出荷用: <input type="checkbox" name="T2M_W_O_CHK_SURFACE"  checked/></td></tr>
+<tr><td width="200">移液前總重: <BR />在庫 <input type="text" name="T2M_W_I_WEIGHT" size="10" style="font-size:20px" <?php echo $str1;?> id="T2M_W_I_WEIGHT" value="<?php echo $_SESSION['T2M_W_I_WEIGHT'];?>"></td><td width="200">移液前總重:<BR /> 出荷 <input type="text" name="T2M_W_O_WEIGHT" size="10" style="font-size:20px" <?php echo $str2;?>  id="fod_lot" value="<?php echo $_SESSION['T2M_W_O_WEIGHT'];?>"></td></tr>
+<tr><td></td><td>
+<input type="submit" name="submit" style="font-size:20px" value=" 送 出 " ></td></tr>
+</table>
+<input type="hidden" name="fod_lot" value="<?php echo $_GET['fod_lot'];?>" />
+<input type="hidden" name="stock_lot" value="<?php echo $_GET['stock_lot'];?>" />
+</form>
+<a href="toto_toto.php"><strong> 取消</strong></a>
+<?php
+if(isset($_POST['submit'])){
+		$query="select * from fillplan_out_decide where FDM_LOT_NO='".$_POST['fod_lot']."'";
+//		  echo $query."<BR>";
+		$result=mssql_query($query);
+		$numrows=mssql_num_rows($result);
+		if($numrows==0){
+			my_msg("輸入錯誤","toto_toto.php");	
+		}
+		else{
+		$url="toto_toto__.php?fod_lot=".$_GET['fod_lot']."&stock_lot=".$_GET['stock_lot']."&T2M_W_I_WEIGHT=".$_POST['T2M_W_I_WEIGHT']."&T2M_W_O_WEIGHT=".$_POST['T2M_W_O_WEIGHT'];
+		jumpto($url);
+		}
+	}
+?>

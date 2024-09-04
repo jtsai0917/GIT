@@ -1,0 +1,193 @@
+<?php include("../checkuser.php");
+session_start();
+$_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
+$_SESSION['testprod']=2;
+include("../lib/fun.php");
+include("../checkuser.php");
+lasturl();
+datepick();
+if($_POST['search']){
+		$_SESSION['con_type']=$_POST['con_type'];
+		$_SESSION['lid']=$_POST['textfield4'];
+		$_SESSION['datepicker2']=$_POST['datepicker2'];
+		$_SESSION['datepicker1']=$_POST['datepicker1'];
+		refresh();
+	}
+?>
+
+<form name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+  <label for="textfield"></label>
+
+  <table width="1200" border="1">
+    <tr>
+      <td width="480">分析依賴填寫日期 
+        <input name="datepicker1" type="text" id="datepicker1" size="8" value="<?php 
+		if ($_GET['datepicker1']){
+			echo $_GET['datepicker1'];
+			$_SESSION['datepicker1']=$_GET['datepicker1'];
+		}
+		elseif($_SESSION['datepicker1']){
+			echo $_SESSION['datepicker1'];
+		}
+		else{
+		$d=strtotime("-0 Days"); echo date("m/d/Y",$d);
+		}
+		?>">
+        ~
+        <input name="datepicker2" type="text" id="datepicker2" size="8" value="<?php 
+		if ($_GET['datepicker2']){
+			echo $_GET['datepicker2'];
+			$_SESSION['datepicker2']=$_GET['datepicker2'];
+		}
+		elseif($_SESSION['datepicker2']){
+			echo $_SESSION['datepicker2'];
+		}
+		else{
+		$d=strtotime("+0 Days"); echo date("m/d/Y",$d);
+		}
+		?>">
+        
+        品名：<span class="d1">
+        <input type="button" name="X" id="X" value="X" onClick="window.open('../erase_prod.php ', '_self');">
+        <input name="pdd_chemical1" type="text" id="pdd_chemical1" size="8" value="<?php 
+		if ($_GET['pid']){
+			echo $_GET['pid'];
+			$_SESSION['pid']=$_GET['pid'];
+		}
+		elseif($_SESSION['pid']){
+			echo $_SESSION['pid'];
+		}
+		else{
+		echo '';
+		}
+		?>" readonly>
+        <input type="button" name="pdd_no" id="pdd_no" value="查詢品名" onClick="window.open('../pdd_prod_no.php ', '_self');" >
+        <input name="pdd_chemical2" type="text" id="pdd_chemical2" size="10" value="<?php 
+		if ($_GET['pname']){
+			echo $_GET['pname'];
+			$_SESSION['pname']=$_GET['pname'];
+		}
+		elseif($_SESSION['pname']){
+			echo $_SESSION['pname'];
+		}
+		else{
+		echo '';
+		}
+		?>" readonly>
+        容器：
+        <select name="con_type"id="con_type" onChange="set_date_session(this.name,this.value)" >
+        	<option value="LY" <?php if($_SESSION['con_type']=='LY'){echo 'selected="selected"';} ?>>LY</option>
+         	<option value="DM" <?php if($_SESSION['con_type']=='DM'){echo 'selected="selected"';} ?>>DM</option>
+        </select>
+        Lot No：
+        <input type="button" name="X2" id="X2" value="X" onclick="window.open('../erase_lot.php ', '_self');" />
+<input name="textfield4" type="text" id="textfield4" size="10" value="<?php
+		echo '';
+?>">
+        <input type="submit" name="search" id="search" value="搜尋">
+<?php //        <input type="button" name="peint" id="peint" value="列印"> ?>
+        <input type="button" name="exit" id="exit" value="離開">
+        <input type="hidden" name="mm_insert" id="mm_insert" value="form1">
+
+        </span></td>
+
+    </tr>
+  </table>
+</form>
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+
+if (!$_SESSION['datepicker1']){$_SESSION['datepicker1']=date("m/d/Y",$d);}
+if (!$_SESSION['datepicker2']){$_SESSION['datepicker2']=date("m/d/Y",$d);}
+include('../connections/conn.php'); 
+$query="SELECT     DISTINCT     AnalyzeDesign.AND_CANCEL,AnalyzeDesign.AND_REPORT_DATETIME, EMPLOYEE_DATA.EMP_NAME, AnalyzeDesign.AND_MEMO, 
+                            AnalyzeDesign.AND_LOT_NO, AnalyzeDesign.AND_APPLY_DATE, PRODUCT_DATA.PDD_TYPE, PRODUCT_DATA.PDD_PROD_NO,PRODUCT_DATA.PDD_CHEMICAL,
+                            PRODUCT_DATA.PDD_PROD_NAME, AnalyzeDesign.AND_ITEM, AnalyzeDesign.AND_NEED_NO
+
+FROM              AnalyzeDesign INNER JOIN
+                            PRODUCT_DATA ON AnalyzeDesign.AND_GOODS = PRODUCT_DATA.PDD_PROD_NO INNER JOIN
+                            EMPLOYEE_DATA ON AnalyzeDesign.AND_PERSON = EMPLOYEE_DATA.EMP_NO
+WHERE          (AnalyzeDesign.AND_NEED_NO>249) and (AnalyzeDesign.AND_NEED_NO<350) and (PRODUCT_DATA.PDD_TYPE='".$_SESSION['con_type']."') ";
+
+if ($_POST['datepicker1']){
+	$_SESSION['datepicker1']=$_POST['datepicker1'];
+    $query=$query." AND (AnalyzeDesign.and_report_datetime >='".dod($_POST['datepicker1'])."0000')";
+}
+elseif($_SESSION['datepicker1'])
+{
+	$query=$query." AND (AnalyzeDesign.and_report_datetime >='".dod($_SESSION['datepicker1'])."0000')";
+}
+if ($_POST['datepicker2']){
+	$_SESSION['datepicker2']=$_POST['datepicker2'];
+	$query=$query." AND ( AnalyzeDesign.and_report_datetime <='".dod($_POST['datepicker2'])."2359')";
+}
+elseif($_SESSION['datepicker2']){
+	$query=$query." AND ( AnalyzeDesign.and_report_datetime <='".dod($_SESSION['datepicker2'])."2359')";
+}
+if ($_POST['pdd_chemical1']<>''){
+	$_SESSION['pid']=$_POST['pdd_chemical1'];
+	$query=$query." AND (AnalyzeDesign.AND_GOODS ='".$_POST['pdd_chemical1']."')";
+}
+elseif($_SESSION['pid']){
+	$query=$query." AND (AnalyzeDesign.AND_GOODS ='".$_SESSION['pid']."')";
+}
+if ($_SESSION['lid']<>''){
+	$query="SELECT  AnalyzeDesign.*, AnalyzeDesign.AND_CANCEL, AnalyzeDesign.AND_REPORT_DATETIME, EMPLOYEE_DATA.EMP_NAME, AnalyzeDesign.AND_MEMO, 
+                            AnalyzeDesign.AND_LOT_NO, AnalyzeDesign.AND_GOODS, AnalyzeDesign.AND_APPLY_DATE, PRODUCT_DATA.PDD_TYPE, PRODUCT_DATA.PDD_PROD_NO,PRODUCT_DATA.PDD_CHEMICAL,
+                            PRODUCT_DATA.PDD_PROD_NAME, AnalyzeDesign.AND_ITEM, AnalyzeDesign.AND_NEED_NO
+
+FROM              AnalyzeDesign INNER JOIN
+                            PRODUCT_DATA ON AnalyzeDesign.AND_GOODS = PRODUCT_DATA.PDD_PROD_NO INNER JOIN
+                            EMPLOYEE_DATA ON AnalyzeDesign.AND_PERSON = EMPLOYEE_DATA.EMP_NO
+WHERE          (AnalyzeDesign.AND_NEED_NO>=270) and (AnalyzeDesign.AND_LOT_NO LIKE '%".trim($_SESSION['lid'])."%') ";
+}
+$query.=" ORDER BY AND_report_datetime,and_lot_no  DESC";
+
+//  echo $query;
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+?>
+<table width="1200" border="1">
+  <tr bgcolor="#CCCCCC">
+    <td width="80">日期序號</td>
+    <td width="80">料號</td>
+    <td width="100">品名</td>
+    <td width="30">容器</td>
+    <td width="100">LotNO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;台帳</td>
+    <td width="30">分析項目</td>
+    <td width="110">要求完成時間</td>
+    <td width="670"><p>分析項目:<font color="#0000FF">藍字</font>表示已有報告及結果，<font color="#FF0000">紅字</font>表示沒有報告及結果，<font color="green">綠字</font>表示有報告但是無檢驗結果，</p>
+    <p><font color="purple">紫色</font>表示沒有報告但是有檢驗結果‧<span style="background-color: red"><font color="white">紅底白字</font></span>表示檢驗未通過‧</p></td>
+
+  </tr>
+  <?php
+
+while($row = mssql_fetch_array($result))
+{   
+//	echo $row['AND_LOT_NO'];
+	$cdd=new get_from_lot_no;
+  	$cdd->lid=$row['AND_LOT_NO'];
+	$cdd->cid();
+	if(substr($row['AND_ITEM'],-1))
+	if($row['AND_CANCEL']==1){$rpd='已取消';echo '<tr bgcolor="#FF9900">';}
+	if($row['AND_CANCEL']==0){$rpd=substr($row['AND_REPORT_DATETIME'],0,4)."-".substr($row['AND_REPORT_DATETIME'],4,2)."-".substr($row['AND_REPORT_DATETIME'],6,2)." ".substr($row['AND_REPORT_DATETIME'],8,2).":".substr($row['AND_REPORT_DATETIME'],10,2);echo '<tr>';}
+    echo '<td>'.$row['AND_APPLY_DATE']."-".$row['AND_NEED_NO'].'</td>';
+	echo '<td>'.$row['PDD_PROD_NO'].'</td>';
+    echo '<td>'.$row['PDD_PROD_NAME'].'</td>';
+    echo '<td>'.$row['PDD_TYPE'].'</td>';
+    echo '<td><a target="_blank" href="index.php?url=anylize_list_total&type='.$row['PDD_TYPE'].'&lot_no='.$row['AND_LOT_NO'].'&pid='.$row['PDD_CHEMICAL'].'">'.$row['AND_LOT_NO'].'</a></td>';
+    echo '<td>'.anyitems($row['AND_ITEM']).'</td>';
+    echo '<td>'.$rpd.'</td>';
+	if(substr($row['AND_ITEM'],-1)==','){$row['AND_ITEM']=substr($row['AND_ITEM'],0,-1);}
+	analyzereport($row['AND_ITEM'],$row['AND_LOT_NO'],$row['EMP_NAME'],$row['PDD_CHEMICAL'],$row['PDD_PROD_NO']);
+/*    echo '<td><a target="_self" href="'.$url.$row['AND_LOT_NO']."&testdate=".$row['AND_APPLY_DATE']."&operator=".iconv("big5","utf-8",$row['EMP_NAME']).'">ASSAY</a></td>';
+    echo '<td><a target="_self" href="'.$ur2.$row['AND_LOT_NO']."&testdate=".$row['AND_APPLY_DATE']."&operator=".iconv("big5","utf-8",$row['EMP_NAME']).'">NH4</a></td>';
+	    echo '<td><a target="_self" href="'.$ur3.$row['AND_LOT_NO']."&testdate=".$row['AND_APPLY_DATE']."&operator=".iconv("big5","utf-8",$row['EMP_NAME']).'">UV</a></td>';
+*/
+	echo '</tr>';
+}
+?>
+</table>
+<?php
+
+	?>

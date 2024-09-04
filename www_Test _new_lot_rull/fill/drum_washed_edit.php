@@ -1,0 +1,42 @@
+<?php
+	session_start();
+	include("../lib/fun.php");
+	include "../connections/conn.php"	;
+	auth('11-01',$_SESSION['aut']);
+	datepick();
+
+	echo '<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<form id="form1" name="form1" method="POST" action="">
+輸入Lot NO :<input type="text" size="12" name="lotno" id="lotno" value="'.$_SESSION['lotno'].'"  onChange="set_date_session(this.name,this.value)"/>  <input type="submit" name="search" id="search" value="確認LOT NO"/><BR>';
+
+	if(isset($_POST['search']))
+	{
+		$lid=trim($_POST['lotno']);
+		echo '<input type="submit" name="submit" value="變更勾選項目內容">&nbsp;&nbsp;&nbsp;&nbsp;<a href="index.php">返回主頁</a><table width="300" border="1"><tr><td align="center">SN</td><td align="center">桶號</td><td align="center">製造批號</td></tr>';
+		$query="SELECT EWD_SERIAL_NO, EWD_DRUM, EWD_MAKELOT FROM EL_WASH_DRUM WHERE (FDM_LOT_NO = '".$lid."') order by EWD_SERIAL_NO";
+		$result=mssql_query($query);
+		while($row=mssql_fetch_array($result)){
+			echo '<tr><td align="center">'.$row['EWD_SERIAL_NO'].'</td><td align="center"><input type="checkbox" name="chkbox[]" value="'.$row['EWD_SERIAL_NO'].'"> 
+			&nbsp; <input type="text" size="8" name="drumno[]" value="'.$row['EWD_DRUM'].'"></td><td align="center"><input type="text" size="8" name="makelot[]" value="'.$row['EWD_MAKELOT'].'"></td></tr>';
+		}
+		echo '</table><BR><BR>';
+		echo '</form>';
+	}
+
+	if(isset($_POST['submit'])){	
+		$lid=trim($_POST['lotno']);
+
+		$aa=$_POST['chkbox'];
+		$bb=$_POST['drumno'];
+		$cc=$_POST['makelot'];
+		echo "共選擇 ".count($aa). " 筆<BR>";
+		for($i=0;$i < count($aa);$i++){
+			$s=$aa[$i]-1;
+			$query="update EL_WASH_DRUM set EWD_DRUM='".trim($bb[$s])."', EWD_MAKELOT='".trim($cc[$s])."'  where  (FDM_LOT_NO = '".$lid."') and  EWD_SERIAL_NO= ".$aa[$i] ;
+	//		echo $query."<BR>";
+			$result=mssql_query($query);
+			echo "序號".$aa[$i]."之桶號已更新為: ".$bb[$s]."<BR>";
+		//	echo $query."<BR>";
+		}
+	}
+?>

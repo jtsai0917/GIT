@@ -1,0 +1,260 @@
+<?php 
+session_start();
+include("../lib/fun.php");
+include("../checkuser.php");
+include("../lib/jtsai.php");
+include("../connections/conn.php");
+lasturl();
+datepick();
+?>
+<style type="text/css">
+body,td,th {
+	font-size:50px;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+</style>
+<form name="form1" method="post" action="<?php echo $loginFormAction; ?>">
+  <label for="textfield"></label>
+   <input  type="button" name="back" id="back" style="font-size:50px;background-color:#FF0" value="返回上一頁" onclick="location.href='/PRODUCE/UTT_check_input.php?form=<?php echo $_SESSION['form_no']; ?>'"><br>
+ 		<font size="+5"><strong>巡檢表單：<span class="d1">
+        <?php
+		$query="select Form from UTT_FORM_DATA where [index]='".$_SESSION['form']."'";
+	
+		$result=mssql_query($query);
+		$row=mssql_fetch_array($result);
+		echo trim($row[0]);
+		?>
+        <br>
+        <br>
+ 		日期時間: 
+        <?php
+		echo std($_SESSION['date']).' '.$_SESSION['UTT_time'];
+		?>
+        <br>
+        <br>
+        <table bgcolor="#CCCCCC" border="1">
+   		<?php
+		/*
+		if(count($_SESSION['TAG_NO'])>20){
+		$time=count($_SESSION['TAG_NO'])/20;
+		$page=count($_SESSION['TAG_NO'])/$time;
+		}
+		else{$page=count($_SESSION['TAG_NO']);}
+		$time=ceil($time);
+		$_SESSION['max']=$time;
+		$page1=round($page);
+		$page1=$page1*$_GET['page'];
+		if($_GET['page']==1){$count1=0;}else{$count1=$page1-20;}
+		//echo $count1.','.$page1;
+		$_SESSION['count1']=$count1;
+		$_SESSION['page1']=$page1;
+		*/
+		for($count=0;$count<count($_SESSION['TAG_NO']);$count++){
+		if($_SESSION['TAG_NO'][$count]==''){continue;}
+		
+		/*Title與字碼標註(可使用)
+		$query1="SELECT * FROM UTT_FORM_TITLE where Form='".$_SESSION['form']."' AND row='".$count."'";
+		//echo $query1.'<br>';
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		$numrows1=mssql_num_rows($result1);
+		if(trim($row1['title'])<>''){
+		echo '<tr><td align="center" colspan="2" style="background-color:yellow">'.trim($row1['title']).'</td>';}
+        echo '<tr><td align="center">'.$count.'</td><td>項目:';
+		$query="SELECT project,unit,mode,high,tag_mark from UTT_TAGNO_DATA WHERE TAG_NO='".trim($_SESSION['TAG_NO'][$count])."'";
+		$result=mssql_query($query);
+		$row=mssql_fetch_array($result);
+		$value1=trim($row['high']);
+		if(trim($row['tag_mark'])<>'')
+		{
+			$first=substr($_SESSION['TAG_NO'][$count],0,(0-trim($row['tag_mark'])));
+			$second=substr($_SESSION['TAG_NO'][$count],(0-trim($row['tag_mark'])));
+			$TAGNO=$first.'<font color="#FF0000">'.$second.'</font>';
+		}
+		else{
+		$TAGNO=$_SESSION['TAG_NO'][$count];
+		}
+		echo '['.$_SESSION['TAG_NAME'][$count].' '.trim($row[1]).']   <BR>TAG_NO:'.$TAGNO;
+        echo '<br>數值:';
+		*/
+        echo '<tr><td align="center">'.$count.'</td><td>項目:';
+		$query="SELECT project,unit,mode,high from UTT_TAGNO_DATA WHERE TAG_NO='".trim($_SESSION['TAG_NO'][$count])."'";
+		$result=mssql_query($query);
+		$row=mssql_fetch_array($result);
+		$value1=trim($row['high']);
+		echo '['.$_SESSION['TAG_NAME'][$count].' '.trim($row[1]).']   <BR>TAG_NO:'.$_SESSION['TAG_NO'][$count];
+        echo '<br>數值:';
+		$query="SELECT data from UTT_CHECK_DATA WHERE TAG_NO='".trim($_SESSION['TAG_NO'][$count])."' and date='".$_SESSION['date'].$_SESSION['UTT_time']."'";
+		$result=mssql_query($query);
+		$row=mssql_fetch_array($result);
+		$date=trim($row['data']);
+			if($value1=='O' or $value1=='X')
+			{
+				if($date<>''){$value1=$date;}
+				echo '<Select name="data'.$count.'" id="data'.$count.'" style="font-size:50px">';
+				echo '<option value="'.$value1.'" >'.$value1.'</option>';
+				if($value1=='O')
+				{
+				echo '<option value="X" >X</option>';	
+				}
+				else
+				{
+				echo '<option value="O" >O</option>';	
+				}
+				echo '</select></td>';
+			}
+			else{
+			echo '<input type="text" name="data'.$count.'" id="data'.$count.'"  size="6" style="font-size:50px"  value="'.$date.'" ></td>';
+			}
+		}
+		echo '</tr>';
+		$_SESSION['count']=$count;
+		?>
+        </table>
+        <?php
+		echo '<input type="submit" name="ins" id="ins" value="新增" style="font-size:100px">';
+		/*
+		for($i=1;$i<=$time;$i++){
+		if($_GET['page']==$i){$color='ext-decoration:none;color:red;';}else{$color='';}
+		if($i<>$time){
+		echo '<a target="_self" style="'.$color.'font-size:100px" href=/PRODUCE/UTT_check_input_2.php?page='.$i.'>'.$i.'</font></a>,';}
+		else{echo '<a target="_self" style="'.$color.'font-size:100px" href=/PRODUCE/UTT_check_input_2.php?page='.$i.'>'.$i.'</a>';}
+		}
+		*/
+		?>
+        <input type="hidden" name="mm_insert" id="mm_insert" value="form1" >
+
+        </span></strong></font>
+</form>
+<?php
+$max=count($_SESSION['TAG_NO']);
+$loginFormAction = $_SERVER['PHP_SELF'];
+$_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
+if(isset($_POST['backup']))
+{
+	$_SESSION['i']=$_SESSION['i']-1;
+	if($_SESSION['i']<0){$_SESSION['i']=0;my_msg('已至頂端');}
+	echo "<script>history.go(-1)</script>";
+}
+if(isset($_POST['ins']) or isset($_POST['ins1']))
+{
+	$values=0;
+	for($count=0;$count<=count($_SESSION['TAG_NO']);$count++)
+	{
+		$TAG=trim($_SESSION['TAG_NO'][$count]);
+		if(trim($TAG)==""){continue;}
+		$data=$_POST['data'.$count];
+		//if($_POST['data']==''){my_msg(請輸入數值);}
+		$_SESSION['time']=substr($_SESSION['UTT_time'],0,2);
+		$_SESSION['time1']=substr($_SESSION['UTT_time'],2,2);
+		$query1="select max(sn) from UTT_CHECK_DATA WHERE TAG_NO='".$_SESSION['TAG_NO'][$count]."'and date like '%".$_SESSION['date']."%'";
+		$result1=mssql_query($query1);
+		$row1=mssql_fetch_array($result1);
+		$sn=trim($row1[0]);
+		$sn=$sn+1;
+		$query="select * from UTT_TAGNO_DATA WHERE TAG_NO='".$_SESSION['TAG_NO'][$count]."' and (high<>'' or low<>'')";
+		$result=mssql_query($query);
+		$numrows=mssql_num_rows($result);
+		$row=mssql_fetch_array($result);
+		$query1="select * from UTT_record_spec where TAG_NO='".trim($_SESSION['TAG_NO'][$count])."' and Date='".trim($_SESSION['date']).$_SESSION['UTT_time']."'";
+		$result1=mssql_query($query1);
+		$numrows1=mssql_num_rows($result1);
+		if(trim($row['mode'])=='GT'){$Num=trim($row['high']);$sign=1;}
+			elseif(trim($row['mode'])=='LS'){$Num=trim($row['low']);$sign=2;}
+			elseif(trim($row['mode'])=='BT'){$Num=trim($row['high']);$Num1=trim($row['low']);$sign=3;}
+			elseif(trim($row['mode'])=='SAME'){$Num=trim($row['high']);$sign=4;}
+			//echo trim($_SESSION['TAG_NO'][$count]).'='.$sing.','.trim($row['mode']).','.$Num.'<br>';
+			if($sign==1 or $sign==2 or $sign==4)
+			{
+				if($sign==1)
+				{
+					if($data>$Num){$check='O';}else{$check='X';}
+				}
+				elseif($sign==2)
+				{
+					if($data<$Num){$check='O';}else{$check='X';}
+				}
+				else
+				{
+					if($data==$Num){$check='O';}else{$check='X';}
+				}
+			}
+			elseif($sign==3)
+			{
+				if($data>=$Num1 and $data<=$Num){$check='O';}else{$check='X';}
+			}
+			if($data==''){$check='X';}
+		if($numrows!=0)
+		{	
+			if($numrows1==''){
+			$query="insert into UTT_record_spec (TAG_NO, Data, Date, sn, pass, savetime, saveuid) values ('".trim($_SESSION['TAG_NO'][$count])."','".trim($data)."','".trim($_SESSION['date']).$_SESSION['UTT_time']."',".$sn.",'".$check."','".date('Ymdhis')."','".$_SESSION['uid']."')";
+			}
+			else{
+			$query="update UTT_record_spec set Data='".trim($data)."',pass='".$check."' where TAG_NO='".trim($_SESSION['TAG_NO'][$count])."' and Date='".trim($_SESSION['date']).$_SESSION['UTT_time']."'";
+			}
+			//echo $query.'<br>';
+			$result=mssql_query($query);
+		}
+		else
+		{
+			$query1="select * from UTT_record_spec where TAG_NO='".trim($_SESSION['TAG_NO'][$count])."' and Date='".trim($_SESSION['date']).$_SESSION['UTT_time']."'";
+			$result1=mssql_query($query1);
+			$numrows1=mssql_num_rows($result1);
+			if($numrows1==''){
+			$query="insert into UTT_record_spec (TAG_NO, Data, Date, sn, pass, savetime, saveuid) values ('".trim($_SESSION['TAG_NO'][$count])."','".trim($data)."','".trim($_SESSION['date']).$_SESSION['UTT_time']."',".$sn.",'△','".date('Ymdhis')."','".$_SESSION['uid']."')";
+			}
+			else
+			{
+				$query="update UTT_record_spec set Data='".trim($data)."',pass='△' where TAG_NO='".trim($_SESSION['TAG_NO'][$count])."' and Date='".trim($_SESSION['date']).$_SESSION['UTT_time']."'";
+			}
+				//echo $query.'<br>';
+				$result=mssql_query($query);
+		}
+		
+		if($numrows1==0){
+		$query="insert into UTT_CHECK_DATA (TAG_NO ,Data ,sn ,date ,savetime, saveuid, form_id) values ('".trim($_SESSION['TAG_NO'][$count])."','".trim($data)."','".$sn."','".trim($_SESSION['date']).$_SESSION['UTT_time']."','".date('Ymdhis')."','".$_SESSION['uid']."', ".trim($_GET['form_id']).")";}
+		else{
+		$query="update UTT_CHECK_DATA set Data='".trim($data)."', form_id=".$_GET['form_id']." where TAG_NO='".trim($_SESSION['TAG_NO'][$count])."' and date='".trim($_SESSION['date']).$_SESSION['UTT_time']."'";
+		}
+		echo $query.'<br>';
+		$result=mssql_query($query);
+		if(trim($data)==''){$values++;}
+		$count1++;
+	}
+	//if($_GET['page']>1){$count=$count-20-1;}else{}
+	//my_msg('巡檢完成!','/PRODUCE/UTT_check_input.php');
+	//echo $values.','.$count.','.$_SESSION['page1'];break;
+	_confirm3("空白".$values."項/總項".count($_SESSION['TAG_NO'])."項  確定新增嗎?");
+	$query="select * from UTT_DATA_SIGN where SAG_NO='".$_SESSION['FORM']."_".trim($_SESSION['date']).$_SESSION['UTT_time']."'";
+	$result=mssql_query($query);
+	$numrows=mssql_num_rows($result);
+	if($numrows==0){
+	$query="insert into UTT_DATA_SIGN (SAG_NO) values ('".$_SESSION['FORM']."_".trim($_SESSION['date']).$_SESSION['UTT_time']."')";
+	}
+	$result=mssql_query($query);
+}
+function _confirm3($msg,$page){
+	echo "<script type='text/javascript'>
+	if(confirm('$msg')==true){
+	window.alert('巡檢完成!!')
+	location.href='/PRODUCE/UTT_check_input.php'
+	}
+	else{
+	document.location.href='/PRODUCE/UTT_check_input_2.php';
+	}
+	</script>";
+}
+?>
+</table>
+</br>

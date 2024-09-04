@@ -1,0 +1,39 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+include("../connections/conn.php");
+include ('../PHPWord/PHPWord.php');
+	$PHPWord = new PHPWord();
+	$document = $PHPWord->loadTemplate('../FormList/un/TLEQA9130104A9.docx');	
+$query="SELECT          *
+FROM              REANALYZE_REQUEST_DATA
+WHERE          (RAN_LOT_NO = '".$_GET['lot_no']."')
+ORDER BY   RAN_NO";
+$result = mssql_query($query);
+while($row = mssql_fetch_array($result))
+{
+	$reason=$row['RAN_FAIL_ITEM'];
+}
+echo '<form method="post" ><input type="submit" name="close" value="Close"></form>';
+if(isset($_POST['close'])){
+	echo '<script>window.close();</script>';
+}
+$query="select * from FAIL_ITEM_REPORT where (FIR_LOT_NO='".$_GET['lot_no']."')";
+$result = mssql_query($query);
+	while($row = mssql_fetch_array($result))
+	{
+		$st=new get_from_lot_no;
+		$st->lid=$row['FIR_LOT_NO'];
+		$st->ani();
+		$document->setValue("custname0",get_cust_name($row['FIR_CUST_NO']));
+		$document->setValue("pdd_prod_no",$row['FIR_PROD_NO']);
+		$document->setValue("pdd_prod_short_name",get_prod_name($row['FIR_PROD_NO']));
+		$document->setValue("LotNo0",$row['FIR_LOT_NO']);
+		$document->setValue("qty0","   一批  ");
+		$document->setValue("reason0",ana_id_to_nick($reason).' 三次分析皆超出再分析標準');
+		$document->setValue("TestDate0","西曆 ".substr(date("YmdHis"),0,4)." 年 ".substr(date("YmdHis"),4,2)." 月 ".substr(date("YmdHis"),6,2)." 日");
+	}
+$document->save('../tmp/tmp.docx');
+echo '<script>document.location.href="http://'.$_SERVER['HTTP_HOST'].'/tmp/tmp.docx";</script>';
+?>

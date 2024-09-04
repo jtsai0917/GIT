@@ -1,0 +1,13 @@
+<?php
+session_start();
+if($_GET['value']=='on'){
+	$_SESSION[$_GET['name']]='';
+}
+else{
+	$_SESSION[$_GET['name']]=$_GET['value'];
+}
+
+?>
+<script type="text/javascript">
+	window.close()
+</script>

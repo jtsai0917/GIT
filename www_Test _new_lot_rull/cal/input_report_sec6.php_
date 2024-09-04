@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html>
+<body>
+<script type="text/javascript">
+         <!--
+            function getConfirmation(){
+               var retVal = confirm("Do you want to continue ?");
+               if( retVal == true ){
+                  document.write ("User wants to continue!");
+                  return true;
+               }
+               else{
+                  document.write ("User does not want to continue!");
+                  return false;
+               }
+            }
+         //-->
+      </script>
+
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php 
+session_start();
+$_SESSION['lot_no']=$_GET['lot_no'];
+$xx=1;
+
+/////////////////////////取得分析項目表單////////////////////////////
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+datepick();
+$_SESSION['cnt']=0;
+unset($_SESSION['unit']);	
+$query="SELECT DISTINCT ELEMENT_FORM.ELF_FORM,AnalyzeItem.ANI_NICKNAME, AnalyzeItem.ANI_FULLNAME
+FROM              ELEMENT_FORM INNER JOIN
+                            AnalyzeItem ON ELEMENT_FORM.ELM_ID = AnalyzeItem.ANI_INDEX
+WHERE          (ELEMENT_FORM.ELF_FORM = '".$_GET['efm']."') AND (ELEMENT_FORM.PDD_CHEMICAL = '".$_GET['pdd_chemical']."') AND (AnalyzeItem.ANI_GROUPNAME = '".$_GET['ani_groupname']."')";
+//
+//echo $query;
+//$_SESSION['QUERY']=$query;
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+while($row = mssql_fetch_array($result)){
+$table=$row['ELF_FORM'];
+$ani_nick=$row['ANI_NICKNAME'];
+$ani_full=$row['ANI_FULLNAME'];
+}
+
+$query="SELECT          FILLPLAN_OUT_DECIDE.FDM_LOT_NO, FILLPLAN_OUT_DECIDE.CTD_CUST_NO, 
+                            CUSTOMER_DATA.CTD_CUST_NAME
+FROM              FILLPLAN_OUT_DECIDE INNER JOIN
+                            CUSTOMER_DATA ON FILLPLAN_OUT_DECIDE.CTD_CUST_NO = CUSTOMER_DATA.CTD_CUST_NO
+WHERE          (FILLPLAN_OUT_DECIDE.FDM_LOT_NO = '".$_GET['lot_no']."')";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+if($numRows>0)
+{
+	while($row = mssql_fetch_array($result))
+	{
+		if($row['CTD_CUST_NO']<>''){$cust_no=$row['CTD_CUST_NO'];$cust_name=$row['CTD_CUST_NAME'];}
+		else{$cust_no='C00001';$cust_name='TYS Internal';}
+	}
+}
+else{$cust_no='C00001';$cust_name='TYS Internal';}
+if($_GET['ani_groupname']=='FPMS'){$_SESSION['cid']=$pdd->cid='C00001';$cust_name='TYS Internal';}
+$query="SELECT  AnalyzeDesign.AND_APPLY_DATE
+FROM             AnalyzeDesign
+WHERE          (AnalyzeDesign.AND_LOT_NO = '".$_GET['lot_no']."')";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+//echo $query;
+while ($row=mssql_fetch_array($result)){
+	$dt=date("Y-m-d");
+}
+
+if (isset($_POST["refresh"]) or isset($_POST["submit"])){
+$query="SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."') order by DATA_TYPE";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+while($row = mssql_fetch_array($result)){
+	$_SESSION[$row['COLUMN_NAME']]=$_POST[$row['COLUMN_NAME']];
+}
+}
+
+?>
+<style type="text/css">
+.red {
+	color: #F00;
+}
+.blue {
+	color: #00F;
+}
+#form1 table tr td p {
+	color: #F00;
+	font-size: 16px;
+}
+</style>
+
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<title>輸入分析結果</title>
+<style type="text/css">
+.centet {
+	text-align: center;
+}
+#form1 table tr td {
+	text-align: center;
+}
+dd {
+	text-align: left;
+}
+#form1 table tr td {
+	text-align: left;
+}
+.a18 {
+	font-size: 18px;
+}
+#form1 table tr td .red1 {
+	color: #F00;
+}
+</style>
+
+
+
+
+
+<form action="<?php echo $loginFormAction; ?>" method="post" enctype="multipart/form-data" name="form1" id="form1">
+<p>
+    <input type="hidden" name="operator" id="operator" value="" />
+  </p>
+  <table width="1200" border="1"><tr><td width="1200" bgcolor="#999999" >
+  <?php 
+  $pdd=new get_from_lot_no;
+  $pdd->lid=$_GET['lot_no'];
+  $pdd->cid();
+  $pdd->ani();
+  $need_no=$pdd->needno;
+  $prodname=$pdd->pdd_prod_name;
+  $_SESSION['needno']=$need_no;
+  $cust_no=$_SESSION['cid']=trim($pdd->cid);
+  if($pdd->pdd_type==''){$pdd->cid=='C00001';$cust_name=get_cust_name($_SESSION['cid']);$cust_no=$_SESSION['cid'];
+  if(strpos($_GET['lot_no'],"HIC")>0){$pdd->cid='C00000';$cust_name=get_cust_name($pdd->cid);$cust_no=$pdd->cid;}
+  if($_GET['ani_groupname']=='FPMS'){$_SESSION['cid']=$pdd->cid='C00001';$cust_name='TYS Internal';}
+  if ($cust_no==''){
+	  $_SESSION['cid']=$_SESSION['select_cust']='C00001';
+  		$_SESSION['tmp1']=1;
+  }
+  $_SESSION['table']=$table;
+  $_SESSION['select_cust']=$cust_no;
+  }
+  if($_GET['ani_groupname']=='FPMS'){$_SESSION['select_cust']=$pdd->cid='C00001';$cust_name='TYS Internal';}
+  if (trim($pdd->pdd_type)=='LY')
+  {
+	if($pdd->cid=='C00001'){$cust_name=get_cust_name($_SESSION['cid']);$cust_no=$_SESSION['cid'];}
+	if($pdd->cid==''){$pdd->cid='C00001';}
+  	$_SESSION['select_cust']=$cust_no;
+	if($_GET['ani_groupname']=='FPMS'){$_SESSION['select_cust']=$pdd->cid='C00001';$cust_name='TYS Internal';}
+	$dm_no="1~8";
+  } 
+  elseif((trim($pdd->pdd_type)=='BTL') or (trim($pdd->pdd_type)=='DM'))
+  {	
+  	if(substr($_GET['lot_no'],-1)=="_") // 內液處理
+	{
+		if($_SESSION['cid']=='C16043' or $_SESSION['cid']=='C20701' or $_SESSION['cid']=='C20702' or $_SESSION['cid']=='C20703' or $_SESSION['cid']=='C20704' or $_SESSION['cid']=='C20705' or $_SESSION['cid']=='C20707' or $_SESSION['cid']=='C20708' or $_SESSION['cid']=='C20709' or $_SESSION['cid']=='C20801' or $_SESSION['cid']=='C20901' or $_SESSION['cid']=='C20904' or $_SESSION['cid']=='C20942' or $_SESSION['cid']=='C20955' or $_SESSION['cid']=='C20956' or $_SESSION['cid']=='CXF001')
+		{
+			$lotid=substr($_GET['lot_no'],0,-1);
+		//	echo "lot_no=".trim($_GET['lot_no'],-1);
+		//	echo "<BR>";
+			$query="SELECT   distinct     FILLPLAN_DRUM_CUSTOMER.CTD_CUST_NO, 
+								  CUSTOMER_DATA.CTD_CUST_NAME
+					FROM             FILLPLAN_DRUM_CUSTOMER INNER JOIN
+								  CUSTOMER_DATA ON 
+								  FILLPLAN_DRUM_CUSTOMER.CTD_CUST_NO = CUSTOMER_DATA.CTD_CUST_NO
+					WHERE         (FDM_LOT_NO = '".$lotid."')";
+		//	echo $query;
+		//	echo "<BR>";
+			$result=mssql_query($query);  
+			$numRows = mssql_num_rows($result);
+			if($numRows>1)
+			{
+				if($_SESSION['dm_cid']<>''){$_SESSION['select_cust']=$_SESSION['dm_cid'];}
+				echo '選擇客戶:<select name="co0" id="co0">';
+				echo '<option value="C00003">C00003--TYS DRUM 內液</option>';
+				while($row=mssql_fetch_array($result))
+				{
+					echo '<option value="'.$row['CTD_CUST_NO'].'">'.$row['CTD_CUST_NO']."--".$row['CTD_CUST_NAME'].'</option>';
+					$_SESSION['tmp1']=3;
+				}
+				echo '</select>';
+				echo '<input type="submit" name="select_cust" id="select_cust" value="取得客規" /></br>';
+				if($_SESSION['select_cust']=='C00000'){$_SESSION['select_cust']='C00003';}
+				echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+				echo "表單：".$table."</br>";
+				echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+			}
+			elseif($numRows==1)
+			{
+				if($_SESSION['dm_cid']<>''){$_SESSION['select_cust']=$_SESSION['dm_cid'];}
+				while($row=mssql_fetch_array($result))
+				{
+					$_SESSION['select_cust']=$row['CTD_CUST_NO'];
+					$_SESSION['tmp1']=3;
+				}
+				echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+				echo "表單：".$table."</br>";
+				echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+			}
+			elseif($numRows<1)
+			{
+				$_SESSION['select_cust']="C00003";
+				echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+				echo "表單：".$table."</br>";
+				echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+			}
+		}//end if($_SESSION['cid']=='C16043')
+		else
+		{
+			$_SESSION['select_cust']="C00003";
+			echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+			echo "表單：".$table."</br>";
+			echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+		}
+	}
+	else  // 充填口
+	{
+		if($_GET['pdd_prod_no']=='P001-200' or $_GET['pdd_prod_no']=='P002-190' or $_GET['pdd_prod_no']=='P006-330')
+		{
+			
+				$_SESSION['select_cust']="C00001";
+				echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+				echo "表單：".$table."</br>";
+				echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+		}
+		else
+		{
+			$query="SELECT   distinct     FILLPLAN_DRUM_CUSTOMER.CTD_CUST_NO, 
+							  CUSTOMER_DATA.CTD_CUST_NAME
+				FROM             FILLPLAN_DRUM_CUSTOMER INNER JOIN
+							  CUSTOMER_DATA ON 
+							  FILLPLAN_DRUM_CUSTOMER.CTD_CUST_NO = CUSTOMER_DATA.CTD_CUST_NO
+				WHERE         (FDM_LOT_NO = '".$_GET['lot_no']."')";
+	//	echo $query;
+	//	echo "<BR>";
+			$result=mssql_query($query);  
+			$numRows = mssql_num_rows($result);
+				if($_SESSION['dm_cid']<>''){$_SESSION['select_cust']=$_SESSION['dm_cid'];}
+				if($numRows<1)
+				{
+					$_SESSION['select_cust']="C00001";
+					echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+					echo "表單：".$table."</br>";
+					echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+				}
+				if($numRows==1)
+				{
+					while($row=mssql_fetch_array($result))
+					{
+						$_SESSION['select_cust']=$row['CTD_CUST_NO'];
+					}
+					if($_SESSION['select_cust']=='C00000'){$_SESSION['select_cust']='C00001';}
+					echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+					echo "表單：".$table."</br>";
+					echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+				}
+				if($numRows>1)
+				{
+					echo '選擇客戶:<select name="co0" id="co0">';
+					echo '<option value="C00001">C00001--TYS Internal</option>';
+					while($row=mssql_fetch_array($result))
+					{
+						echo '<option value="'.$row['CTD_CUST_NO'].'">'.$row['CTD_CUST_NO']."--".$row['CTD_CUST_NAME'].'</option>';
+						$_SESSION['tmp1']=3;
+					}
+					echo '</select>';
+					echo '<input type="submit" name="select_cust" id="select_cust" value="取得客規" /></br>';
+					if($_SESSION['select_cust']=='C00000'){$_SESSION['select_cust']='C00001';}
+					echo '客戶：<font color="#FF0000"">'.get_cust_name($_SESSION['select_cust'])."&nbsp;&nbsp;&nbsp;&nbsp;".$_SESSION['select_cust']."</font></br>";
+					echo "表單：".$table."</br>";
+					echo "品名： ".get_pdd_name($_GET['pdd_prod_no'])."     項目:".$_GET['ani_groupname'].'</br>';
+				}
+		}
+		
+	}
+  }  
+?>
+  <font color="green" size="+3"> 輸入確認</font>
+   <font color="yellow" size="+0"> (此頁面只可修改樣品瓶號及前處理人員，不可修改檢驗結果)</font>
+  </td></tr></table>
+  <table width="1200" border="1">
+    <tr class="centet">
+      <td width="500" bgcolor="#CCCCCC">日期: <?php echo $datetime;?></td>
+      <td width="300" bgcolor="#CCCCCC">Lot NO：
+      <input name="LotNo" type="text" id="LotNo" value="<?php echo $_GET['lot_no']?>" size="14" readonly /></td>
+      <td width="400" bgcolor="#CCCCCC"> 序號：
+      <input name="SerialNo" type="text" id="SerialNo" value="<?php 
+	  $query="SELECT          ".$table.".*
+FROM              ".$table." 
+WHERE          (LotNo  = '".$_GET['lot_no']."')";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+$field= mssql_num_fields($result);
+$sn=$numRows+1;
+ if(trim($_SESSION['SampleNo'])=='' and $_GET['ani_groupname']<>'A'){
+	 $_SESSION['SampleNo']=chk_smp($_SESSION['select_cust'], $_GET['pdd_prod_no']);
+ }
+ elseif((trim($_SESSION['SampleNoss'])<>'' and trim($_SESSION['SampleNo'])==''))
+ {
+	  $_SESSION['SampleNo']=$_SESSION['SampleNoss'];
+	  
+ }
+	   ?>" size="4" readonly /></td></tr><tr>
+      <td width="200" bgcolor="#CCCCCC">取樣瓶號碼：
+      <input name="SampleNo" type="text" id="SampleNo" value="<?php echo $_SESSION['SampleNo'];?>" size="6" onchange="set_date_session(this.name,this.value)"/>
+      <input type="checkbox" name="keep_sample1" id="keep_sample1" <?php if($_SESSION['keep_sample']=='on'){echo "checked";}else{echo '';}?>>
+(保留樣品)
+<label for="keep_sample"></label>
+選擇桶號：
+<select name="drumno2" id="drumno2" onchange="set_date_session(this.name,this.value)">
+<?php
+$sec=new sample;
+if(substr($_GET['lot_no'],-1,1)=='_'){$o_lot=substr($_GET['lot_no'],0,-1);}else{$o_lot=$_GET['lot_no'];}
+$sec->lot_no=$o_lot;
+$sec->selections();
+?>    
+</select>
+<input type="submit" name="chdrumno" id="chdrumno" value="修改桶號" onClick="return confirm('確定修改?')"/>
+<td width="200" bgcolor="#CCCCCC">測試人員：
+      <input name="Tester" type="text" id="Tester" value="<?php echo $_SESSION['uid']?>" size="10" readonly />      </td>
+      <td width="200" bgcolor="#CCCCCC"> 取樣人員:
+  <?php sampler();?>
+       <BR>
+       前處理人員:
+          <input name="x5" type="submit" value="X" />
+          <input name="Operator" type="hidden" id="Operator" value="<?php echo $_GET['operator'];?>" size="10" readonly />
+          <input name="op" type="text" value="<?php echo $_SESSION['userid'];?>" size="10"  />
+          <input type="submit" name="an_first" id="button" value=" 工號  " onClick="window.open('./index.php?url=select_user6', '_self');" />
+          <input name="opname" type="text" value="<?php echo get_uname($_SESSION['userid'])  ;?>" size="10"  />
+  
+    </td></tr>
+      </table>
+	<table width="1200" border="1">
+    <tr>
+    <td width="60" bgcolor="#CCCCCC">項目</td>
+    <td width="120" bgcolor="#CCCCCC">輸入值<span class="red1">(不可為空白)</span></td>
+    <td width="100" bgcolor="#CCCCCC">客規</td>
+    <td width="50" bgcolor="#CCCCCC">DL</td>
+    <td width="50" bgcolor="#CCCCCC">USL</td>
+	<td width="50" bgcolor="#CCCCCC">LSL</td>
+    <td width="100" bgcolor="#CCCCCC">客戶再分析標準\定量下限</td>
+    </tr> 
+    <tr class="centet">
+<?php
+include("../connections/conn.php");
+list($a,$b,$c,$d)=last_checker($_GET['ani_groupname'],$_GET['lot_no']);
+$query="SELECT COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."')";
+if($_GET['ani_groupname']=='PMS')
+{ $query="SELECT COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS inner join AnalyzeItem on AnalyzeItem.ANI_ID = INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME WHERE (TABLE_NAME ='".$table."') order by AnalyzeItem.ANI_ORDER";}
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+$i=0;
+while($row = mssql_fetch_array($result))
+{
+if (($row['COLUMN_NAME']!='LotNo') && ($row['COLUMN_NAME']!='CHK5') && ($row['COLUMN_NAME']!='CHK6') && 
+($row['COLUMN_NAME']!='CHK7') && ($row['COLUMN_NAME']!='CHK8') && ($row['COLUMN_NAME']!='CHK1') && ($row['COLUMN_NAME']!='CHK9') && ($row['COLUMN_NAME']!='CHK10') && ($row['COLUMN_NAME']!='CHK11') && ($row['COLUMN_NAME']!='CHK12') && ($row['COLUMN_NAME']!='CHK2') && ($row['COLUMN_NAME']!=
+'CHK3') && ($row['COLUMN_NAME']!='CHK4') && ($row['COLUMN_NAME']!='Ok') && ($row['COLUMN_NAME']!='AnalyzeTime') && ($row['COLUMN_NAME']!='AnalyzeTime') && 
+($row['COLUMN_NAME']!='AnaManager') && ($row['COLUMN_NAME']!='Tester') && ($row['COLUMN_NAME']!='Operator') && ($row['COLUMN_NAME']!='SampleNo') && 
+($row['COLUMN_NAME']!='SerialNo') && ($row['COLUMN_NAME']!='TestDate'))
+	{
+		$clo=new ani_excel;
+		$clo->table=$table;
+		$clo->pid=$_GET['pdd_prod_no'];
+		$clo->item=$row['COLUMN_NAME'];
+		$clo->get();
+		$disc=$_SESSION['disc'.$clo->item]=$clo->disc;
+		if($clo->disc=='x'){$disc='X';}
+	if($disc<>'X')
+	{echo '<tr class="centet">';
+		$i=$i+1;
+		if($_SESSION['select_cust']==''){$_SESSION['select_cust']='C00001';}
+		if($disc==''){$showitem=$row['COLUMN_NAME'];}
+		elseif($disc=='NULL'){$showitem=$row['COLUMN_NAME'];}
+		else {$showitem=$disc;}
+		if($_GET['ani_groupname']=='FPMS'){$_SESSION['select_cust']=$pdd->cid='C00001';$cust_name='TYS Internal';}
+		list ($spec,$dl,$usl,$stdu,$ps,$stdl,$lsl)=get_test_spec($row['COLUMN_NAME'],$_GET['pdd_prod_no'],$_SESSION['select_cust'],$_GET['ani_groupname']);
+		if($ps=='ppm'){$value=$row['COLUMN_NAME']/1000;}
+		if($ps<>''){$_SESSION['ps']=$ps;}
+		echo '<td><font color="#0000FF">'.$showitem.'</font>：</td><td>';
+      	echo '<input name="'.$row['COLUMN_NAME'].'" id="'.$row['COLUMN_NAME'].'" type="text" readonly="readonly"';	  
+	  	if($_SESSION[$row['COLUMN_NAME']]<>''){$value=$_SESSION[$row['COLUMN_NAME']];}
+		if($_SESSION[$row['COLUMN_NAME']]==''){echo ' style="background-color:white;"';}
+		elseif(($_SESSION[$row['COLUMN_NAME']]==2 or $_SESSION[$row['COLUMN_NAME']]==3) and $_GET['ani_groupname']=='INHP'){  ;}
+		elseif($usl<>'' and $lsl<>'' and ($_SESSION[$row['COLUMN_NAME']]>$usl or $_SESSION[$row['COLUMN_NAME']]<$lsl)){echo ' style="background-color:red;"';$xx=0;;}
+		elseif($stdu=='' and $usl<>'' and $_SESSION[$row['COLUMN_NAME']]<=$usl){echo ' style="background-color:white;"';}
+	  	elseif(($_SESSION[$row['COLUMN_NAME']]<=$usl and $_SESSION[$row['COLUMN_NAME']]>$stdu) or ($_SESSION[$row['COLUMN_NAME']]>=$lsl and $_SESSION[$row['COLUMN_NAME']]<$stdl)) {echo ' style="background-color:yellow;"';$xx=0;$_SESSION['status']=1;}
+	  	elseif((($_SESSION[$row['COLUMN_NAME']]>$usl) and ($_SESSION[$row['COLUMN_NAME']]<>'NULL') and ($spec<>NULL)) or (($_SESSION[$row['COLUMN_NAME']]<$lsl) and ($_SESSION[$row['COLUMN_NAME']]<>'NULL') and ($spec<>NULL))){echo ' style="background-color:red;"';$xx=0;}
+	  	elseif($spec==NULL){echo ' style="background-color:white;"';}
+	 	else{echo ' style="background-color:white;"';}
+	 
+	  if((($spec=='') or ($spec=='<')) and ($_SESSION[$row['COLUMN_NAME']]=='')){echo ' value="NULL" style="background-color:white;"';}
+	  elseif((($_GET['ani_groupname']=='M13') or ($_GET['ani_groupname']=='M21')) and ($_SESSION[$row['COLUMN_NAME']]=='')){$value="0.000001";}
+	  else{$value=$_SESSION[$row['COLUMN_NAME']];}
+//	  echo ' value="'.$value.'"  onblur="'.'ShowName('."'".$row['COLUMN_NAME']."'".')"';
+ 	echo ' value="'.$value.'" readonly ';
+	echo ' size="6"/>';
+	echo "(".$ps.")";
+    echo '  </td>';
+	   		$lsl=trim($lsl);
+	   		if(($lsl==NULL) || ($lsl=='')){
+				$spec=$spec.">";
+				$showagain=$stdu.">\\".$dl;
+			}
+			else{
+			$spec=$lsl."<".$usl;
+			$showagain=$stdl."<".$stdu."\\".$dl;
+			}
+	 ?>
+       <td><?php echo $spec ;?></td><td><?php echo $dl;?></td><td><?php echo $usl;?></td><td><?php echo $lsl;?></td><td><?php echo $showagain;?></td></tr>
+       
+<?php 
+	}}
+} ?>
+
+</table>
+<form name="form1" method="post" action="">
+<table width="1200" border="1">
+    <tr class="centet" >
+      <td width="744" align="center">
+      <input type="radio" name="RadioGroup1" value="1" />
+      再確認&nbsp;&nbsp;&nbsp;&nbsp;
+      <input type="radio" name="RadioGroup1" value="2" />
+      再取樣&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      最後一次的前處理人員&nbsp;<input type="text" name="last_op" value="<?php echo trim($b);?>" size="5"><?php echo "(".get_uname($b).")";?>
+      <input type="hidden" name="last_tester" value="<?php echo trim($a); ?>" >
+      </td>
+	  <td width="440" align="center">
+      <input type="hidden" name="CHK1" id="CHK1" value="1" />
+      <input type="hidden" name="CHK2" id="CHK2" value="1" />
+      <input type="hidden" name="CHK3" id="CHK3" value="1" />
+      <input type="hidden" name="CHK4" id="CHK4" value="1" />
+      <input type="hidden" name="CHK5" id="CHK5" value="1" />
+      <input type="hidden" name="CHK6" id="CHK6" value="1" />
+      <input type="hidden" name="CHK7" id="CHK7" value="1" />
+      <input type="hidden" name="CHK8" id="CHK8" value="1" />
+      <input type="hidden" name="AnaManager" id="AnaManager" value="NULL" />
+      <input type="hidden" name="TestDate" id="TestDate" value="<?php echo $dt." 00:00:00";?>" />
+      <input type="hidden" name="AnalyzeTime" id="AnalyzeTime" value="<?php echo $_SESSION['createtime']; ?>" />
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <font color="#FF0000">合否判定</font>
+      <?php if($xx==1){$x1="checked";echo '<font color="blue" size="+2">合</font>';}else{$x1='unchecked';echo '<font color="red" size="+2">否</font>';} ?>
+      <input type="checkbox" name="Ok" id="Ok" <?php echo $x1;?> hidden >
+      <input type="submit" name="submit" id="submit" value=" 確定 / 儲存"/>
+      <input type="hidden" name="MM_insert" value="form1">
+      <input type="submit" name="leave" id="button" value=" 放棄 / 離開  " onClick="window.open('<?php echo $_SESSION['lasturl1'];?>', '_self');" />      <?php if ($_GET['ani_groupname']=="TM") {
+		  echo '<input type="button" name="TM" id="TM" value="取得TM分析資料" onClick="window.open('."'/cal/index.php?url=ctm&pdd_chemical=".$_GET['pdd_chemical']."&operator=".$_GET['operator']."&ani_groupname=".$_GET['ani_groupname']."&lot_no=".$_GET['lot_no']."&cust_no=".$cust_no."&pid=".$_GET['pdd_prod_no']."', '_self');".'"'.' />';
+	  }?></td>
+    </tr>
+    </table>
+     </form>
+</body>
+</html>
+<?php
+$loginFormAction = $_SERVER['PHP_SELF'];
+
+if (isset($_POST["submit"])) 
+{
+	if($_POST['RadioGroup1']==''){$_POST['RadioGroup1']=0;}
+	$last_checker=get_userid(trim($_POST['last_checker']));
+	if($_SESSION['uptime']<>''){$datetime=$_SESSION['uptime'];}
+	else{$datetime=date("YmdHis");}
+	$query="INSERT INTO sampler (lotno, sampler, createtime, creator, ani_group, sample_id) VALUES (N'".trim($_GET['lot_no'])."', N'".$_POST['sampler']."', N'".$datetime."', N'".$_SESSION['uid']."','".$_GET['ani_groupname']."','".$_SESSION['SampleNo']."')";
+//	echo "<BR>".$query."<BR>";
+//	break;
+	$result=mssql_query($query);
+
+	$query="INSERT INTO RE_TEST (LotNo, Type, Pre_Tester, Tester, AnalyzeTime, PDD_NO, ani_group, op, Pre_op) VALUES (N'".trim($_GET['lot_no'])."', ".$_POST['RadioGroup1'].", N'".trim($_POST['last_tester'])."', N'".trim($_SESSION['uid'])."', N'".$datetime."', N'".trim($_GET['pdd_prod_no'])."','".$_GET['ani_groupname']."', '".$_POST['op']."', '".$_POST['last_op']."')";   
+		$result=mssql_query($query);
+	if(trim($_GET['efm'])=='TLAQA9110900' and trim($_GET['pdd_prod_no'])=='P050-000' and (trim($_SESSION['cid'])=='C23003' or trim($_SESSION['cid'])=='C14061'))
+	{
+		if($_POST['Ok']=='on'){$ok=1;}
+		$query="select count(LotNo) as sn from TLRIO9110900 where LotNo='".$_GET['LotNo']."'";
+		$result=mssql_query($query);
+		$row=mssql_fetch_row($result);
+		$a=$row[0];
+		$query="INSERT INTO TLRIO9110900 (TestDate, CHK1, CHK2, LotNo, SerialNo, SampleNo, RION01, RION02, RION03, RION05, CHK3, CHK4, Ok, Tester, Operator, AnalyzeTime) VALUES ('".$_POST['TestDate']."', '1', '1','".trim($_GET['lot_no'])."',".$a.",'".$_POST['SampleNo']."',".$_POST['PP01'].",".$_POST['PP02'].",".$_POST['PP03'].",".$_POST['PP05'].", '1', '1',".$ok.",'".$_POST['Tester']."','".$_POST['Operator']."','".$datetime."')";
+		$result=mssql_query($query);
+		
+	}
+	
+	
+	$smpid=trim($_SESSION['SampleNo']);
+	
+	if($_POST['keep_sample1']=='on')
+	{
+		$query="INSERT INTO Sample_Keeping (Lot_No, sample_no, keep_datetime, creator) VALUES  
+		('".$_GET['lot_no']."','".$_SESSION['SampleNo']."','".$datetime."','".$_SESSION['uid']."')";
+		$result=mssql_query($query);
+	}
+	
+			//////////檢查樣品瓶號///////////
+	if ($_POST['Ok']=="on"){$_POST['Ok']=1;}
+	else {$_POST['Ok']=0;}
+	//////////取得欄位名///////////
+	
+	include ("../connections/conn.php");
+
+	$_SESSION['createtime']=$datetime;
+	//Sample是否建立過此LOT的此瓶號	
+	$query_smp="select * from sample where SMP_ID='".$smpid."' and SMP_LOT='".$_GET['lot_no']."'";
+	$result_smp=mssql_query($query_smp);
+	$numrows_smp=mssql_num_rows($result_smp);
+//	break;
+	if($numrows_smp==0){ //Sample沒有建立過
+		// Sample有沒有此瓶號
+		$query_smp1="select * from sample where SMP_ID='".$smpid."'";
+		$result_smp1=mssql_query($query_smp1);
+		$numrows_smp1=mssql_num_rows($result_smp1);
+		if($numrows_smp1==0){ //Sample沒有此瓶號
+			if(substr($smpid,0,1)=='T'){$met="PFA";}
+			else{$met="PE";}
+			$query_creat_smp="INSERT INTO [dbo].[Sample] ([SMP_ID], [SMP_MAT], [SMP_MID_ID], [SMP_START], [SMP_TIMES], [SMP_SERVICE], [SMP_LOT], [SMP_DRUMNO],
+			[SMP_USER], [SMP_OUT], [SMP_SMP], [SMP_ANA], [SMP_BACK], [SMP_SAVE], [SMP_SAVE_TIME], [SMP_FINISH], [SMP_JUNK], [SMP_JUNK_D]) VALUES 
+			(N'".$smpid."', N'".$met."', N'".$_GET['pdd_prod_no']."', N'".date("Ymd")."', 1,1, '".$_GET['lot_no']."','".$_POST['drumno2']."', 
+			NULL, NULL, '".$_SESSION['uid']."', NULL, NULL, NULL, NULL, NULL, NULL, NULL)"; 
+	//		$_SESSION['QQ1']=$query_creat_smp;
+			$result_smp_creat=mssql_query($query_creat_smp);							
+		}
+		else{//Sample已經有此瓶號
+			$query_update_smp="UPDATE          dbo.Sample
+SET                   SMP_LOT = '".$_GET['lot_no']."', SMP_MID_ID =  N'".$_GET['pdd_prod_no']."', SMP_TIMES = SMP_TIMES + 1, SMP_SERVICE = 1, 
+                            SMP_DRUMNO = '".$_POST['drumno2']."', SMP_SAVE = '".date("Ymd")."', SMP_SMP = '".$_SESSION['uid']."'
+WHERE          (SMP_ID = '".$smpid."')";
+		$result_update_smp=mssql_query($query_update_smp);
+		}
+	}
+	
+	
+	//Sample All是否已有此LOT的此瓶號	
+	$query_sma="select * from sample_all where SMA_ID='".$smpid."' and SMA_LOT='".$_GET['lot_no']."'";
+	$result_sma=mssql_query($query_sma);
+	$numrows_sma=mssql_num_rows($result_sma);
+	if($numrows_sma==0){//沒有的狀況下
+	// Sample_All有沒有此瓶號
+		$query_sma="select * from sample_all where SMA_ID='".$smpid."'";
+		$result_sma=mssql_query($query_sma);
+		$numrows_sma=mssql_num_rows($result_sma);
+		if($numrows_sma==0){
+			$query_creat_sma="INSERT INTO dbo.Sample_All
+								(SMA_ID, SMA_TIMES, SMA_SERVICE, SMA_LOT, SMA_USER, SMA_OUT, SMA_SMP, SMA_ANA, SMA_BACK, 
+								SMA_SAVE, SMA_SAVE_TIME, ISREWORK, SMA_FINISH, SMA_JUNK, SMA_JUNK_D, SMA_DRUMNO, 
+								SMA_SERIAL_NO, DHN_DRUM_NO, SMA_PREPSAMPLE_MAN, SMA_PREPSAMPLE_DATE, 
+								SMA_PREPSAMPLE_BACK_DATE, SMA_PREPSAMPLE_BACK_MAN, SMA_RETURN, SMA_RETURN_MAN)
+								VALUES          ('".$smpid."',1,1,'".$_GET['lot_no']."',
+								NULL,NULL,'".$_SESSION['uid']."',NULL,NULL,'".date("Ymd")."','".date("His")."',0,
+								NULL,NULL,NULL,'".$_POST['drumno2']."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)";
+			$result_sma_creat=mssql_query($query_creat_sma);	
+		}
+		else{
+			$query="select top(1) SMA_TIMES+1 from Sample_All where SMA_ID='".$smpid."' ORDER BY   SMA_TIMES DESC";
+			$result=mssql_query($query);
+			$row=mssql_fetch_row($result);
+			$times=$row[0];
+			$query_creat_sma="INSERT INTO dbo.Sample_All
+								(SMA_ID, SMA_TIMES, SMA_SERVICE, SMA_LOT, SMA_USER, SMA_OUT, SMA_SMP, SMA_ANA, SMA_BACK, 
+								SMA_SAVE, SMA_SAVE_TIME, ISREWORK, SMA_FINISH, SMA_JUNK, SMA_JUNK_D, SMA_DRUMNO, 
+								SMA_SERIAL_NO, DHN_DRUM_NO, SMA_PREPSAMPLE_MAN, SMA_PREPSAMPLE_DATE, 
+								SMA_PREPSAMPLE_BACK_DATE, SMA_PREPSAMPLE_BACK_MAN, SMA_RETURN, SMA_RETURN_MAN)
+								VALUES          ('".$smpid."',".$times.",1,'".$_GET['lot_no']."',
+								NULL,NULL,'".$_SESSION['uid']."',NULL,NULL,'".date("Ymd")."','".date("His")."',0,
+								NULL,NULL,NULL,'".$_POST['drumno2']."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)";
+			$result_sma_creat=mssql_query($query_creat_sma);
+		}
+	}
+
+$query="INSERT INTO dbo.analyze_first1
+                          (lot_no, sample_no, create_time, ps, create_user,first,ani_group,chemical,need_no)
+VALUES         ('".$_GET['lot_no']."', '".$_POST['SampleNo']."', '".$_SESSION['createtime']."', '".$_POST['ani_groupname']."', '".$_SESSION['uid']."','".$_POST['op']."','".$_GET['ani_groupname']."','".$_GET['pdd_chemical']."',".$_SESSION['needno'].")";
+
+$result=mssql_query($query);
+$query="INSERT INTO dbo.analyze_first
+                          (lot_no, sample_no, create_time, ps, create_user,first,ani_group,chemical,need_no)
+VALUES         ('".$_GET['lot_no']."', '".$_POST['SampleNo']."', '".$_SESSION['createtime']."', '".$_POST['ani_groupname']."', '".$_SESSION['uid']."','".$_POST['op']."','".$_GET['ani_groupname']."','".$_GET['pdd_chemical']."',".$_SESSION['needno'].")";
+
+$result=mssql_query($query);
+
+if($_POST['Ok']==0)
+{
+	$query="INSERT INTO dbo.analyze_fail
+                          (lot_no, sample_no,PDD_PROD_NO,ani_group,ani_chemical,Tester,Analyzetime)
+VALUES         ('".$_GET['lot_no']."', '".$_POST['SampleNo']."', '".$_GET['pdd_prod_no']."', '".$_GET['ani_groupname']."', '".$_GET['pdd_chemical']."','".$_SESSION['uid']."','".$_SESSION['createtime']."') ";
+
+$result=mssql_query($query);
+}
+
+/*
+$query="UPDATE          QC_LotData
+SET                   state = 'n'
+WHERE          (Chemical = '".$_GET['pdd_chemical']."') AND (LotNo = '".$_GET['lot_no']."')";
+$result=mssql_query($query);
+*/
+
+$query="SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."') order by DATA_TYPE";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+$q1="INSERT INTO ".$table." (";
+$q2=" VALUES     (";
+while($row = mssql_fetch_array($result)){
+	if(($row['COLUMN_NAME']=='B') and $_GET['pdd_chemical']=='H2O' and $_GET['ani_groupname']<>'TT_B'){write_ttb(1,$_POST['SampleNo'],$_POST['Ok'],$_POST['Tester'],$_GET['lot_no'],"TLEQA9110101",$_POST['B'],$_POST['Operator'],$_SESSION['createtime']);}
+	if($row['COLUMN_NAME']=='TestDate'){
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.="'".date("Y-m-d")."',";
+			}
+	elseif(substr($prodname,0,3)=='CAL' and $row['COLUMN_NAME']==$prodname){
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.="'Y',";
+	}
+	elseif($row['DATA_TYPE']<>'float' and ($row['COLUMN_NAME']=='F' or $row['COLUMN_NAME']=='B' or $row['COLUMN_NAME']=='Water')){
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.='NULL'.",";
+			}
+	elseif($row['COLUMN_NAME']=='AnaManager'){
+			;}
+	elseif($row['DATA_TYPE']=='int') {
+		if(trim($row['COLUMN_NAME'])=='SerialNo'){
+			$q1.="[".$row['COLUMN_NAME']."],";
+			$_SESSION['tble']=$table;
+			$_SESSION['lot_no']=$_GET['lot_no'];
+			$q2.=new_analyze_sn($table,$_GET['lot_no']).",";
+		}else{
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.=$_POST[$row['COLUMN_NAME']].",";}
+			}
+	elseif($row['DATA_TYPE']=='float') {		
+	$dift=new read_table;
+	$dift->table=$table;
+	$dift->LotNo=$_GET['lot_no'];
+	$dift->row_name=$row['COLUMN_NAME'];
+	$dift->read();
+	$from_lot=new get_from_lot_no;
+	$from_lot->lid=$_GET['lot_no'];
+	$from_lot->ani();
+	$from_lot->pdd_type;
+	if(($_POST[$row['COLUMN_NAME']]>0.001) and ($_POST[$row['COLUMN_NAME']]<>'') and ($dift->value>0.001) and ($dift->value<>''))
+	{
+	if((($_POST[$row['COLUMN_NAME']]/($dift->value)>=10 or ($_POST[$row['COLUMN_NAME']]/($dift->value))<=0.1)) and ($from_lot->pdd_type=='LY'))
+	{
+		$diff=new difference_too_large;
+		$diff->LotNo=$_GET['lot_no'];
+		$diff->table=$table;
+		$diff->uid=$_SESSION['uid'];
+		$diff->create_time=date("YmdHi");
+		$diff->item=$row['COLUMN_NAME'];
+		$diff->ani_group=$_GET['ani_groupname'];
+		$diff->write();		
+	}}
+			$q1.="[".$row['COLUMN_NAME']."],";
+			if(($_POST[$row['COLUMN_NAME']]=='') or ($_POST[$row['COLUMN_NAME']]=='NULL'))
+				{
+					$q2.="NULL,";
+				}
+			else{
+					$q2.=$_POST[$row['COLUMN_NAME']].",";
+				}
+			}
+	elseif($row['DATA_TYPE']=='smalldatetime') {
+			if ($_POST[$row['COLUMN_NAME']]==''){$_POST[$row['COLUMN_NAME']] = '';}
+			if ($_POST[$row['COLUMN_NAME']]=='NULL'){$_POST[$row['COLUMN_NAME']] = '';}
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.="'".short_date($_POST[$row['COLUMN_NAME']])."',";
+			}
+	elseif($row['COLUMN_NAME']=='AnalyzeTime'){
+			$q1.="[".$row['COLUMN_NAME']."],";
+        	$q2.="'".$_SESSION['createtime']."',";
+			}
+	elseif(($row['COLUMN_NAME']=='B') or ($row['COLUMN_NAME']=='F') or ($row['COLUMN_NAME']=='Water')){
+			if ($_POST[$row['COLUMN_NAME']]==''){$_POST[$row['COLUMN_NAME']] = NULL;}
+			$q1.="[".$row['COLUMN_NAME']."],";
+        	$q2.=$_POST[$row['COLUMN_NAME']].",";
+			}
+	else{
+			$q1.="[".$row['COLUMN_NAME']."],";
+			if(trim($row['COLUMN_NAME'])=='Tester')
+			{
+				$name=getusername(trim($_SESSION['uid']));
+				$q2.="'".$name."',";
+			}
+			else{
+    		$q2.="'".$_POST[$row['COLUMN_NAME']]."',";}
+	}
+}
+$q1=substr($q1,0,-1);
+$q2=substr($q2,0,-1);
+$qx=$q1.") 
+".$q2.")";
+$_SESSION['testquery']=$query=$qx;
+//echo $query.'<br><br>';
+$result = mssql_query($query);
+//////傳尾碼LOT是BK的也將SLOP與RSQ的資料一起匯入//////
+if($_SESSION['pass']==1 and $_SESSION['SLOP']!='' and $_SESSION['RSQ']!='')
+{
+	for($I=0;$I<2;$I++)
+	{
+		$yy=0;
+		if($I==0){$btl='SLOP';}else{$btl='RSQ';}
+		$lotnum1=substr($_GET['lot_no'],-2,2);
+		$pdd_prod_no1=substr($_GET['pdd_prod_no'],-3,3);
+		if($lotnum1=='BK' and $pdd_prod_no1=='BLK'){$lotnum=substr($_GET['lot_no'],0,-2);}
+		$pdd_prod_no=substr($_GET['pdd_prod_no'],0,-3).$btl;
+		$lot=$lotnum.$btl;
+		$query="SELECT COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."')";
+		if($_GET['ani_groupname']=='PMS')
+		{ $query="SELECT COLUMN_NAME,DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS inner join AnalyzeItem on AnalyzeItem.ANI_ID = INFORMATION_SCHEMA.COLUMNS.COLUMN_NAME WHERE (TABLE_NAME ='".$table."') order by AnalyzeItem.ANI_ORDER";}
+		$result = mssql_query($query);
+		$numRows = mssql_num_rows($result);
+		while($row = mssql_fetch_array($result))
+		{
+			list ($spec,$dl,$usl,$stdu,$ps,$stdl,$lsl)=get_test_spec($row['COLUMN_NAME'],$pdd_prod_no,$_SESSION['select_cust'],$_GET['ani_groupname']);
+			if(trim($_SESSION[$btl][$row['COLUMN_NAME']])==''){continue;}
+			elseif((trim($_SESSION[$btl][$row['COLUMN_NAME']])==2 or trim($_SESSION[$btl][$row['COLUMN_NAME']])==3) and $_GET['ani_groupname']=='INHP'){  ;}
+			elseif($usl<>'' and $lsl<>'' and (trim($_SESSION[$btl][$row['COLUMN_NAME']])>$usl or trim($_SESSION[$btl][$row['COLUMN_NAME']])<$lsl)){$yy=1;}
+			elseif($stdu=='' and $usl<>'' and trim($_SESSION[$btl][$row['COLUMN_NAME']])<=$usl){}
+			elseif((trim($_SESSION[$btl][$row['COLUMN_NAME']])<=$usl and trim($_SESSION[$btl][$row['COLUMN_NAME']])>$stdu) or (trim($_SESSION[$btl][$row['COLUMN_NAME']])>=$lsl and trim($_SESSION[$btl][$row['COLUMN_NAME']])<$stdl)) {$yy=1;}
+			elseif(((trim($_SESSION[$btl][$row['COLUMN_NAME']])>$usl) and (trim($_SESSION[$btl][$row['COLUMN_NAME']])<>'NULL') and ($spec<>NULL)) or ((trim($_SESSION[$btl][$row['COLUMN_NAME']])<$lsl) and (trim($_SESSION[$btl][$row['COLUMN_NAME']])<>'NULL') and ($spec<>NULL))){$yy=1;}
+		}
+		$query="SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."') order by DATA_TYPE";
+$result = mssql_query($query);
+$numRows = mssql_num_rows($result);
+$q1="INSERT INTO ".$table." (";
+$q2=" VALUES     (";
+while($row = mssql_fetch_array($result)){
+	if(($row['COLUMN_NAME']=='B') and $_GET['pdd_chemical']=='H2O' and $_GET['ani_groupname']<>'TT_B'){write_ttb(1,$_POST['SampleNo'],$_POST['Ok'],$_POST['Tester'],$lot,"TLEQA9110101",$_POST['B'],$_POST['Operator'],$_SESSION['createtime']);}
+	if($row['COLUMN_NAME']=='TestDate'){
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.="'".date("Y-m-d")."',";
+			}
+	elseif(substr($prodname,0,3)=='CAL' and $row['COLUMN_NAME']==$prodname){
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.="'Y',";
+	}
+	elseif($row['DATA_TYPE']<>'float' and ($row['COLUMN_NAME']=='F' or $row['COLUMN_NAME']=='B' or $row['COLUMN_NAME']=='Water')){
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.='NULL'.",";
+			}
+	elseif($row['COLUMN_NAME']=='AnaManager'){
+			;}
+	elseif($row['DATA_TYPE']=='int') {
+		if(trim($row['COLUMN_NAME'])=='SerialNo'){
+			$q1.="[".$row['COLUMN_NAME']."],";
+			$q2.=new_analyze_sn($_SESSION['tble'],$lot).",";
+		}else{
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.=$_SESSION[$btl][$row['COLUMN_NAME']].",";}
+			}
+	elseif($row['DATA_TYPE']=='float') {
+	$dift=new read_table;
+	$dift->table=$table;
+	$dift->LotNo=$lot;
+	$dift->row_name=$row['COLUMN_NAME'];
+	$dift->read();
+	$from_lot=new get_from_lot_no;
+	$from_lot->lid=$lot;
+	$from_lot->ani();
+	$from_lot->pdd_type;
+	if(($_SESSION[$btl][$row['COLUMN_NAME']]>0.001) and ($_SESSION[$btl][$row['COLUMN_NAME']]<>'') and ($dift->value>0.001) and ($dift->value<>''))
+	{
+	if((($_SESSION[$btl][$row['COLUMN_NAME']]/($dift->value)>=10 or ($_SESSION[$btl][$row['COLUMN_NAME']]/($dift->value))<=0.1)) and ($from_lot->pdd_type=='LY'))
+	{
+		$diff=new difference_too_large;
+		$diff->LotNo=$lot;
+		$diff->table=$table;
+		$diff->uid=$_SESSION['uid'];
+		$diff->create_time=date("YmdHi");
+		$diff->item=$row['COLUMN_NAME'];
+		$diff->ani_group=$_GET['ani_groupname'];
+		$diff->write();		
+	}}
+			$q1.="[".$row['COLUMN_NAME']."],";
+			if(($_SESSION[$btl][$row['COLUMN_NAME']]=='') or ($_SESSION[$btl][$row['COLUMN_NAME']]=='NULL'))
+				{
+					$q2.="NULL,";
+				}
+			else{
+					$q2.=$_SESSION[$btl][$row['COLUMN_NAME']].",";
+				}
+			}
+	elseif($row['DATA_TYPE']=='smalldatetime') {
+			if ($_SESSION[$btl][$row['COLUMN_NAME']]==''){$_SESSION[$btl][$row['COLUMN_NAME']] = '';}
+			if ($_SESSION[$btl][$row['COLUMN_NAME']]=='NULL'){$_SESSION[$btl][$row['COLUMN_NAME']] = '';}
+			$q1.="[".$row['COLUMN_NAME']."],";
+            $q2.="'".short_date($_SESSION[$btl][$row['COLUMN_NAME']])."',";
+			}
+	elseif($row['COLUMN_NAME']=='AnalyzeTime'){
+			$q1.="[".$row['COLUMN_NAME']."],";
+        	$q2.="'".$_SESSION['createtime']."',";
+			}
+	elseif(($row['COLUMN_NAME']=='B') or ($row['COLUMN_NAME']=='F') or ($row['COLUMN_NAME']=='Water')){
+			if ($_SESSION[$btl][$row['COLUMN_NAME']]==''){$_SESSION[$btl][$row['COLUMN_NAME']] = NULL;}
+			$q1.="[".$row['COLUMN_NAME']."],";
+        	$q2.=$_SESSION[$btl][$row['COLUMN_NAME']].",";
+			}
+	else{
+			$q1.="[".$row['COLUMN_NAME']."],";
+			if(trim($row['COLUMN_NAME'])=='Tester')
+			{
+				$name=getusername(trim($_SESSION['uid']));
+				$q2.="'".$name."',";
+			}
+			else{
+				if($row['COLUMN_NAME']!='Ok')
+				{
+					if($_SESSION[$btl][$row['COLUMN_NAME']]!=''){
+					$q2.="'".$_SESSION[$btl][$row['COLUMN_NAME']]."',";}
+					else{
+							if($_POST[$row['COLUMN_NAME']]==$_GET['lot_no'])
+							{
+								$q2.="'".$lot."',";
+							}
+							else{$q2.="'".$_POST[$row['COLUMN_NAME']]."',";}
+						}
+				}
+				else
+				{
+					
+					if($yy==0){$q2.="'".'1'."',";}else{$q2.="'".'0'."',";}
+				}
+			}
+	}
+}
+$q1=substr($q1,0,-1);
+$q2=substr($q2,0,-1);
+$qy=$q1.") 
+".$q2.")";
+//echo $qy.'<br>';
+$result = mssql_query($qy);
+
+	}	
+	unset($_SESSION['pass'],$_SESSION['SLOP'],$_SESSION['RSQ']);
+}
+
+if($_GET['pdd_prod_no']=='GM-ICP75' or $_GET['pdd_prod_no']=='GM-ICP77' or $_GET['pdd_prod_no']=='GM-ICP79' or $_GET['pdd_prod_no']=='GM-ICP88')
+	{
+		$cps_url="index.php?url=input_report_sec1&pdd_prod_no=".$_GET['pdd_prod_no']."CPS&pdd_chemical=".$_GET['pdd_chemical']."&operator=".$_GET['operator']."&efm=".$_GET['efm']."&lot_no=".$_GET['lot_no']."CPS&ani_groupname=".$_GET['ani_groupname'];
+		_confirm("新增CPS報告?",$_SESSION['lasturl1'],$cps_url);
+	}
+	else{
+		jumpto($_SESSION['lasturl1']);
+	}
+}	
+
+
+function getdrumno($smpno,$lotno)
+{
+	$query="SELECT DISTINCT SMA_DRUMNO
+FROM             dbo.Sample_All
+WHERE         (SMA_ID = '".$smpno."') AND (SMA_LOT = '".$lotno."') AND (ISREWORK = 0)";
+$result=mssql_query($query);
+$numRows = mssql_num_rows($result);
+if($numRows>0){
+while($row=mssql_fetch_array($result)){
+		return $row['SMA_DRUMNO'];
+	}}
+	else{ return getdrumst($smpno,$lotno);}
+}
+
+function getdrumst($smpno,$lotno){
+	$query="SELECT DISTINCT SMA_DRUMNO
+FROM             dbo.Sample_All
+WHERE         (SMA_ID = '".$smpno."') AND (SMA_LOT = '".$lotno."') AND (ISREWORK IS NULL)";
+$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		return "再分析：".$row['SMA_DRUMNO'];
+	}
+}
+
+if(isset($_POST['chdrumno']))
+{
+	$_SESSION['SampleNo']=$_POST['SampleNo'];
+	$_SESSION['createtime']=$datetime;
+$query_smp="select * from sample where SMP_ID='".$_SESSION['SampleNo']."'";
+// echo $query_smp."<Br>";
+$result_smp=mssql_query($query_smp);
+// echo $numrows_smp=mssql_num_rows($result_smp)."<BR>";
+if($numrows_smp==0){
+	if(substr($_SESSION['SampleNo'],0,1)=='T'){$met="PFA";}
+	else{$met="PE";}
+	$query_creat_smp="INSERT INTO [dbo].[Sample] ([SMP_ID], [SMP_MAT], [SMP_MID_ID], [SMP_START], [SMP_TIMES], [SMP_SERVICE], [SMP_LOT], [SMP_DRUMNO], [SMP_USER], [SMP_OUT], [SMP_SMP], [SMP_ANA], [SMP_BACK], [SMP_SAVE], [SMP_SAVE_TIME], [SMP_FINISH], [SMP_JUNK], [SMP_JUNK_D]) VALUES (N'".$_SESSION['SampleNo']."', N'".$met."', N'".$_SESSION['pid']."', N'".date("Ymd")."', 1,1, '".$_GET['lot_no']."','".$_POST['drumno2']."', NULL, NULL, '".$_SESSION['uid']."', NULL, NULL, NULL, NULL, NULL, NULL, NULL)"; 
+//	echo "Q1:".$query_creat_smp."<BR>";
+	$result_smp_creat=mssql_query($query_creat_smp);							
+}
+$query_sma="select * from sample_all where SMA_ID='".$_SESSION['SampleNo']."'";
+$result_sma=mssql_query($query_sma);
+$numrows_sma=mssql_num_rows($result_sma);
+if($numrows_sma==0){
+	$query_creat_sma="INSERT INTO dbo.Sample_All
+                            (SMA_ID, SMA_TIMES, SMA_SERVICE, SMA_LOT, SMA_USER, SMA_OUT, SMA_SMP, SMA_ANA, SMA_BACK, 
+                            SMA_SAVE, SMA_SAVE_TIME, ISREWORK, SMA_FINISH, SMA_JUNK, SMA_JUNK_D, SMA_DRUMNO, 
+                            SMA_SERIAL_NO, DHN_DRUM_NO, SMA_PREPSAMPLE_MAN, SMA_PREPSAMPLE_DATE, 
+                            SMA_PREPSAMPLE_BACK_DATE, SMA_PREPSAMPLE_BACK_MAN, SMA_RETURN, SMA_RETURN_MAN)
+							VALUES          ('".$_SESSION['SampleNo']."',1,1,'".$_GET['lot_no']."',
+							NULL,NULL,'".$_SESSION['uid']."',NULL,NULL,'".date("Ymd")."','".date("His")."',NULL,
+							NULL,NULL,NULL,'".$_POST['drumno2']."',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL)";
+//	echo "Q2:".$query_creat_sma."<BR>";
+	$result_sma_creat=mssql_query($query_creat_sma);							
+}
+
+
+	$query="UPDATE        dbo.Sample_All
+SET                  SMA_DRUMNO = '".$_POST['drumno2']."'
+WHERE         (SMA_ID = '".$_POST['SampleNo']."') AND (SMA_LOT = '".$_GET['lot_no']."')";
+//	echo $query."<Br>";
+$result=mssql_query($query);
+	$query="UPDATE        dbo.Sample
+SET                  SMP_DRUMNO = '".$_POST['drumno2']."'
+WHERE         (SMP_ID = '".$_POST['SampleNo']."') AND (SMP_LOT = '".$_GET['lot_no']."')";
+//	echo $query."<Br>";
+$result=mssql_query($query);
+
+refresh();
+}
+
+if(isset($_POST['select_cust'])){
+	$_SESSION['dm_cid']=$_POST['co0'];
+	refresh();
+}
+
+if(isset($_POST['an_first'])){
+$query="SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$table."')";
+$result=mssql_query($query);
+$numRows = mssql_num_rows($result);
+if($numRows>0){
+while($row=mssql_fetch_array($result)){
+	$_SESSION[$row['COLUMN_NAME']]=$_POST[$row['COLUMN_NAME']];
+	jumpto("./index.php?url=select_user6");
+}
+}
+}
+
+if(isset($_POST['button2'])){
+button2();
+}
+
+if (isset($_POST["leave"])) 
+{
+	keep_session();
+	jumpto($_SESSION['lasturl1']);
+}
+
+if (isset($_POST["x5"])) 
+{
+	unset($_SESSION['userid']);
+	unset($_SESSION['username']);
+	refresh();
+}
+
+function button2()
+{
+$query="SELECT COLUMN_NAME,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH FROM INFORMATION_SCHEMA.COLUMNS WHERE (TABLE_NAME ='".$_SESSION['table']."')";
+$result=mssql_query($query);
+$numRows = mssql_num_rows($result);
+if($numRows>0)
+	{
+	while($row=mssql_fetch_array($result))
+		{
+		$_SESSION[$row['COLUMN_NAME']."1"]=$_POST[$row['COLUMN_NAME']];
+		}
+	}
+}
+
+function write_ttb($sn,$smp_no,$ok,$uid,$lot,$table,$b,$op,$ani_time)
+{
+	$query="INSERT INTO ".$table."
+                            (TestDate, CHK1, CHK2, LotNo, SerialNo, SampleNo, B, CHK3, CHK4, Ok, Tester, Operator, AnalyzeTime)
+			VALUES          ('".date("Y-m-d")."',1,1,'".$lot."','".$sn."','".$smp_no."',".$b.",1,1,'".$ok."','".$uid."','".$op."','".$ani_time."')";
+			$_SESSION['TMPQUERRY']=$query;
+	$result=mssql_query($query);
+}
+function auth1($aid,$emp_aut_group,$chk1)
+{
+		session_start();
+	$chk1=0;
+	if($emp_aut_group=='')
+	{
+		$query="SELECT          EMPLOYEE_AUTHORITY.*
+				FROM              EMPLOYEE_AUTHORITY
+				WHERE          (EMP_NO = '".$_SESSION['uid']."')";
+	$result = mssql_query($query);
+	while($row=mssql_fetch_array($result))
+		{
+			$emp_aut_group=$row['AUT_GROUP'];	
+		}
+	}
+	
+	$query="select * from CAPABILITY_DATA where (CBT_NO='".$aid."')";
+	$result = mssql_query($query);
+	while($row=mssql_fetch_array($result))
+	{
+		$str=$row['CBT_KEYIN'];	
+	}
+	$aa=explode(';',$str);
+	for($i=0;$i<count($aa);$i++){
+		$aa[$i].=";";
+		if(preg_match("/$aa[$i]/i", $emp_aut_group)){$chk1=1;}
+	}
+	if($chk1==1)
+	{
+		$_SESSION['ck']=1;
+	}
+}
+
+function chk_smp($cid,$pid){
+	$query="SELECT  PRODUCT_DATA.PDD_PROD_SHORT_NAME FROM  PRODUCT_DATA WHERE   (PDD_PROD_NO = '".$pid."')";
+	$_SESSION['Q1']=$query;
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	return $row[0];
+}
+
+function last_checker($ani_group,$lotno){
+	$query="SELECT TOP (1) Tester,op,Pre_Tester,Pre_op FROM RE_TEST WHERE (LotNo = '".$lotno."' and ani_group='".$ani_group."') ORDER BY   AnalyzeTime DESC";	
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	return array($row[0],$row[1],$row[2],$row[3]);
+}
+
+function get_userid($empname){
+	$query="SELECT EMPLOYEE_DATA.EMP_NO FROM EMPLOYEE_DATA WHERE (EMP_NAME = '".$empname."')";
+	$result = mssql_query($query);
+	$numRows = mssql_num_rows($result);
+	while($row = mssql_fetch_array($result)){
+	$table=$row['EMP_NO'];
+	}
+	return $table;
+}
+
+function sampler(){
+	echo '<select name="sampler" id="sampler">';
+	echo '<option value=""></option>';
+	$query="SELECT EMPLOYEE_DATA.EMP_NO as empno, EMPLOYEE_DATA.EMP_NAME as empna, DEPARTMENT_DATA.DEP_NO, DEPARTMENT_DATA.DEP_NAME FROM EMPLOYEE_DATA INNER JOIN DEPARTMENT_DATA ON EMPLOYEE_DATA.DEP_NO = DEPARTMENT_DATA.DEP_NO WHERE (DEPARTMENT_DATA.DEP_NO = 'EP')"; 	
+	$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		echo '<option value="'.$row['empno'].'">'.$row['empna'].'</option>';
+	}
+	echo '</select> :';
+}
+?>

@@ -1,0 +1,12 @@
+
+SELECT          FOD_DAY, FOD_YEAR_MONTH
+FROM              FILLPLAN_OUT_DECIDE
+WHERE          (FDM_LOT_NO = 'TS62G22L620')
+
+$produce_date=$row['FOD_YEAR_MONTH'].$row['FOD_DAY'];
+
+$validmon=validmon($cid,$pid);
+
+$valid=$produce_date."+".$validmon." month";
+
+date("Ymd", strtotime($valid))

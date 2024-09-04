@@ -1,0 +1,7 @@
+<?php
+	session_start();
+	include_once("../connections/conn.php");
+	include("../lib/fun.php");
+	include("../lib/jtsai.php");
+	datepick();
+?>

@@ -1,0 +1,11 @@
+<?php
+include("conn_spc.php");
+$query="SELECT TEMPNEWVSUB_BK.MID AS mid, TEMPNEWVSUB_BK.TNVSID AS tnvsid, TEMPNEWVSUB_BK.CTRLITEM AS ctrlitem, 
+				TEMPMAIN_BK.GROUPNAME AS PDD_GROUP, TEMPMAIN_BK.FILENAME AS CUST_NAME FROM TEMPNEWVSUB_BK INNER JOIN 
+				TEMPMAIN_BK ON TEMPNEWVSUB_BK.MID = TEMPMAIN_BK.MID ";
+				echo $query;
+$result=mssql_query($query);
+while($row=mssql_fetch_array($result)){
+	echo $row['mid'].":".$row['tnvsid'].":".$row['ctrlitem'].":".$row['PDD_GROUP'].":".$row['CUST_NAME']."<BR>";
+}
+?>

@@ -1,0 +1,203 @@
+<?php
+$_POST['dm_no']=substr($_POST['dm_no'],-8,8);
+session_start();
+include("../connections/conn.php");
+include ("../lib/fun.php");
+include ("../lib/jtsai.php");
+datepick();
+
+$_SESSION['dm_no']=trim($_SESSION['dm_no']);
+$_SESSION['lid']=trim($_SESSION['lid']);
+$_POST['lid']=trim($_POST['lid']);
+$query="SELECT  COUNT(FDM_LOT_NO) AS cnt FROM EL_FILLDATA_DRUM WHERE   (FDM_LOT_NO LIKE '".$_POST['lid']."') AND (EFD_DRUM_NO = '".$_SESSION['dm_no']."')";
+$result=mssql_query($query);
+$row=mssql_fetch_row($result);
+$cnt=$row[0];
+if($cnt>>0){my_msg("此統已經充填過!!","el_drum_f2.php");}
+if(isset($_POST['x2'])){
+	$query="UPDATE  FILL_INDICATE SET FID_FILL_END_DATE = '".date("YmdHis")."',FID_SOURCE_LOT = '".trim($_SESSION['source_lot'])."' WHERE   (FDM_LOT_NO = '".$_SESSION['lid']."')"	;
+	$result=mssql_query($query);
+	jumpto("index.php");
+}
+
+$sa=new get_from_lot_no;
+$sa->lid=$_POST['lid'];
+$sa->ani();
+$pdd_prod_short_name=trim($sa->pdd_prod_short_name);
+if(substr($_POST['dm_no'],0,2)<>$pdd_prod_short_name)
+{
+	my_msg(" 桶號錯誤 ： ".$_POST['dm_no'],"el_drum_f2.php");
+}
+
+if($_SESSION['uid']==''){jumpto("login.php");}
+$query="select count(*) FROM	DRUM_HISTORY_NORMAL
+			WHERE	(DHN_DRUM_NO='".$_POST['dm_no']."')";
+// 	echo "<BR>".$query."<BR>";		
+$result=mssql_query($query);
+$numrow=mssql_num_rows($result);
+$row=mssql_fetch_row($result);
+if($numrow>0){
+	$used_cnt=$row[0];
+	$sx=$row[0];
+	$query1="select count(*) as num FROM DRUM_HISTORY_NORMAL where  (DHN_DRUM_NO='".$_POST['dm_no']."') and (DHN_LOT_NO".$sx." = '".$_SESSION['lid']."') ";
+//	echo "<BR>".$query1."<BR>";
+	$result1=mssql_query($query1);
+	$row1=mssql_fetch_row($result1);
+	}
+
+//if($row1[0]>0){my_msg("重複輸入","el_drum_f2.php");}
+/*
+$queryn="SELECT  COUNT(*) AS wdm FROM EL_WASH_DRUM WHERE   (FDM_LOT_NO = '".$_SESSION['lid']."') AND (EWD_DRUM = '".$_SESSION['dm_no']."')";
+$_SESSION['queryn']=$queryn;
+$resultn=mssql_query($queryn);
+$rows=mssql_fetch_row($resultn);
+
+ if($rows[0]==0){_confirm("未進行洗淨作業，將跳轉至洗淨作業",'',"wash_drum_f2.php");}
+*/
+$query="select count(*) as DMN FROM	DRUM_HISTORY_NORMAL
+			WHERE          (DHN_DRUM_NO='".$_POST['dm_no']."') and ((DHN_LOT_NO1 = '".$_SESSION['lid']."') or (DHN_LOT_NO2 = '".$_SESSION['lid']."') or (DHN_LOT_NO3 = '".$_SESSION['lid']."'))";
+$result=mssql_query($query);
+$row=mssql_fetch_row($result);
+
+?><head>
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<style type="text/css">
+body,td,th {
+	font-size: 30px;
+}
+a:link {
+	text-decoration: none;
+}
+a:visited {
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: none;
+}
+a:active {
+	text-decoration: none;
+}
+</style>
+
+</head>
+
+<a href="fill.php"><img src="../pics/TYS.jpg" alt="" width="50" height="28" /></a>人員：<?php echo $_SESSION['uname']?>
+<BR>DRUM 充填作業<BR>
+ <form id="form1" name="form1" method="post" action="<?php echo $loginFormAction;?>">
+ <input type="hidden" name="lid" value="<?php echo $_POST['lid'];?>" />
+ <input type="hidden" name="dm_no" value="<?php echo $_POST['dm_no'];?>" />
+<?php
+
+$query="SELECT  EWD_MAKELOT, EWD_USED_COUNT FROM EL_WASH_DRUM WHERE   (FDM_LOT_NO = '".$_SESSION['lid']."') AND (EWD_DRUM = '".$_POST['dm_no']."')";
+// echo "<BR>".$query."<BR>";
+$result=mssql_query($query);
+$rows=mssql_fetch_row($result);
+$_SESSION['made_lot']=$rows[0];
+$_SESSION['used_count']=$rows[1];
+$_SESSION['dm_no']=$_POST['dm_no'];
+
+echo "(EL 藥品) 充填作業"."<BR>";
+echo '充填前準備</br>' ;
+echo "客戶:".$_SESSION['cid']."<BR>";
+echo "Lot NO.:".$_SESSION['lid']."<BR>";
+echo "桶號:".$_SESSION['dm_no']."<BR>";
+echo '桶號(第'.($_SESSION['cnt']+1)."/".$_SESSION['fdm_qty_drum'].'桶)： <input type="text" autocomplete="off" name="dm_no"  style="font-size:25px" size="12" id="dm_no" value="'.$_POST['dm_no'].'"readonly/><BR>';
+echo '製造 LOT ： <input type="text" autocomplete="off" name="made_lot"  style="font-size:25px" size="12" id="made_lot" value="'.$_SESSION['made_lot'].'"/><BR>';
+echo '來源 LOT NO ： <input type="text" autocomplete="off" name="source_lot"  style="font-size:25px" size="12" id="source_lot" value="'.$_SESSION['source_lot'].'"/>';
+
+echo '<BR>使用次數：'.$qq->dm_cnt.'</br>';
+?>
+
+     <label for="weight"></label>
+   空桶重：
+   <input type="text" name="weight" id="weight" value="<?php echo $_SESSION['drum_weight']; ?>" />
+</br>
+     <input type="checkbox" name="ck1" id="ck1" checked="checked"/>
+   重量CHECK
+</br>
+     <input type="checkbox" name="ck2" id="ck2" checked="checked"/>
+   CAP蓋上</br>
+     <input type="checkbox" style="zoom: 1.5" name="ck3" id="ck3" checked="checked"/>
+
+   桶上層擦拭(無汙染/水附著)
+   <BR />
+     <input type="submit"  style="width:120px;height:40px;border:3px orange double;" name="next"  autofocus="autofocus" id="smp2" value="下一桶" />
+     <input type="submit"  style="width:120px;height:40px;border:3px orange double;" name="finish" id="smp3" value="結束" />
+     <input type="submit"  style="width:120px;height:40px;border:3px orange double;" name="cancel"  value="取消" />
+ </form>
+<?php 
+$loginFormAction = $_SERVER['PHP_SELF'];
+if(isset($_POST['smp'])){
+		
+}
+
+if(isset($_POST['next'])){  // EL_FILLDATA_DRUM
+	$_SESSION['made_lot']=$_POST['made_lot'];
+	$_SESSION['source_lot']=$_POST['source_lot'];
+	echo "made_lot=".$_SESSION['made_lot']."<BR>";
+	_confirm("新增 ".$_SESSION['dm_no']."? (Y/N)","el_drum_f2.php",'');
+	$query="select max(EFD_SERIAL_NO)+1 from EL_FILLDATA_DRUM where FDM_LOT_NO='".$_SESSION['lid']."'";
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	$sn=$row[0];
+	if($sn==''){$sn=1;}
+	if($_SESSION['lid']<>'' and $_SESSION['dm_no']<>'')
+	{
+		$query="INSERT INTO DRUM_FILL_DAY_CHECK
+                   (DDC_CHK_DATE, FDM_LOT_NO, PDD_PROD_NO, DDC_PURGE, DDC_SCALES_SET, DDC_CHK_SCALES)
+				VALUES  ('".date("Ymd")."','".$_SESSION['lid']."','',".$_POST['purge_qty'].",200,20)";
+		$result=mssql_query($query);
+		$query="Select * From DRUM_HISTORY_NORMAL Where DHN_DRUM_NO ='".$_POST['dm_no']."'";	
+		$result=mssql_query($query);
+		$row=mssql_fetch_row($result);
+		$numrow1=mssql_num_rows($result);
+		if($numrow1==0){ //新增桶號
+			$query="Insert Into DRUM_HISTORY_NORMAL (DHN_DRUM_NO, DHN_USED_COUNT, CTD_CUST_NO1, PDD_PROD_NO1,DHN_LOT_NO1,DHN_FILLED_DATE1) 	VALUES ('".$_POST['dm_no']."',  0 ,'','".$ppap."', '".$_SESSION['lid']."','".date("Ymd")."' )";
+//			echo $query."<BR>";
+// break;
+			$result=mssql_query($query);	
+			if($result){echo trim($_POST['dm_no'])." has been added in DRUM_HISTORY_NORMAL.<BR>";	}
+			$query="INSERT INTO EL_FILLDATA_DRUM (FDM_LOT_NO, EFD_DRUM_NO, EFD_SERIAL_NO, EFD_OPERATOR, EFD_EMPTY_SCALES, EFD_QTY, EFD_CHK_CAP, EFD_CHK_CAP_CLR, EFD_SAMPLING, EFD_MAKELOT) VALUES ('".$_SESSION['lid']."','".$_SESSION['dm_no']."',".$sn." ,'".$_SESSION['uid']."',".$_POST['weight'].",".$_SESSION['drum_kg'].",'Y','Y','N','".$_POST['made_lot']."')";
+//		echo $query;break;
+//echo $query."<BR>";
+			$result=mssql_query($query);
+		}
+		else
+		{
+			$queryx="select * from DRUM_HISTORY_NORMAL where (DHN_DRUM_NO='".$_POST['dm_no']."') and (DHN_LOT_NO1= '".$_SESSION['lid']."' or DHN_LOT_NO2='".$_SESSION['lid']."' or DHN_LOT_NO3='".$_SESSION['lid']."')";
+			$resultx=mssql_query($queryx);
+			$numrowx=mssql_num_rows($queryx);
+			if($numrowx>0){my_msg("此桶已經輸入過","el_drum_f2.php");}
+			else{			
+				$query=	"update DRUM_HISTORY_NORMAL set DHN_LOT_NO".$sx."='".$_SESSION['lid']."', DHN_FILLED_DATE".$sx."='".date("Ymd")."', DHN_USED_COUNT=".($sx-1)." where  (DHN_DRUM_NO='".$_POST['dm_no']."')";
+//				echo $query."<BR>";
+//			echo $query;break;
+				$result=mssql_query($query);
+			}	
+			$query="INSERT INTO EL_FILLDATA_DRUM (FDM_LOT_NO, EFD_DRUM_NO, EFD_SERIAL_NO, EFD_OPERATOR, EFD_EMPTY_SCALES, EFD_QTY, EFD_CHK_CAP, EFD_CHK_CAP_CLR, EFD_SAMPLING, EFD_MAKELOT) VALUES ('".$_SESSION['lid']."','".$_SESSION['dm_no']."',".$sn." ,'".$_SESSION['uid']."',".$_POST['weight'].",".$_SESSION['drum_kg'].",'Y','Y','N','".$_POST['made_lot']."')";
+//		echo $query;break;
+//echo $query."<BR>";
+			$result=mssql_query($query);	
+		}
+		
+	}
+	$pos=$_SESSION['dm_no'];
+	$_SESSION['dm_no']='';
+	echo '<a  href=el_drum_f2.php target="_blank"> NEXT f2</a>';
+	my_msg("新增 ".$pos,"el_drum_f2.php");	
+}
+
+if(isset($_POST['finish'])){
+	$_SESSION['dm_no']='';
+	jumpto("index.php");
+}
+
+if(isset($_POST['cancel'])){
+	$_SESSION['dm_no']='';
+	jumpto($_SESSION['index']);
+	}
+ 
+?>
+ 
+ 

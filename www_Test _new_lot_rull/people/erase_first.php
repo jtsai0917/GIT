@@ -1,0 +1,7 @@
+<?php
+session_start();
+$_SESSION['no1']="";
+$_SESSION['no2']="";
+header("Location: " . $_SESSION['lasturl'] );
+?>
+ 

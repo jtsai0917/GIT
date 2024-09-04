@@ -1,0 +1,11 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php
+echo "ip".substr($_SERVER["SERVER_ADDR"],0,3);
+if(substr(0,3,$_SERVER["SERVER_ADDR"])=='195'){
+	echo substr(0,3,$_SERVER["SERVER_ADDR"]);
+}
+
+if(substr(0,3,$_SERVER["SERVER_ADDR"])=='143'){
+	substr(0,3,$_SERVER["SERVER_ADDR"]);
+}
+?>

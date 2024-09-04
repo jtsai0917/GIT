@@ -1,0 +1,49 @@
+<?php 
+include("../checkuser.php");
+include("../lib/fun.php");
+datepick();
+session_start();
+	lasturl();
+$_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
+if($_SESSION['datepicker1']==''){$_SESSION['datepicker1']=date("m/d/Y");}
+if($_SESSION['datepicker2']==''){$_SESSION['datepicker2']=date("m/d/Y");}
+
+echo 'Choose date:<input type="text" name="datepicker1" id="datepicker1" size="10" value="'.$_SESSION['datepicker1'].'" onChange="set_date_session(this.name,this.value)">';
+
+echo '<form method="post" action=""> <input type="submit" name="print" value="create iStar file">    </form>';
+if(isset($_POST['print']))
+{
+	// 創建一個新的 XML 文檔
+	$doc = new DOMDocument('1.0', 'UTF-8');
+	// 創建根元素
+	$root = $doc->createElement('MaterialInlineMeasurementData');
+	 $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+	// $root->setAttribute('xsi:noNamespaceSchemaLocation', 'Inlinedata-1.0.xsd');
+	$root->setAttribute('SupplierID', '123456789');
+	$root->setAttribute('MaterialNo', 'L123456');
+	$root->setAttribute('ManufacturingSite', 'SITE1234');
+	$root->setAttribute('ManufacturingLine', 'A');
+	$root->setAttribute('ProcessStage', 'STG1234');
+	$root->setAttribute('EqpID', 'EQP1234');
+	$root->setAttribute('FileGenTime', '2015/11/10 17:42:00+08:00');
+	$root->setAttribute('FileTemplateVersion', '1.0');
+	$doc->appendChild($root);
+	for($i=0;$i<3;$i++){
+		// 創建子元素
+		$data = $doc->createElement('DATA');
+		// ContainerID="N/A" MeasureTime="2015/11/10 10:48:35+08:00" VALUE="44.8" UNIT="BAR" SupplierBatchID="123456789" tsmcBatchID="2023" Status="N/A"
+		$data->setAttribute('Parameter', 'PARAMETER1');
+		$data->setAttribute('MeasureTime', '2015/11/10 10:48:35+08:00');
+		$data->setAttribute('VALUE', '44.8');
+		$data->setAttribute('UNIT', 'BAR');
+		$data->setAttribute('SupplierBatchID', '123456789');
+		$data->setAttribute('tsmcBatchID', '2023');
+		$data->setAttribute('Status', 'N/A');
+		// 添加子元素到父元素
+		$root->appendChild($data);
+	}
+	// 保存 XML 檔案
+	$doc->save('./tmp/catalog.xml');
+}
+
+?>

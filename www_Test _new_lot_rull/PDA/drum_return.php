@@ -1,0 +1,59 @@
+<?php
+session_start();
+include("../lib/fun.php");
+include("../connections/conn.php");
+if($_SESSION['uid']==''){jumpto("login.php");}
+$_SESSION['lid']='';
+datepick();
+echo  "<h1>報廢回收作業";
+echo '<form id="form1" name="form1" method="post" action="">'.'輸入桶號：'.'  <input type="text" style="font-size:20px" size="10"  autofocus ="autofocus" name="rdrum_id" value=
+"'.trim($_SESSION['rdrum_id']).'" onchange="set_date_session(this.name,this.value)" size="8"/><br><br>';
+
+if ($_SESSION['rdrum_id']<>''){
+	echo 'DRUM  ['.$_SESSION['rdrum_id'].'] '."使用紀錄".' :<BR>';
+	$query = "SELECT          DRUM_HISTORY_NORMAL.DISABLE, DRUM_HISTORY_NORMAL.DHN_DRUM_NO, 
+                            DRUM_HISTORY_NORMAL.DHN_LOT_NO1, FILLPLAN_OUT_DECIDE.FDM_QTY_DRUM, 
+                            OUT_DECISION.CTD_CUST_NO, CUSTOMER_DATA.CTD_CUST_SHORT_NAME, DRUM_HISTORY_NORMAL.DHN_TYS_RCV_DATE1 
+FROM              CUSTOMER_DATA INNER JOIN
+                            OUT_DECISION ON CUSTOMER_DATA.CTD_CUST_NO = OUT_DECISION.CTD_CUST_NO RIGHT OUTER JOIN
+                            OUT_CHECK_DRUM_DETAIL ON OUT_DECISION.OTD_NO = OUT_CHECK_DRUM_DETAIL.OTD_NO RIGHT OUTER JOIN
+                            DRUM_HISTORY_NORMAL INNER JOIN
+                            FILLPLAN_OUT_DECIDE ON DRUM_HISTORY_NORMAL.DHN_LOT_NO1 = FILLPLAN_OUT_DECIDE.FDM_LOT_NO ON 
+                            OUT_CHECK_DRUM_DETAIL.OCD_LOT_NO = DRUM_HISTORY_NORMAL.DHN_LOT_NO1 AND 
+                            OUT_CHECK_DRUM_DETAIL.OCD_DRUM_NO = DRUM_HISTORY_NORMAL.DHN_DRUM_NO
+WHERE          (DRUM_HISTORY_NORMAL.DHN_DRUM_NO = '".$_SESSION['rdrum_id']."') AND (DRUM_HISTORY_NORMAL.DISABLE <> 1) order by [index]";
+//	echo "<BR>".$query."<BR>";FEFER444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444445
+	$result=mssql_query($query);
+	if($result){
+		echo '<table width="340" border="1"><tr><td>LotNo</td><td>桶數</td><td>客戶</td><td>回收日</td></tr>';
+	}
+	while($row=mssql_fetch_array($result)){
+		
+		echo '<tr><td>'.$row[2].'</td><td>'.$row[3].'</td><td>'.$row[4]."<BR>".$row[5]."</td><td>".$row[6]."</td></tr>";
+	}
+	echo '</table>';
+	echo '<BR><input type="submit" name="invalid" value=" 報廢 " autofocus="autofocus">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="submit" name="rnt" value=" 回收 " ></form><h1';
+}
+echo '<a href="index.php"><h1 style="font-size:24;"> 返 回 </h1></a>';
+if($_POST['invalid']){
+	echo '作廢'.$_POST['rdrum_id']."<BR>";
+	$query="UPDATE DRUM_HISTORY_NORMAL SET DISABLE = 1 WHERE (DHN_DRUM_NO = '".trim($_POST['rdrum_id'])."') ";
+	$result=mssql_query($query);
+	$query="UPDATE EL_WASH_DRUM SET DISABLE = 1 WHERE (EWD_DRUM = '".trim($_POST['rdrum_id'])."') ";
+	$result=mssql_query($query);
+	$query="UPDATE EL_FILLDATA_DRUM SET DISABLE = 1 WHERE (EFD_DRUM_NO = '".trim($_POST['rdrum_id'])."') ";
+	$result=mssql_query($query);
+	$_SESSION['rdrum_id']='';
+	my_msg(trim($_POST['rdrum_id'])."作廢完成");
+}
+
+if(isset($_POST['rnt'])){
+	echo '回收 ： '.$_POST['rdrum_id']."<BR>";
+	$query="UPDATE DRUM_HISTORY_NORMAL SET DHN_TYS_RCV_DATE1 = '".date("Ymd")."' WHERE (DHN_DRUM_NO = 'W2349205') AND (DISABLE <> 1) AND (DHN_TYS_RCV_DATE1 IS NULL)";
+	$result=mssql_query($query);
+	if($result){
+		my_msg($_POST['rdrum_id']."回收完成");
+	}
+}
+
+?> 

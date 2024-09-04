@@ -1,0 +1,22 @@
+<?php
+session_start();
+include("../connections/conn.php");
+function array_user_group($uid,$gname){
+	
+	$query="SELECT group_name FROM EMPLOYEE_GROUP where empno='".$uid."'";
+	$result=mssql_query($query);
+	$group='';
+	while($row=mssql_fetch_array($result)){
+		$group=$group.trim($row['group_name']).",";
+	}
+	$gname=$gname.",";
+
+	if(preg_match("/{$gname}/i", $group)){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+
+?>

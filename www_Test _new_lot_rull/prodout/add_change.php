@@ -1,0 +1,82 @@
+<meta http-equiv="Content-Type" content="text/html; charset=big5" />
+<?php
+session_start();
+include("../connections/conn.php");
+include("../lib/fun.php");
+include("../lib/jtsai.php");
+remurl("edit_change");
+datepick();
+$query="SELECT FILLPLAN_OUT_DECIDE.CTD_CUST_NO AS Expr1, CUSTOMER_DATA.CTD_CUST_SHORT_NAME, 
+                            FILLPLAN_OUT_DECIDE.FDM_QTY, FILLPLAN_OUT_DECIDE.FDM_QTY_UNIT, 
+                            LORRY_EXAMINE_LIST.LEL_FAKE_QTY, LORRY_EXAMINE_LIST.LEL_REMNANT_QTY
+FROM              FILLPLAN_OUT_DECIDE INNER JOIN
+                            CUSTOMER_DATA ON FILLPLAN_OUT_DECIDE.CTD_CUST_NO = CUSTOMER_DATA.CTD_CUST_NO INNER JOIN
+                            LORRY_EXAMINE_LIST ON FILLPLAN_OUT_DECIDE.FDM_LOT_NO = LORRY_EXAMINE_LIST.LEL_LOT_NO
+WHERE          (FILLPLAN_OUT_DECIDE.FDM_LOT_NO = '".trim($_GET['oldlotno'])."')";
+// echo $query."<BR>";
+$result=mssql_query($query);
+$row=mssql_fetch_row($result);
+$cid1=$row[0];
+$cname1=$row[1];
+$qty=$row[2];
+$unit=$row[3];
+$fake_qty=$row[4];
+$REMNANT_QTY=$row[5];
+	echo '<form id="form2" name="form2" method="post" action="'.$loginFormAction.'">';
+	echo '出貨客戶變更';
+	echo '<table width="1024" height="160" bgcolor="#CCCCCC">';
+	echo '<tr><td width="512">原LOT NO ：'.$_GET['oldlotno'].'</td><td>新LOT NO ：'.$_GET['newlotno'].'</td></tr>';
+	if($_SESSION['cid3']==''){
+		$_SESSION['cid3']=$cid1;
+	}
+	echo '<tr><td width="512">原 客 戶：
+			<input name="cid1" type="text" id="cid1" size="16" value="'.$cid1.'" readonly>
+			<input type="button" name="cidb1" id="cidb1"  value="查詢客戶" >
+			<input name="cname1" type="text" id="cname1" size="20" value="'.$cname1.'" readonly></td><td>新 客 戶：
+          <input name="cid3" type="text" id="cid3" size="16" value="'.$_SESSION['cid3'].'" readonly>
+          <input type="button" name="cidb2" id="cidb2" value="查詢客戶" onClick="window.open('."'cust_no3.php?sup=N ', '_blank' ".'),window.close();">
+          <input name="cname2" type="text" id="cname3" size="20" value="'.get_cust_name($_SESSION['cid3']).'"></td></tr>';
+	echo '<tr><td width="512">有效月數 ：<input name="remonth" type="text" id="remonth" size="6" value="6">
+		  殘存月數 ：<input name="leftmonth" type="text" id="leftmonth" size="6" value="3"></td><td>原數量 ：<input name="oldqty" type="text" id="oldqty" size="10" value="'.$qty.'">'.$unit.'
+		  &nbsp;&nbsp;新數量 ：<input name="newqty" type="text" id="newqty" size="10" value="'.$qty.'" >'.$unit.'</td></tr>';
+	 echo '<tr><td width="512">假出庫數量(不可為空值)：<input name="fake_qty" type="text" id="fake_qty" size="6" value="'.$fake_qty.'">'.$unit.'</td><td>殘液數量(不可為空值)：<input name="REMNANT_QTY" type="text" id="REMNANT_QTY" size="10" value="'.$REMNANT_QTY.'">'.$unit.'
+		  &nbsp;&nbsp;</td></tr>';
+	echo '<tr><td width="512" align="right"><input name="leave" type="submit" size="28" value="         離   開        " /></td><td><input name="save" type="submit" id="save" size="28" value="         儲    存        " /></td></tr>';
+	echo '</table></form>';
+
+if(isset($_POST['save']))
+{
+	if($_POST['fake_qty']<>'' & $_POST['REMNANT_QTY']<>''){
+		// fillplan_out_decide
+	$query="update fillplan_out_decide set FDM_LOT_NO='".trim($_GET['newlotno'])."', CTD_CUST_NO = '".$_POST['cid3']."' where FDM_LOT_NO='".trim($_GET['oldlotno'])."'";
+
+	$result=mssql_query($query);
+	
+	// lorry_fill_check
+	$query="update lorry_fill_check set FDM_LOT_NO='".trim($_GET['newlotno'])."' where FDM_LOT_NO='".trim($_GET['oldlotno'])."'";
+
+	$result=mssql_query($query);
+
+	// lorry_examine_list
+	$query="update LORRY_EXAMINE_LIST set LEL_LOT_NO='".trim($_GET['newlotno'])."', LEL_FAKE_QTY = ".$_POST['fake_qty'].", LEL_REMNANT_QTY = ".$_POST['REMNANT_QTY']." where LEL_LOT_NO='".trim($_GET['oldlotno'])."'";
+
+	$result=mssql_query($query);		
+	}
+	else{
+		my_msg("輸入錯誤");
+	}
+}
+
+
+if(isset($_POST['leave']))
+{
+	unset($_SESSION['cid1']);
+	unset($_SESSION['cid2']);
+	unset($_SESSION['pid1']);
+	unset($_SESSION['pid2']);
+	echo "<script>
+		window.close();
+		</script>";	
+
+}
+?>

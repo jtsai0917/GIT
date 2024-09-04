@@ -1,0 +1,84 @@
+<meta http-equiv="content-type" content="text/html; charset=big5" />
+變更分析資料的  LOT NO<BR>
+<form method="post" action="">
+	
+		<fieldset>
+			<legend>    </legend>
+			原始 Lot No : <input type="text" name="slot" size="15" /><br />
+	
+			目標 Lot No : <input type="text" name="dlot" size="15" /><input type="submit" name="enter" value="確定"><br />
+			
+			說明 :<BR>
+			&nbsp;<textarea style="resize:none;width:400px;height:200px;" name="disc"></textarea>
+	
+			
+		</fieldset>
+	
+	</form>
+	
+<?php
+include_once("../connections/conn.php");
+include_once("../lib/fun.php");
+include_once("../lib/user_right.php");
+$a2=array_user_group($_SESSION['uid'],'分析主管');
+if($a2<>1){my_msg("無使用權限","../main.php");}
+if(isset($_POST['enter'])){
+	$slot=trim($_POST['slot']);
+	$dlot=trim($_POST['dlot']);
+	$uid=$_SESSION['uid'];
+	$disc=$_POST['disc'];
+	// 變更分析依賴
+	// 1. 列出所有檢查表並變更其 LOTNO
+	$query="SELECT DISTINCT ELEMENT_FORM.ELF_FORM AS ef
+	FROM              AnalyzeDesign INNER JOIN
+	                            PRODUCT_DATA ON AnalyzeDesign.AND_GOODS = PRODUCT_DATA.PDD_PROD_NO INNER JOIN
+	                            ELEMENT_FORM ON PRODUCT_DATA.PDD_CHEMICAL = ELEMENT_FORM.PDD_CHEMICAL
+	WHERE          (AnalyzeDesign.AND_LOT_NO = '".trim($_POST['slot'])."') 	ORDER BY ef ";
+	$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		update_lotno(trim($_POST['slot']),trim($_POST['dlot']),$row['ef']);
+	}
+	update_design(trim($_POST['slot']),trim($_POST['dlot']));
+	
+	update_form($slot,$dlot,"analyze_fail","lot_no"); 
+	update_form($slot,$dlot,"analyze_first","lot_no"); 
+	update_form($slot,$dlot,"analyze_first1","lot_no"); 
+	update_form($slot,$dlot,"analyze_Urgent","lot_no"); 
+	update_form($slot,$dlot,"AnalyzeGroup_Lot","lot_no"); 
+	update_form($slot,$dlot,"ani_result_group","lot_no"); 
+	update_form($slot,$dlot,"Ani_Signatory","LotNo"); 
+	update_form($slot,$dlot,"FILE_REPORTS","FILE_LOT_NO"); 
+	insert_log($slot,$dlot,$uid,$disc);
+	//
+	//
+}
+
+function update_lotno($slot,$dlot,$form){
+	if($slot=='' or $dlot==''){
+		my_msg("Lot NO 不可為空");
+	}
+	$query="UPDATE ".$form." SET LotNo = '".$dlot."' WHERE (LotNo = '".$slot."') ";
+	$result=mssql_query($query);
+	echo $form."....完成<BR>";
+}
+
+function update_design($slot,$dlot){
+	$query="UPDATE AnalyzeDesign SET AND_LOT_NO = '".$dlot."' WHERE (AND_LOT_NO = '".$slot."')";
+	$result=mssql_query($query);
+	echo "AnalyzeDesign....完成<BR>";
+}
+
+function update_form($slot,$dlot,$form,$item_name){
+	$query="UPDATE ".$form." SET ".$item_name." = '".$dlot."' WHERE (".$item_name." = '".$slot."') ";
+	$result=mssql_query($query);
+	echo "更新".$form."....完成<BR>";
+}
+
+function insert_log($slot,$dlot,$uid,$disc){
+	$query="INSERT INTO change_lotno_log (sourcelot, distlot, createtime, creator,disc) 
+ VALUES          (N'".$slot."', N'".$dlot."', CONVERT(DATETIME, '".date("Y-m-d H:i:s")."', 102), N'".$uid."','".$disc."')";
+	$result=mssql_query($query);
+	echo "新增 LOG 完成<BR>";
+}
+
+?>

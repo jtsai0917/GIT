@@ -1,0 +1,128 @@
+<?php 
+include("../checkuser.php");
+include("../lib/fun.php");
+include("../connections/conn.php");
+datepick();
+session_start();
+	lasturl();
+$_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
+if($_SESSION['datepicker1']==''){$_SESSION['datepicker1']=date("m/d/Y");}
+$select_date=dod($_SESSION['datepicker1']);
+echo 'Choose date:<input type="text" name="datepicker1" id="datepicker1" size="10" value="'.$_SESSION['datepicker1'].'" onChange="set_date_session(this.name,this.value)">';
+
+echo '<form method="post" action="">';
+echo '<table width="768" border="1"><tr bgcolor="#F1F1F1"><td>Tag_No</td><td>Tag Name</td><td>Data</td><td>SN</td><td>Date</td><td>SPEC</td><td>HIGH</td><td>LOW</td><td>PASS</td></tr>';
+
+$query="SELECT          istar_default_setting.name AS Tag_No, UTT_TAGNO_DATA.project, UTT_record_spec.Data, UTT_record_spec.sn, 
+                            UTT_record_spec.[Date] AS dd, UTT_record_spec.pass, UTT_TAGNO_DATA.spec, UTT_TAGNO_DATA.high, 
+                            UTT_TAGNO_DATA.low
+FROM              istar_default_setting INNER JOIN
+                            UTT_TAGNO_DATA ON istar_default_setting.name = UTT_TAGNO_DATA.TAG_NO INNER JOIN
+                            UTT_record_spec ON UTT_TAGNO_DATA.TAG_NO = UTT_record_spec.TAG_NO
+WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.active = 1) AND (UTT_record_spec.[Date] LIKE N'".$select_date."%')
+ORDER BY   UTT_record_spec.sn"; 
+//echo $query."<BR>";
+$result=mssql_query($query);
+while($row=mssql_fetch_array($result)){
+	if($max < $row['sn']){
+		$max=$row['sn'];
+	}
+	echo '<tr><td>'.$row['Tag_No'].'</td><td>'.$row['project'].'</td><td>'.$row['Data'].'</td><td>'.$row['sn'].'</td><td>'.$row['dd'].'</td><td>'.$row['spec'].'</td>
+	<td>'.$row['high'].'</td><td>'.$row['low'].'</td><td>'.$row['pass'].'</td></tr>';
+}
+echo '</table>';
+echo iconv("utf-8","big5","選擇SN:").'<select name="sn">';
+echo '<option value="10">'.iconv("utf-8","big5","平均值").'</option>';
+for($i=1;$i<=$max;$i++){
+	echo '<option value="'.$i.'">'.$i.'</option>';
+}
+echo '<option value="0">'.iconv("utf-8","big5","最新資料").'</option>';
+echo '</select>';
+echo '<input type="submit" name="print" value="create iStar file"></form>';
+
+
+if(isset($_POST['print']))
+{
+	echo iconv("utf-8","big5","產生SN為 ").$_POST['sn'].iconv("utf-8","big5"," 的XML檔案")."<BR>";
+	// 創建一個新的 XML 文檔
+	$doc = new DOMDocument('1.0', 'UTF-8');
+	// 創建根元素
+	$root = $doc->createElement('MaterialInlineMeasurementData');
+	 $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
+	 $root->setAttribute('xsi:noNamespaceSchemaLocation', 'Inlinedata-1.0.xsd');
+	$query="SELECT name, [value] FROM istar_default_setting WHERE ([level] = 0) AND (active = 1) order by [order],[index] ";
+
+	$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		$root->setAttribute(trim($row['name']),trim($row['value']));
+	}
+
+	$root->setAttribute('FileGenTime', date("Y/m/d H:i:s").'+08:00');
+	echo 'CreateTime : '.date("Y/m/d H:i:s").'+08:00<BR>';
+	$root->setAttribute('FileTemplateVersion', '1.0');
+	$doc->appendChild($root);
+		
+	// 創建子元素
+	$query="SELECT  name, UNIT FROM istar_default_setting WHERE ([level] = 1) AND (active = 1)";
+	$result=mssql_query($query);
+	while($row=mssql_fetch_array($result)){
+		list($value,$unit,$dat)=get_data(trim($row['name']),$select_date,$_POST['sn']);
+		echo "Value=".$value."<BR>";
+		$value=round(sqrt($value)*3,4);
+//		echo "SS".$value,$unit,$dat."<BR>";
+		$data = $doc->createElement('DATA');
+		$data->setAttribute('Parameter', trim($row['name']));
+		$data->setAttribute('ContainerID',"N/A");
+		$data->setAttribute('MeasureTime', sta(trim($dat)).'+08:00');
+		$data->setAttribute('VALUE', $value);
+		$data->setAttribute('UNIT', iconv("big5","utf-8",trim($unit)));
+		$data->setAttribute('SupplierBatchID', '123456789');
+		$data->setAttribute('tsmcBatchID', '2023');
+		$data->setAttribute('Status', 'N/A');		
+		$root->appendChild($data);
+	}
+	
+	// 保存 XML 檔案
+	$doc->save('./tmp/catalog.xml');
+	echo '<a href="./tmp/catalog.xml" target="_blank">'.iconv("utf-8","big5","下載").'</a>';
+}
+
+function get_data($parameter,$date,$sn){
+	if($sn<>0){
+			$query="SELECT  TOP (1) UTT_record_spec.Data, UTT_TAGNO_DATA.unit, UTT_record_spec.[Date]  
+FROM              istar_default_setting INNER JOIN
+                            UTT_TAGNO_DATA ON istar_default_setting.name = UTT_TAGNO_DATA.TAG_NO INNER JOIN
+                            UTT_record_spec ON UTT_TAGNO_DATA.TAG_NO = UTT_record_spec.TAG_NO
+WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.active = 1) AND 
+                            (UTT_record_spec.[Date] LIKE N'".$date."%') AND (UTT_record_spec.sn = ".$sn.") AND 
+                            (istar_default_setting.name = '".$parameter."')";
+	}
+	else{
+			$query="SELECT   TOP (1) UTT_record_spec.Data, UTT_TAGNO_DATA.unit, UTT_record_spec.[Date]  
+FROM              istar_default_setting INNER JOIN
+                            UTT_TAGNO_DATA ON istar_default_setting.name = UTT_TAGNO_DATA.TAG_NO INNER JOIN
+                            UTT_record_spec ON UTT_TAGNO_DATA.TAG_NO = UTT_record_spec.TAG_NO
+WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.active = 1) AND 
+                            (UTT_record_spec.[Date] LIKE N'".$date."%') AND (istar_default_setting.name = '".$parameter."')";
+//                            echo $query."<BR>";
+	}
+	$result=mssql_query($query);
+	$row=mssql_fetch_row($result);
+	$a1=$row[1];
+	$a2=$row[2];
+	$value=$row[0];
+	if($sn==10){
+		echo "SN=10";
+		$query="SELECT          AVG(CAST(UTT_record_spec.Data AS float)) AS A0
+		FROM              istar_default_setting INNER JOIN
+		                            UTT_TAGNO_DATA ON istar_default_setting.name = UTT_TAGNO_DATA.TAG_NO INNER JOIN
+		                            UTT_record_spec ON UTT_TAGNO_DATA.TAG_NO = UTT_record_spec.TAG_NO
+		WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.active = 1) AND 
+                            (UTT_record_spec.[Date] LIKE N'".$date."%') AND (istar_default_setting.name = '".$parameter."')";
+		$result=mssql_query($query);
+		$row=mssql_fetch_row($result);
+		$value=$row[0];
+	}
+	return array($value,$a1,$a2);
+}
+?>

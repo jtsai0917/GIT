@@ -1,0 +1,3 @@
+<?
+define("weburl","http://localhost/");
+?>
