@@ -120,34 +120,21 @@ WHERE          OUT_DECISION.OTD_NO ='".$_SESSION['nono']."'";
 
 }
 
-/*
-if((isset($_POST['next1'])) and ($_POST['chk1']!=1 or $_POST['chk2']!=2 or $_POST['chk3']!=3))
-{
-	
-	echo '<br>';
-			echo  "客戶 : ".$_SESSION['cidcname'].')<br>';
-			echo  "品名 : ".$_SESSION['pidcname'].')<br>';
-			echo  "批號 : ".$selectlot.'<br>';
-			echo '<br>';
-			echo '<input type="checkbox" name="chk1" value="1">'."容器荷姿:(".$L.$KG.") 與容器對照是否無錯誤.".'</br>';
-			echo '<input type="checkbox" name="chk2" value="2">'."數量".$QTY."與容器對照是否無錯誤".'</br>';
-			echo '<input type="checkbox" name="chk3" value="3">'."附帶條件有無?".'</br>';
-			echo '<input type="submit" name="next1" style="font-size:20px" id="next1" value="下一步" />'.'</br>';
-	echo "請確認輸入無誤";
-}
-*/
 if(isset($_POST['next1']))
 {	
 	$query="SELECT          CUSTOMER_PRODUCTS.CTP_CUSTBAR1, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_CHECK, OP.OPD_LOT_NO, 
-                            OP.OPD_QTY_DRUM, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_start_char AS sc, OP.PDD_PROD_NO, 
+                            SUM(OP.OPD_QTY_DRUM) AS asd, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_start_char AS sc, OP.PDD_PROD_NO, 
                             PRODUCT_DATA.PDD_PROD_NAME
 FROM              OUT_PRODUCT AS OP INNER JOIN
                             OUT_DECISION ON OP.OPM_ORDER_NO = OUT_DECISION.OPM_ORDER_NO INNER JOIN
                             CUSTOMER_PRODUCTS ON OP.PDD_PROD_NO = CUSTOMER_PRODUCTS.PDD_PROD_NO AND 
                             OUT_DECISION.CTD_CUST_NO = CUSTOMER_PRODUCTS.CTD_CUST_NO INNER JOIN
                             PRODUCT_DATA ON OP.PDD_PROD_NO = PRODUCT_DATA.PDD_PROD_NO
-	WHERE          (OP.OPD_LOT_NO = '".trim($_POST['lot_id'])."') AND (OP.OTD_NO = '".$_POST['nono']."')";
-//	echo $query."<BR>";
+	WHERE          (OP.OPD_LOT_NO = '".trim($_POST['lot_id'])."') AND (OP.OTD_NO = '".$_POST['nono']."')
+	GROUP BY   CUSTOMER_PRODUCTS.CTP_CUSTBAR1, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_CHECK, OP.OPD_LOT_NO, 
+                            OP.OPD_QTY_DRUM, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_start_char, OP.PDD_PROD_NO, 
+                            PRODUCT_DATA.PDD_PROD_NAME ";
+
 	$result=mssql_query($query);
 	$numrow1=mssql_num_rows($result);
 	if($numrow1==0){
@@ -185,6 +172,7 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 	echo "LOT NO:".'<input type="text" name="no" autocomplete="off" id="no" style="font-size:20px" value="'.$_SESSION['lot_id'].'"  readonly="readonly" /></br>';
 	$query1="select  * from OUT_CHECK_DRUM_DETAIL where (OTD_NO='".$_POST['nono']."' and OCD_LOT_NO = '".trim($_POST['lot_id'])."')";
 //	echo $query1."<BR>";
+//	break;
 	$result1 = mssql_query($query1);
 	$numRows1 = mssql_num_rows($result1);
 		$_SESSION['numrow']=$numRows1;
@@ -202,7 +190,7 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 				echo '<input type="hidden" name="nono" id="nono" value="'.$_POST['nono'].'">';
 				echo '<input type="hidden" name="sc" id="sc" value="'.$start_char.'">';
 				
-				echo "桶  號  :&nbsp; &nbsp; &nbsp;".'<input type="text" name="no1" autocomplete="off" id="no1" autofocus="autofocus" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
+				echo "桶  號 :&nbsp; &nbsp; &nbsp;".'<input type="text" name="no1" autocomplete="off" id="no1" autofocus="autofocus" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
 				echo "棧板編號:".'<input type="text" name="no2" autocomplete="off" id="no2" style="font-size:20px" value="'.$_SESSION['pa_no'].'"/></br>';
 				echo '<input type="submit" name="next2" style="font-size:20px" id="next2" value="下一桶/儲存" />';
 				echo "      ".'<input type="submit" name="next3" style="font-size:20px" id="next3" value="結束刷桶" />'.'</br>';
@@ -213,7 +201,7 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 				echo '<input type="hidden" name="check_custbar1" id="check_custbar1" value="'.$ck1.'">';
 				echo '<input type="hidden" name="nono" id="nono" value="'.$_POST['nono'].'">';
 				echo '<input type="hidden" name="sc" id="sc" value="'.$start_char.'">';
-				echo "桶  號  :&nbsp;&nbsp; &nbsp; ".'<input type="text" name="no1" autocomplete="off" id="no1" autofocus="autofocus" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
+				echo "桶  號 :&nbsp;&nbsp; &nbsp; ".'<input type="text" name="no1" autocomplete="off" id="no1" autofocus="autofocus" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
 				echo "棧板編號:".'<input type="text" name="no2" autocomplete="off" id="no2" style="font-size:20px" value="'.$_SESSION['pa_no'].'"/></br>';
 				echo '<input type="submit" name="next2" style="font-size:20px" id="next2" value="下一桶/儲存" />';
 				echo "      ".'<input type="submit" name="next3" style="font-size:20px" id="next3" value="結束刷桶" />'.'</br>';
@@ -375,7 +363,7 @@ if(isset($_POST['next2']) and $_POST['no1']<>'' and $_POST['no2']<>'' )
 		}
 		if($BC!=1){ //echo "棧板編號錯誤".'<br>';
 			}
-			$query2="SELECT OP.OPM_ORDER_NO, OP.OPD_SERIAL_NO, OD.OTD_NO, OP.OTN_NO, OP.OTNP_SERIAL_NO, OP.PDD_PROD_NO, 
+			$query2="SELECT top(1) OP.OPM_ORDER_NO, OP.OPD_SERIAL_NO, OD.OTD_NO, OP.OTN_NO, OP.OTNP_SERIAL_NO, OP.PDD_PROD_NO, 
                             OP.OAF_PACKAGE, OP.OPD_LOT_NO, OP.PRA_SERIAL_NO, OP.OPD_TERM_DATE, OP.OPD_VALIDATE, 
                             OP.OPD_QTY_DRUM, OP.OPD_ACC_UNIT, OP.OPD_QTY_LITER, OP.OPD_QTY_KG, OP.OPD_SIGN_RECEIPT, 
                             OP.OPD_COA_RECEIPT, OP.OPD_MEMO, OP.OPD_REAL_QTY_KG, OP.OPD_INWARD_DATE, OP.OPD_COA_NO, 
@@ -409,18 +397,19 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 					echo  "客戶 : ".$_SESSION['cidcname'].')<br>';
 					echo  "品名 : ".$_SESSION['pidcname'].')<br>';
 					echo "LOT NO:".'<input type="text" autocomplete="off" size="10" name="no" id="no" style="font-size:20px" value="'.$_SESSION['aa'][0].'" readonly=" readonly"/><br>';
-					$query3="SELECT  OUT_PRODUCT.OPD_QTY_DRUM FROM OUT_CHECK_DRUM_DETAIL INNER JOIN OUT_PRODUCT ON OUT_CHECK_DRUM_DETAIL.OTD_NO = OUT_PRODUCT.OTD_NO AND OUT_CHECK_DRUM_DETAIL.OCD_LOT_NO = OUT_PRODUCT.OPD_LOT_NO WHERE 
+					$query3="SELECT OUT_CHECK_DRUM_DETAIL.* FROM OUT_CHECK_DRUM_DETAIL where
 					(OUT_CHECK_DRUM_DETAIL.OTD_NO = '".trim($_POST['nono'])."') AND (OUT_CHECK_DRUM_DETAIL.OCD_LOT_NO = '".trim($_POST['no'])."')";
-//				echo $query3."<BR>";
+	//			echo $query3."<BR>";
 					$result3=mssql_query($query3);
 					$row3=mssql_num_rows($result3);
 					$row4=mssql_fetch_row($result3);
-					if($row3 >= $row4[0]){
+					if($row3 >= $_SESSION['QTY']){
 						$check_finished=1;
 					}
 					else{	
-						echo '第'. ($row3+1).'/'.$row4[0].'桶';
+						echo '第'. ($row3+1).'/'.$_SESSION['QTY'].'桶';
 						echo '</br>';
+						$_SESSION['dm_no']=$_SESSION['no1']='';
 //						echo "C<BR>";
 						if($_POST['check_custbar1']==1){
 							echo "客戶料號:".'<input type="text" name="cust_prod_no" autocomplete="off" id="cust_prod_no" style="font-size:20px" value="" autofocus="autofocus" /></br>';
@@ -428,7 +417,7 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 						echo '<input type="hidden" name="custbar1" id="custbar1" value="'.$_POST['custbar1'].'">';
 						echo '<input type="hidden" name="check_custbar1" id="check_custbar1" value="'.$ck1.'">';
 						echo '<input type="hidden" name="sc" id="sc" value="'.$_POST['sc'].'">';
-						echo "桶  號  : &nbsp;&nbsp;&nbsp; ".'<input type="text" autocomplete="off" name="no1" autofocus="autofocus" id="no1" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
+						echo "桶  號 : &nbsp;&nbsp;&nbsp; ".'<input type="text" autocomplete="off" name="no1" autofocus="autofocus" id="no1" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
 						echo "棧板編號:".'<input type="text" autocomplete="off" name="no2" id="no2" style="font-size:20px" value="'.$_SESSION['pa_no'].'"/></br>';
 						echo '<input type="submit" name="next2" style="font-size:20px" id="next2" value="下一桶/儲存" />';
 						echo "      ".'<input type="submit" style="font-size:20px" name="next3" id="next3" value="結束刷桶" />'.'</br>';	
@@ -441,11 +430,13 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 	
 }//end next2
 elseif(isset($_POST['next2']) and ($_POST['no1']=='' or $_POST['no2']=='')){
+	
 	$_SESSION['pa_no']=$_POST['no2'];
-	$_SESSION['dm_no']=$_POST['no1'];
+	$_SESSION['dm_no']=$_SESSION['no1']='';
 	$_SESSION['cust_prod_no']=$_POST['cust_prod_no'];
 //	echo  "客戶 : ".$_SESSION['cidcname'].')<br>';
 //	echo  "品名 : ".$_SESSION['pidcname'].')<br>';
+
 	echo '<input type="hidden" name="no" autocomplete="off" id="no" style="font-size:20px" value="'.$_SESSION['lot_id'].'"  readonly="readonly" /></br>';
 	$ck1=$_POST["check_custbar1"];
 				if($ck1==1){
@@ -467,7 +458,7 @@ elseif(isset($_POST['next2']) and ($_POST['no1']=='' or $_POST['no2']=='')){
 				echo '<input type="hidden" name="check_custbar1" id="check_custbar1" value="'.$_POST['check_custbar1'].'">';
 				echo '<input type="hidden" name="nono" id="nono" value="'.$_POST['nono'].'">';
 				echo '<input type="hidden" name="sc" id="sc" value="'.$_POST['sc'].'">';
-				echo "桶  號  :&nbsp;&nbsp; &nbsp; ".'<input type="text" name="no1" autocomplete="off" id="no1" autofocus="autofocus" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
+				echo "桶  號 :&nbsp;&nbsp; &nbsp; ".'<input type="text" name="no1" autocomplete="off" id="no1" autofocus="autofocus" style="font-size:20px" value="'.$_SESSION['dm_no'].'"/></br>';
 				echo "棧板編號:".'<input type="text" name="no2" autocomplete="off" id="no2" style="font-size:20px" value="'.$_SESSION['pa_no'].'"/></br>';
 				echo '<input type="submit" name="next2" style="font-size:20px" id="next2" value="下一桶/儲存" />';
 				echo "      ".'<input type="submit" name="next3" style="font-size:20px" id="next3" value="結束刷桶" />'.'</br>';
