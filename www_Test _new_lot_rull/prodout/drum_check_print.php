@@ -216,8 +216,7 @@ function valid($PDD_CLASS,$pid,$cid,$lid)
 	$T=substr($S,0,1);
 	$len=strlen($S);
 //	echo $T.":".$len."<BR>";
-	if(($len==7 or $len==11))
-	{   //TYS ¦Û»s«~
+
 		$query="SELECT CTP_VALID_MON, CTP_REMNANT_MON FROM CUSTOMER_PRODUCTS WHERE (CTD_CUST_NO = '".$cid."') AND (PDD_PROD_NO = '".$pid."')";
 //		echo $query."<BR>";
 		$result = mssql_query($query);
@@ -237,6 +236,7 @@ function valid($PDD_CLASS,$pid,$cid,$lid)
 			$mo=_exmonth(substr($lid,-3,1));
 			$day=substr($lid,-2,2);
 			$term=$yr.$mo.$day;
+			
 		}
 		
 		$str="+".$n." month";
@@ -253,10 +253,7 @@ function valid($PDD_CLASS,$pid,$cid,$lid)
 			$stt=strtotime($term_date.$str);
 			$stt=date("Y-m-d H:i:s",strtotime($term_date.$str));
 		}
-	}
-	else{
-		$stt='';
-	}
+
 	return $stt;
 }
 	
