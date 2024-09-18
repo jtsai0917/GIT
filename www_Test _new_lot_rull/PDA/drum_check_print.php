@@ -3,7 +3,7 @@
 <title></title>
 Drum 出荷檢查表</br>
 <form method="post" action="<?php echo $loginFormAction; ?>">
-<input type="submit" name="print" id="print" value="列印" />
+<input type="submit" name="print" id="print" value="列印1" />
 <input type="submit" name="leave" id="leave" value="離開" />
 
 <?PHP 
@@ -24,7 +24,7 @@ $GLOBALS['num']=0;
 
 if(isset($_POST['leave']))
 	{
-		jumpto('http://143.2.11.51/prodout/index.php?url=drum_check_list');
+		jumpto('http://10.181.140.66/prodout/index.php?url=drum_check_list');
 	}
 if(isset($_POST['print']))
 {		
