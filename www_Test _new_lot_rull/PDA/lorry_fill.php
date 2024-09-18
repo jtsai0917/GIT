@@ -571,7 +571,7 @@ function tank(){
 		echo '<br><input type="text" size="5" name="p0" onchange="set_date_session(this.name,this.value)" value="'.$_SESSION['p0'].'">kg/cm^2';
 		echo '</td></tr><tr>';
 		
-		echo '<td width="100">Filter 1</td><td width="100">Filter 2</td><td>充填站</td></tr><td>';
+		echo '<td width="100">Filter 1</td><td width="100">Filter 2</td><td width="100">Filter 3</td><td>充填站</td></tr><td>';
 		select_Filter1($pid);
 		echo '<br><input type="text" size="5" name="f1" onchange="set_date_session(this.name,this.value)" value="'.$_SESSION['f1'].'">kg/cm^2';
 		echo '</td><td>';
@@ -591,32 +591,14 @@ function tank(){
 }
 
 function finish($flow){
+$flow=$_SESSION['select_flow'];
 	$_SESSION['step']='finish';
 	$jj=new get_from_lot_no;
 	$jj->lid=$_SESSION['lid'];
 	$jj->ani();
 	$pid=trim($jj->pid);
 	$cid=trim($jj->cid);
-	if($_POST['select_series']<>'')
-	{$flow.=trim($_POST['select_series'])."/";}
-	if($_POST['select_Tank']<>'')
-	{$flow.=trim($_POST['select_Tank'])."/";}
-	if($_POST['select_Pump']<>'')
-	{$flow.=trim($_POST['select_Pump'])."/";}
-	if($_POST['select_Tank1']<>'')
-	{$flow.=trim($_POST['select_Tank1'])."/";}
-	if($_POST['select_Pump1']<>'')
-	{$flow.=trim($_POST['select_Pump1'])."/";}
-	if($_POST['select_Filter1']<>'')
-	{$flow.=trim($_POST['select_Filter1'])."/";}
-	if($_POST['select_Filter2']<>'')
-	{$flow.=trim($_POST['select_Filter2'])."/";}
-	if($_POST['select_Filter3']<>'')
-	{$flow.=trim($_POST['select_Filter3'])."/";}
-	if($_POST['select_Spot']<>'')
-	{$flow.=trim($_POST['select_Spot'])."/";}
-	$_SESSION['select_flow']=$flow=substr($flow,0,-1);
-	
+	$pressure="";
 	if($_SESSION['select_series']<>'')
 	{$pressure.="NA/";}
 	if($_SESSION['select_Tank']<>'')
@@ -668,8 +650,8 @@ VALUES  ('".trim($_SESSION['lid'])."', '".$pid."', '".$c."', '".date("Ymd")."', 
 	$result6 = mssql_query($query);
 	
 	// 7. 設定充填路徑
-	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date, pressure) VALUES ('".$_SESSION['lid']."','".$flow."','".$_SESSION['uid']."','".date("YmdHis")."','".$pressure."')";	
-//	echo $query."<BR>";
+	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date, pressure) VALUES ('".$_SESSION['lid']."','".$_SESSION['select_flow']."','".$_SESSION['uid']."','".date("YmdHis")."','".$pressure."')";	
+//	echo $query."<BR>SS";break;
 	$result=mssql_query($query);
 	
 // 8. 封槽管理項目
@@ -703,7 +685,7 @@ VALUES  ('".trim($_SESSION['lid'])."', '".$pid."', '".$c."', '".date("Ymd")."', 
 	}
 	else{echo "沒有封槽資料<BR>";}	
 	//5. Update FILL_INDICATE	
-	$query="Update FILL_INDICATE Set FID_FILL_BEGIN_DATE = '".date("YmdHis")."', FID_SOURCE_LOT = N'".strtoupper($_SESSION['source_lot'])."', FID_FILL_STATUS=1, FID_QTY = ".$_SESSION['qty'].", FID_WASHED_COUNT = 0, FID_OPERATOR = '".$_SESSION['uid']."'   Where FDM_LOT_NO = '".$_SESSION['lid']."'"; 
+	$query="Update FILL_INDICATE Set FID_FILL_BEGIN_DATE = '".date("YmdHis")."', FID_SOURCE_LOT = N'".strtoupper($_POST['source_lot'])."', FID_FILL_STATUS=1, FID_QTY = ".$_SESSION['qty'].", FID_WASHED_COUNT = 0, FID_OPERATOR = '".$_SESSION['uid']."'   Where FDM_LOT_NO = '".$_SESSION['lid']."'"; 
 
 	$result5 = mssql_query($query);
 	$query="select * from lorry_fill_tmp where lot_no='".trim($_SESSION['lid'])."'";
@@ -998,8 +980,9 @@ if(isset($_POST['save'])){
 	$row=mssql_fetch_row($result);
 	$n=$row[0];
 */
-	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date) VALUES ('".$_SESSION['lot_no']."','".$_SESSION['flow']."','".$_SESSION['uid']."','".date("YmdHis")."')";	
+	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date) VALUES ('".$_SESSION['lot_no']."','".$_SESSION['select_flow']."','".$_SESSION['uid']."','".date("YmdHis")."')";	
 	$result=mssql_query($query);
+	echo $query."<BR>";break;
 	echo "完成";
 	echo '<script type="text/javascript">window.close()</script>';
 }
