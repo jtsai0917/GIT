@@ -584,14 +584,14 @@ function tank(){
 		select_Spot($pid);
 		echo '</td></tr></table>';	
 		echo '</br></br><input type="submit"  name="finish" value="   下 一 步   " /><input type="submit" name="submit3" value="    上 一 步    " /></br>';
-		$_SESSION['select_flow']=$_SESSION['select_series']."/".$_SESSION['select_Tank']."/".$_SESSION['select_Pump']."/".$_SESSION['select_Filter1']."/".$_SESSION['select_Filter2']."/".$_SESSION['select_Filter3']."/".$_SESSION['select_Spot'];
+//		$_SESSION['select_flow']=$_SESSION['select_series']."/".$_SESSION['select_Tank']."/".$_SESSION['select_Pump']."/".$_SESSION['select_Filter1']."/".$_SESSION['select_Filter2']."/".$_SESSION['select_Filter3']."/".$_SESSION['select_Spot'];
 		echo '<input type="hidden" name="select_flow" value="'.$_SESSION['select_flow'].'">';
 		echo '</form>';
 	}
 }
 
 function finish($flow){
-$flow=$_SESSION['select_flow'];
+$_SESSION['select_flow']=$flow;
 	$_SESSION['step']='finish';
 	$jj=new get_from_lot_no;
 	$jj->lid=$_SESSION['lid'];
@@ -599,25 +599,86 @@ $flow=$_SESSION['select_flow'];
 	$pid=trim($jj->pid);
 	$cid=trim($jj->cid);
 	$pressure="";
-	if($_SESSION['select_series']<>'')
-	{$pressure.="NA/";}
-	if($_SESSION['select_Tank']<>'')
-	{$pressure.="NA/";}
-	if($_SESSION['select_Pump']<>'')
-	{$pressure.=trim($_SESSION['p0'])."/";}
-	if($_SESSION['select_Tank1']<>'')
-	{$pressure.="NA/";}
-	if($_SESSION['select_Pump1']<>'')
-	{$pressure.=trim($_SESSION['p1'])."/";}
-	if($_SESSION['select_Filter1']<>'')
-	{$pressure.=trim($_SESSION['f1'])."/";}
-	if($_SESSION['select_Filter2']<>'')
-	{$pressure.=trim($_SESSION['f2'])."/";}
-	if($_SESSION['select_Filter3']<>'')
-	{$pressure.=trim($_SESSION['f3'])."/";}
-	if($_SESSION['select_Spot']<>'')
-	{$pressure.="NA/";}
-	$_SESSION['pressure']=$pressure=substr($pressure,0,-1);
+		if($_POST['select_series']<>'' and $_POST['select_series']<>'NA')
+	{
+		$flow.=trim($_POST['select_series'])."/";
+		$flow1.=trim($_POST['select_series'])."/";
+		$pressurex.="NA/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Tank']<>'' and $_POST['select_Tank']<>'NA')
+	{
+		$flow.=trim($_POST['select_Tank'])."/";
+		$flow1.=trim($_POST['select_Tank'])."/";
+		$pressurex.="NA/";	
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Pump']<>'' and $_POST['select_Pump']<>'NA')
+	{
+		$flow.=trim($_POST['select_Pump'])."/";
+		$flow1.=trim($_POST['select_Pump'])."/";
+		$pressurex.=trim($_POST['p0'])."/";	
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Tank1']<>'' and $_POST['select_Tank1']<>'NA')
+	{
+		$flow.=trim($_POST['select_Tank1'])."/";
+		$flow1.=trim($_POST['select_Tank1'])."/";
+		$pressurex.="NA/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Pump1']<>'' and $_POST['select_Pump1']<>'NA')
+	{
+		$flow.=trim($_POST['select_Pump1'])."/";
+		$flow1.=trim($_POST['select_Pump1'])."/";
+		$pressurex.=trim($_POST['p1'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Filter1']<>'' and $_POST['select_Filter1']<>'NA')
+	{
+		$flow.=trim($_POST['select_Filter1'])."/";
+		$flow1.=trim($_POST['select_Filter1'])."/";
+		$pressurex.=trim($_POST['f1'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Filter2']<>'' and $_POST['select_Filter2']<>'NA')
+	{
+		$flow.=trim($_POST['select_Filter2'])."/";
+		$flow1.=trim($_POST['select_Filter2'])."/";
+		$pressurex.=trim($_POST['f2'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Filter3']<>'' and $_POST['select_Filter3']<>'NA')
+	{
+		$flow.=trim($_POST['select_Filter3'])."/";
+		$flow1.=trim($_POST['select_Filter3'])."/";
+		$pressurex.=trim($_POST['f3'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Spot']<>'' and $_POST['select_Spot']<>'NA')
+	{
+		$flow.=trim($_POST['select_Spot'])."/";
+		$flow1.=trim($_POST['select_Spot'])."/";
+		$pressurex.="NA/";
+	}else{
+		$flow1.="NA/";
+	}
+	
+	
+	$flow=substr($flow,0,-1);
+//	echo $flow;break;
+	$_SESSION['select_flow']=$flow;
+	$pressure=substr($pressurex,0,-1);
+	$flow1a=explode("/",$flow1);
+	$pressure1=explode("/",$pressurex);
 	
 	$query="SELECT leave FROM Tank_batch where active=1 and tank_no='".$_SESSION['tank_no']."' ORDER BY [index] DESC";
 
@@ -650,7 +711,7 @@ VALUES  ('".trim($_SESSION['lid'])."', '".$pid."', '".$c."', '".date("Ymd")."', 
 	$result6 = mssql_query($query);
 	
 	// 7. 設定充填路徑
-	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date, pressure) VALUES ('".$_SESSION['lid']."','".$_SESSION['select_flow']."','".$_SESSION['uid']."','".date("YmdHis")."','".$pressure."')";	
+	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date, pressure) VALUES ('".$_SESSION['lid']."','".$_POST['flow']."','".$_SESSION['uid']."','".date("YmdHis")."','".$pressure."')";	
 //	echo $query."<BR>SS";break;
 	$result=mssql_query($query);
 	
@@ -980,9 +1041,10 @@ if(isset($_POST['save'])){
 	$row=mssql_fetch_row($result);
 	$n=$row[0];
 */
+$_SESSION['select_flow']=$_POST['flow'];
 	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date) VALUES ('".$_SESSION['lot_no']."','".$_SESSION['select_flow']."','".$_SESSION['uid']."','".date("YmdHis")."')";	
 	$result=mssql_query($query);
-	echo $query."<BR>";break;
+//	echo $query."<BR>";break;
 	echo "完成";
 	echo '<script type="text/javascript">window.close()</script>';
 }
