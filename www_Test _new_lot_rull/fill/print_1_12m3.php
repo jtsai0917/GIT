@@ -57,70 +57,114 @@ function print_table(){
 	
 require_once("../lib/fun.php");
 require_once("../connections/conn.php");
-$query="SELECT          dbo.LORRY_FILL_CHECK.FDM_LOT_NO, dbo.FILLPLAN_OUT_DECIDE.PDD_PROD_NO, dbo.FILLPLAN_OUT_DECIDE.FDM_CREATOR,
-                            dbo.PRODUCT_DATA.PDD_PROD_NAME, dbo.FILLPLAN_OUT_DECIDE.FOD_YEAR_MONTH, 
-                            dbo.FILLPLAN_OUT_DECIDE.FOD_DAY, dbo.FILLPLAN_OUT_DECIDE.CTD_CUST_NO,
-							dbo.FILLPLAN_OUT_DECIDE.FDM_LY_NO, dbo.FILLPLAN_OUT_DECIDE.FDM_SAM_CNT
-							, dbo.FILLPLAN_OUT_DECIDE.FDM_QTY, dbo.FILLPLAN_OUT_DECIDE.FDM_LY_NO, dbo.PRODUCT_DATA.PDD_LITER_KG,
-							dbo.LORRY_FILL_CHECK.LFC_B_REMAIN_QTY, dbo.LORRY_FILL_CHECK.LFC_B_TROUGH_TOP, dbo.LORRY_FILL_CHECK.LFC_B_CHK_COUP_CLR,
-							dbo.LORRY_FILL_CHECK.LFC_B_CHK_COUP, dbo.LORRY_FILL_CHECK.LFC_B_CHK_COUP_LINK, dbo.LORRY_FILL_CHECK.LFC_B_CHK_EXHAUST,
-							dbo.LORRY_FILL_CHECK.LFC_B_SET_FILL,  dbo.LORRY_FILL_CHECK.LFC_F_FLOW, dbo.LORRY_FILL_CHECK.LFC_F_SAM_COUNT,
-							dbo.LORRY_FILL_CHECK.LFC_F_RESISTANCE, dbo.LORRY_FILL_CHECK.LFC_E_OPER_FILL, dbo.LORRY_FILL_CHECK.LFC_E_TROUGH_TOP,
-							dbo.LORRY_FILL_CHECK.LFC_E_CHK_AIR_SEAL, dbo.LORRY_FILL_CHECK.LFC_E_CHK_FILL_CLOSE, dbo.LORRY_FILL_CHECK.LFC_E_CHK_EXHAUST,
-							dbo.LORRY_FILL_CHECK.LFC_E_CHK_VALVE, dbo.LORRY_FILL_CHECK.LFC_E_CHK_COUP_CLR, dbo.LORRY_FILL_CHECK.LFC_E_CHK_COUP, 
-							dbo.LORRY_FILL_CHECK.LFC_E_CHK_PIPE_PICKUP, dbo.LORRY_FILL_CHECK.LFC_FILLER,dbo.LORRY_FILL_CHECK.LFC_W_PRIOR_WEIGHT,
-							dbo.FILLPLAN_OUT_DECIDE.FDM_QTY_UNIT
-FROM             dbo.LORRY_FILL_CHECK INNER JOIN
-                          dbo.FILLPLAN_OUT_DECIDE ON 
-                          LORRY_FILL_CHECK.FDM_LOT_NO = FILLPLAN_OUT_DECIDE.FDM_LOT_NO INNER
-                           JOIN
-                          dbo.PRODUCT_DATA ON 
-                          FILLPLAN_OUT_DECIDE.PDD_PROD_NO = PRODUCT_DATA.PDD_PROD_NO
-WHERE          (dbo.LORRY_FILL_CHECK.FDM_LOT_NO = '".$this->lid."')";
-
+$query="SELECT      TOP (1) LORRY_FILL_CHECK.FDM_LOT_NO, FILLPLAN_OUT_DECIDE.PDD_PROD_NO, 
+                            FILLPLAN_OUT_DECIDE.FDM_CREATOR, PRODUCT_DATA.PDD_PROD_NAME, 
+                            FILLPLAN_OUT_DECIDE.FOD_YEAR_MONTH, FILLPLAN_OUT_DECIDE.FOD_DAY, 
+                            FILLPLAN_OUT_DECIDE.CTD_CUST_NO, FILLPLAN_OUT_DECIDE.FDM_LY_NO, 
+                            FILLPLAN_OUT_DECIDE.FDM_SAM_CNT, FILLPLAN_OUT_DECIDE.FDM_QTY, 
+                            FILLPLAN_OUT_DECIDE.FDM_LY_NO AS Expr1, PRODUCT_DATA.PDD_LITER_KG, 
+                            LORRY_FILL_CHECK.LFC_B_REMAIN_QTY, LORRY_FILL_CHECK.LFC_B_TROUGH_TOP, 
+                            LORRY_FILL_CHECK.LFC_B_CHK_COUP_CLR, LORRY_FILL_CHECK.LFC_B_CHK_COUP, 
+                            LORRY_FILL_CHECK.LFC_B_CHK_COUP_LINK, LORRY_FILL_CHECK.LFC_B_CHK_EXHAUST, 
+                            LORRY_FILL_CHECK.LFC_B_SET_FILL, LORRY_FILL_CHECK.LFC_F_FLOW, 
+                            LORRY_FILL_CHECK.LFC_F_SAM_COUNT, LORRY_FILL_CHECK.LFC_F_RESISTANCE, 
+                            LORRY_FILL_CHECK.LFC_E_OPER_FILL, LORRY_FILL_CHECK.LFC_E_TROUGH_TOP, 
+                            LORRY_FILL_CHECK.LFC_E_CHK_AIR_SEAL, LORRY_FILL_CHECK.LFC_E_CHK_FILL_CLOSE, 
+                            LORRY_FILL_CHECK.LFC_E_CHK_EXHAUST, LORRY_FILL_CHECK.LFC_E_CHK_VALVE, 
+                            LORRY_FILL_CHECK.LFC_E_CHK_COUP_CLR, LORRY_FILL_CHECK.LFC_E_CHK_COUP, 
+                            LORRY_FILL_CHECK.LFC_E_CHK_PIPE_PICKUP, LORRY_FILL_CHECK.LFC_FILLER, 
+                            LORRY_FILL_CHECK.LFC_W_PRIOR_WEIGHT, FILLPLAN_OUT_DECIDE.FDM_QTY_UNIT, 
+                            LORRY_FILL_CHECK.LFC_B_TROUGH_QTY, LORRY_FILL_CHECK.LFC_E_TROUGH_QTY, 
+                            LORRY_FILL_CHECK.LFC_E_CHK_MEGA_CHECK AS megacheck, Fill_Flow_Chart.flow, 
+                            Fill_Flow_Chart.pressure
+FROM           LORRY_FILL_CHECK INNER JOIN
+                            FILLPLAN_OUT_DECIDE ON 
+                            LORRY_FILL_CHECK.FDM_LOT_NO = FILLPLAN_OUT_DECIDE.FDM_LOT_NO INNER JOIN
+                            PRODUCT_DATA ON 
+                            FILLPLAN_OUT_DECIDE.PDD_PROD_NO = PRODUCT_DATA.PDD_PROD_NO LEFT OUTER JOIN
+                            Fill_Flow_Chart ON FILLPLAN_OUT_DECIDE.FDM_LOT_NO = Fill_Flow_Chart.Lot_No 
+WHERE       (LORRY_FILL_CHECK.FDM_LOT_NO = '".$this->lid."') ORDER BY Fill_Flow_Chart.[index] DESC" ; 
+//echo $query."<BR>";
 $result = mssql_query($query);
 $numRows = mssql_num_rows($result);	
+$p=0;
 	while($row = mssql_fetch_array($result))
 		{
 			$I11=$row['FDM_QTY_UNIT'];
 			if($I11=='KG'){$qty=$row['FDM_QTY']/$row['PDD_LITER_KG'];}else{$qty=$row['FDM_QTY'];}
 			$big_drum_volume=get_big_drum_volume($row['FDM_LY_NO']);
 			$f6=get_prod_name($row['PDD_PROD_NO']);
+			$h6="*2".trim($row['PDD_PROD_NO'])."*";
 			$f7=$row['FOD_YEAR_MONTH'].$row['FOD_DAY'];
 			$f8=get_cust_name($row['CTD_CUST_NO']);
 			$f9=$row['FDM_LOT_NO'];
 			$f10=$row['FDM_SAM_CNT'];
 			$f11=$qty;
 			$f12=$row['FDM_LY_NO'];
-			$f13=$row['LFC_W_PRIOR_WEIGHT'];
-			$h14=$row['PDD_LITER_KG'];
-			$f15=$row['LFC_B_REMAIN_QTY'];
-			$d16=get_uname($row['FDM_CREATOR']);
-			$f18=$f30=$row['LFC_B_TROUGH_TOP'];
+			$h12="*3".substr(trim($row['FDM_LY_NO']),2)."*";
+		//	$f13=$row['LFC_W_PRIOR_WEIGHT'];
+			$h13=$row['PDD_LITER_KG'];
+			$f14=$row['LFC_B_REMAIN_QTY'];
+			$d15=get_uname($row['FDM_CREATOR']);
+			$f16=$row['LFC_B_TROUGH_TOP'];
+			$h16=$row['LFC_B_TROUGH_QTY'];
 			$ah18=$big_drum_volume*$f18/100;
 			$f19=$row['LFC_B_CHK_COUP_CLR'];
 			$f20=$row['LFC_B_CHK_COUP'];
 			$f21=$row['LFC_B_CHK_COUP_LINK'];
-			$f22=$row['LFC_B_CHK_EXHAUST'];
-			$f24=$row['LFC_B_SET_FILL'];
-			$f25=$row['LFC_F_FLOW'];
-			$f26=$row['LFC_F_SAM_COUNT'];
-			$f27=$row['LFC_F_RESISTANCE'];
-			$f29=$row['LFC_E_OPER_FILL'];		
-			$f31=$row['LFC_E_CHK_AIR_SEAL'];
+	//		$f22=$row['LFC_B_CHK_EXHAUST'];
+			$f22=$row['LFC_B_SET_FILL'];
+			$f23=$row['LFC_F_FLOW'];
+			$f24=$row['LFC_F_SAM_COUNT'];
+	//		$f27=$row['LFC_F_RESISTANCE'];
+	//		$f28=$row['megacheck'];
+	//		$f29=$row['LFC_E_OPER_FILL'];		
+	//		$f27=$row['LFC_E_CHK_AIR_SEAL'];
 			$f32=$row['LFC_E_CHK_FILL_CLOSE'];
 			$f33=$row['LFC_E_CHK_EXHAUST'];
 			$f34=$row['LFC_E_CHK_EXHAUST'];
+			/*
 			$f36=$row['LFC_E_CHK_VALVE'];
 			$f37=$row['LFC_E_CHK_COUP_CLR'];
 			$f38=$row['LFC_E_CHK_COUP'];
 			$f39=$row['LFC_E_CHK_PIPE_PICKUP'];
-			$d40=get_uname($row['LFC_FILLER']);
-			$h18=$h30=$ah18;
+	*/
+			$d36=get_uname($row['LFC_FILLER']);
+	//		$h18=$row['LFC_B_TROUGH_QTY'];
+			$f26=$row['LFC_E_TROUGH_TOP'];
+			$h26=$row['LFC_E_TROUGH_QTY'];
+		// 分割字串
+			$chart=$row['flow'];
+//		echo '<BR>';
+			$presure=$row['pressure'];
+			$ac=explode('/',$chart);
+			$pc=explode('/',$presure);
+			$an=count($ac);
+			for($n=0;$n<$an;$n++){
+				if(substr($ac[$n],0,1)=='P'){
+					$j20=trim($ac[$n]).'出口壓力 X1：'.trim($pc[$n]).'Kg/cm2';
+					$pc0=$pc[$n];
+				}
+				if(substr($ac[$n],0,1)=='S'){
+					if($p==0){
+						$j21=trim($ac[$n]).'出口壓力 X2：'.trim($pc[$n]).'Kg/cm2';
+						$pc1=$pc[$n];
+					}
+					if($p==1){
+						$j22=trim($ac[$n]).'出口壓力 X3：'.trim($pc[$n]).'Kg/cm2';
+						$pc2=$pc[$n];
+					}
+					$p++;
+				}
+			}
+			$pd1=$pc0-$pc1;
+			$pd2=$pc0-$pc2;
+			$j23='總壓差1=X1-X2 = '.trim($pd1).' Kg/cm2';
+			$j24='總壓差2=X1-X3 = '.trim($pd2).' Kg/cm2';
 		}
-		$query="SELECT          SMA_LOT , SMA_ID
+$query="SELECT          SMA_LOT , SMA_ID
 FROM              Sample_All
-WHERE          (SMA_LOT = '".$this->lid."')";
+WHERE          (SMA_LOT = '".$this->lid."')  AND (ISREWORK <> '0')";
 $result = mssql_query($query);
 $i=6;
 while($row = mssql_fetch_array($result)){
@@ -131,31 +175,34 @@ $i=$i+1;
 	
 	
 	$objPHPExcel->setActiveSheetIndex(0)
-                            ->setCellValue('f6',iconv("big5","utf-8",$f6))
-                            ->setCellValue("f7",$f7)
-                            ->setCellValue('f8',iconv("big5","utf-8",$f8))
-                            ->setCellValue('f9',$f9)
-                            ->setCellValue('f10',$f10)
-                            ->setCellValue('f11',$f11)
+							->setCellValue('f6',iconv("big5","utf-8",$f6))
+							->setCellValue('h6',iconv("big5","utf-8",$h6))
+							->setCellValue("f7",$f7)
+							->setCellValue('f8',iconv("big5","utf-8",$f8))
+							->setCellValue('f9',$f9)
+							->setCellValue('f10',$f10)
+							->setCellValue('f11',$f11)
 							->setCellValue('f12',$f12)
-							->setCellValue('f13',$f13)
-                            ->setCellValue("h14",$h14)
-                            ->setCellValue('f15',$f15)
-                            ->setCellValue('d16',iconv("big5","utf-8",$d16))
-							->setCellValue('f18',$f18)
-							->setCellValue('H18',$h18)
-                            ->setCellValue('f19',$f19)
+							->setCellValue('h12',$h12)
+					//		->setCellValue('f13',$f13)
+							->setCellValue("h13",$h13)
+							->setCellValue('f14',$f14)
+							->setCellValue('d15',iconv("big5","utf-8",$d15))
+							->setCellValue('f16',$f16)
+							->setCellValue('H16',$h16)
+							->setCellValue('f19',$f19)
 							->setCellValue('f20',$f20)
 							->setCellValue('f21',$f21)
-							->setCellValue('f22',$f22)
+					//		->setCellValue('f22',$f22)
+							->setCellValue('f25',$f22)
 							->setCellValue('f23',$f23)
 							->setCellValue('f24',$f24)
-							->setCellValue('f25',$f25)
+							->setCellValue('f23',$f23)
 							->setCellValue('f26',$f26)
-							->setCellValue('f27',$f27)
-							->setCellValue('f29',$f29)
-							->setCellValue('f30',$f30)
-							->setCellValue('h30',$h30)
+			//				->setCellValue('f27',$f27)
+			//				->setCellValue('f28',$f28)
+			//				->setCellValue('f29',$f29)
+							->setCellValue('h26',$h26)
 							->setCellValue('f32',$f32)
 							->setCellValue('f33',$f33)
 							->setCellValue('f34',$f34)
@@ -164,7 +211,12 @@ $i=$i+1;
 							->setCellValue('f38',$f38)
 							->setCellValue('f39',$f39)
 							->setCellValue('h18',$h18)
-							->setCellValue('d40',iconv("big5","utf-8",$d40))
+							->setCellValue('j20',iconv("big5","utf-8",$j20))
+							->setCellValue('j21',iconv("big5","utf-8",$j21))
+							->setCellValue('j22',iconv("big5","utf-8",$j22))
+							->setCellValue('j23',iconv("big5","utf-8",$j23))
+							->setCellValue('j24',iconv("big5","utf-8",$j24))
+							->setCellValue('d36',iconv("big5","utf-8",$d36))
 							;
 $styleThinBlackBorderOutline = array(
 	'borders' => array(
@@ -174,6 +226,13 @@ $styleThinBlackBorderOutline = array(
 		),
 	),
 );
+	$objPHPExcel->getActiveSheet(0)->getStyle('H6')->getFont()->setName('C39HrP48DmTt' );
+	$objPHPExcel->getActiveSheet(0)->getStyle('H9')->getFont()->setName('C39HrP48DmTt' );
+	$objPHPExcel->getActiveSheet(0)->getStyle('H12')->getFont()->setName('C39HrP48DmTt' );
+	$objPHPExcel->getActiveSheet(0)->getStyle('H6')->getFont()->setSize(18);
+	$objPHPExcel->getActiveSheet(0)->getStyle('H9')->getFont()->setSize(18);
+	$objPHPExcel->getActiveSheet(0)->getStyle('H12')->getFont()->setSize(18);
+	
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f6')->applyFromArray($styleThinBlackBorderOutline);
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f7')->applyFromArray($styleThinBlackBorderOutline);
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f8')->applyFromArray($styleThinBlackBorderOutline);
@@ -197,15 +256,17 @@ $styleThinBlackBorderOutline = array(
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f36')->applyFromArray($styleThinBlackBorderOutline);
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('B18')->applyFromArray($styleThinBlackBorderOutline);
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('F18')->applyFromArray($styleThinBlackBorderOutline);
-	$objPHPExcel->setActiveSheetIndex(0)->getStyle('H18')->applyFromArray($styleThinBlackBorderOutline);
-	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f37')->applyFromArray($styleThinBlackBorderOutline);
-	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f38')->applyFromArray($styleThinBlackBorderOutline);
-	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f39')->applyFromArray($styleThinBlackBorderOutline);
-	$objPHPExcel->setActiveSheetIndex(0)->getStyle('d40')->applyFromArray($styleThinBlackBorderOutline);
-	$objPHPExcel->getActiveSheet(0)->getStyle('f6:f39')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-	$objPHPExcel->getActiveSheet(0)->getStyle('f6:f39')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-	$objPHPExcel->getActiveSheet(0)->getStyle('d16:d40')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
-	$objPHPExcel->getActiveSheet(0)->getStyle('d16:d40')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+	$objPHPExcel->setActiveSheetIndex(0)->getStyle('H12')->applyFromArray($styleThinBlackBorderOutline);
+//	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f37')->applyFromArray($styleThinBlackBorderOutline);
+//	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f38')->applyFromArray($styleThinBlackBorderOutline);
+//	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f39')->applyFromArray($styleThinBlackBorderOutline);
+	$objPHPExcel->setActiveSheetIndex(0)->getStyle('d36')->applyFromArray($styleThinBlackBorderOutline);
+	$objPHPExcel->getActiveSheet(0)->getStyle('f6:f35')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+	$objPHPExcel->getActiveSheet(0)->getStyle('f6:f35')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+	$objPHPExcel->getActiveSheet(0)->getStyle('d15:d40')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+	$objPHPExcel->getActiveSheet(0)->getStyle('H6:H12')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+	$objPHPExcel->getActiveSheet(0)->getStyle('H6:H12')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+	$objPHPExcel->getActiveSheet(0)->getStyle('d15:d40')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 	$objPHPExcel->getActiveSheet(0)->getStyle('H18:H30')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 	$objPHPExcel->getActiveSheet(0)->getStyle('H18:H30')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 	$objPHPExcel->getActiveSheet(0)->getStyle('G18:G30')->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);

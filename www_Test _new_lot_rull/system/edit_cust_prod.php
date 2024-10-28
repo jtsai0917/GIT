@@ -144,6 +144,23 @@ if(isset($_POST["save"])){
 //	echo '<BR>'.$_POST['lyno'].'<BR>';
 //	break;
 if($_POST['outcheck1']=='on'){$ck1=1;}else{$ck1=0;}
+
+$A=get_cust_name($_GET['cid']);
+$B="¥x¿n";
+if (strpos($A, $B) !== false) {
+   $query="UPDATE        CUSTOMER_PRODUCTS SET CTP_CUSTBAR1_start_char = '".$ck1."',CTP_CUSTBAR1_CHECK = '".$ck1."',smp_reg = '".trim($_POST['smp_reg'])."',CTP_UNIT = '".trim($_POST['ctp_unit'])."',smp_total = '".trim($_POST['smp_total'])."',             
+					 CTP_EXPORT ='".$_POST['export']."', CTP_CLASS ='".$_POST['ctp_class']."', CTP_SEL_LY_TOTO ='".$_POST['lyno']."',
+					 CTP_DESC ='".$_POST['postcript']."', CTP_FILL ='".cx($_POST['fill'])."', CTP_ANALYZE ='".cx($_POST['analyze'])."', 
+                     CTP_VALID_MON ='".$_POST['validmon']."', CTP_REMNANT_MON ='".$_POST['rem_mon']."', CTP_CHANGE_DM ='".cx($_POST['changedm'])."', 
+                     CTP_REWASH ='".cx($_POST['rewash'])."', CTP_SAMPLE_BEFORE ='".cx($_POST['sambefore'])."', CTP_COA_BEFORE ='".cx($_POST['coabefore'])."', 
+                     CTP_OUT_SMP_PE ='".$_POST['out_pe']."', CTP_OUT_SMP_TFA ='".$_POST['out_tfa']."', CTP_BEF_SMP_PE ='".$_POST['bef_pe']."', 
+                          CTP_BEF_SMP_TFA ='".$_POST['bef_tfa']."', CTP_CUSTBAR1 ='".$_POST['barcode1']."', CTP_CUSTBAR2 ='".$_POST['barcode2']."', 
+						  CTP_CUSTBAR3 ='".$_POST['barcode3']."', CTP_PRINT_FMT ='".$_POST['barcodedrum']."', CTP_BIGHOSEBAR ='".$_POST['lorry_hose_barcode']."', 
+						  CTP_BIGHOSEBAR_Length ='".$_POST['hose_barcode']."', CTP_ExportCountLimit ='".$_POST['limit']."', CTP_SAMPLE_MODE ='".cx($_POST['block3'])."', 
+						  CTP_CUST_PROD_NO1 ='".$_POST['cust_prod_no1']."', CTP_CUST_PROD_NO2 ='".$_POST['cust_prod_no2']."'
+WHERE         (CTD_CUST_NO = '".$_GET['cid']."') and (PDD_PROD_NO='".$_GET['pid']."')";	
+}
+else{
 		$query="UPDATE        CUSTOMER_PRODUCTS SET CTP_CUSTBAR1_CHECK = '".$ck1."',smp_reg = '".trim($_POST['smp_reg'])."',CTP_UNIT = '".trim($_POST['ctp_unit'])."',smp_total = '".trim($_POST['smp_total'])."',             
 					 CTP_EXPORT ='".$_POST['export']."', CTP_CLASS ='".$_POST['ctp_class']."', CTP_SEL_LY_TOTO ='".$_POST['lyno']."',
 					 CTP_DESC ='".$_POST['postcript']."', CTP_FILL ='".cx($_POST['fill'])."', CTP_ANALYZE ='".cx($_POST['analyze'])."', 
@@ -155,6 +172,7 @@ if($_POST['outcheck1']=='on'){$ck1=1;}else{$ck1=0;}
 						  CTP_BIGHOSEBAR_Length ='".$_POST['hose_barcode']."', CTP_ExportCountLimit ='".$_POST['limit']."', CTP_SAMPLE_MODE ='".cx($_POST['block3'])."', 
 						  CTP_CUST_PROD_NO1 ='".$_POST['cust_prod_no1']."', CTP_CUST_PROD_NO2 ='".$_POST['cust_prod_no2']."'
 WHERE         (CTD_CUST_NO = '".$_GET['cid']."') and (PDD_PROD_NO='".$_GET['pid']."')";	
+}
 //echo $query."<BR>";
 $result=mssql_query($query);
 //break;

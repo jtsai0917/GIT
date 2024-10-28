@@ -21,7 +21,7 @@ WHERE          (OUT_PRODUCT.OPD_LOT_NO = '".$lot_no."' and OUT_PRODUCT.OPD_SERIA
 
 	$result = mssql_query($query);
 	$numrow=mssql_num_rows($result);
-	echo $query."<BR>";
+//	echo $query."<BR>";
 	if($numrow >0){
 		while($row=mssql_fetch_array($result)){
 			$lyno=substr(trim($lot_no),0,2).substr(trim($lot_no),-4,4);

@@ -1,8 +1,8 @@
 <?php  
 session_start();
- 		$_SESSION['dbhost']=$myServer = "10.181.5.100";
+//		$_SESSION['dbhost']=$myServer = "10.181.5.100";
 //  	$_SESSION['dbhost']=$myServer = "143.2.11.3";
-//		$_SESSION['dbhost']=$myServer = "localhost";
+		$_SESSION['dbhost']=$myServer = "localhost";
 $myUser = "sa";
     	$myPass = "9037";
 //			$myPass = "2Iairiol!@#";

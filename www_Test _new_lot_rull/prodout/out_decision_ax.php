@@ -45,6 +45,7 @@ include("../connections/conn.php");
 		$_SESSION['datepicker1']=$_POST['datepicker1'];
 		$_SESSION['datepicker2']=$_POST['datepicker2'];
 		$query="SELECT  COPCONFIRM.*, CONVERT(varchar(100), TYSORDERDATE, 101) as odate,CONVERT(varchar(100), RECEIPTDATEREQUESTED, 101) as rdate FROM COPCONFIRM where SALESID<>'' ";
+//		echo $query."<BR>";
 		if($_POST['order_no']<>''){ $query.="and SALESID='".$_POST['order_no']."' ";}
 		else{
 			if($_POST['datepicker1']<>''){$query.="and RECEIPTDATEREQUESTED >='".ddo($_POST['datepicker1'])."'";}
@@ -69,7 +70,13 @@ include("../connections/conn.php");
 		$aa[$i][10]=$row['TYSMEMO'];
 		$aa[$i][11]=$row['INVENTLOCATIONID'];
 		$aa[$i][12]=$row['TYSNOTE'];
-		$aa[$i][13]=$row['LOTNO'];
+		if($row['ITEMID']=='P327-020' or $row['ITEMID']=='P326-020'){
+			$lot_no=$row['LOTNO']."B020";
+		}
+		else{
+			$lot_no=$row['LOTNO'];
+		}
+		$aa[$i][13]=$lot_no;
 		$aa[$i][14]=$row['CREATEDBY'];
 		$aa[$i][15]=$row['CREATEDDATETIME'];
 		$aa[$i][16]=$row['COPCONFIRMNO'];

@@ -65,8 +65,8 @@ a:active {
 
 <body>
 <p><a href="fill.php"><img src="../pics/TYS.jpg" alt="" width="50" height="28" /></a>人員：<?php echo $_SESSION['uname']?></p>
-<p><strong><a href="lorry_fill_hic.php">1. 新版 LORRY 充填作業</a></strong></p>
-<p><strong><a href="lorry_fill.php">7. LORRY 充填作業</a></strong></p>
+<p><strong><a href="lorry_fill.php">1. 新版 LORRY 充填作業</a></strong></p>
+<p><strong><a href="http://<?php echo $server_ip = $_SERVER['SERVER_ADDR'];?>:88/PDA/lorry_fill.aspx?uid=<?php echo $_SESSION['uid'];?>">1. 新版 LORRY 充填作業</a></strong></p>
 <p><strong><a href="el_drum_fill.php">2. EL藥品Drum充填/洗淨</p>
 <p><strong><a href="el_drum_fill.php">3. IPA Drum充填</p>
 <p><strong><a href="pda_20L_FILL.php">4. 20L PE充填/洗淨</p>

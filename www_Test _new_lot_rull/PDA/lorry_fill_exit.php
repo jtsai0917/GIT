@@ -1,0 +1,15 @@
+<?php
+include("../lib/fun.php");
+	session_start();
+	unset($_SESSION['qty']);
+	unset($_SESSION['chemical']);
+	unset($_SESSION['select_series']);
+	unset($_SESSION['select_Tank']);
+	unset($_SESSION['select_Pump']);
+	unset($_SESSION['select_Filter1']);
+	unset($_SESSION['select_Filter2']);
+	unset($_SESSION['select_Pump1']);
+	unset($_SESSION['select_Filter3']);
+	unset($_SESSION['select_Spot']);
+	jumpto("lorry_fill.php");
+?>

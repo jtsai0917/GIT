@@ -4,6 +4,7 @@ include("../connections/conn.php");
 include ("../lib/fun.php");
 include ("../lib/jtsai.php");
 datepick();
+$_SESSION['select_flow']='';
 if($_SESSION['uid']==''){jumpto("login.php");}
 else{$return_page="index.php";}
 ?><head>
@@ -209,7 +210,7 @@ if(isset($_POST['end']))
 				}
     	}else{
     		$_SESSION['step']='';
-    		my_msg("請重新開始","fill.php");
+    		my_msg("請重新開始","lorry_fill.php");
 		   	break;
     	}
 
@@ -233,13 +234,15 @@ if(isset($_POST['end']))
 		$query="Insert Into LORRY_FILL_CHECK 	(create_date, creator, FDM_LOT_NO,  LFC_W_LY_NO,  LFC_B_REMAIN_QTY,  LFC_B_TROUGH_TOP,  LFC_B_CHK_COUP_CLR,  LFC_B_CHK_COUP,  LFC_B_CHK_COUP_LINK,  LFC_B_CHK_EXHAUST,  
 				LFC_B_SET_FILL,  LFC_F_FLOW,  LFC_F_SAM_COUNT,  LFC_F_RESISTANCE,  LFC_E_OPER_FILL,  LFC_E_TROUGH_TOP,  LFC_E_CHK_AIR_SEAL,  LFC_E_CHK_FILL_CLOSE,  LFC_E_CHK_EXHAUST,  LFC_E_CHK_VALVE,  
 				LFC_E_CHK_COUP_CLR,  LFC_E_CHK_COUP,  LFC_E_CHK_PIPE_PICKUP,  LFC_FILLER,  LFC_AIR_SEAL,  LFC_AIR_SEAL_START,  LFC_AIR_SEAL_END,  LFC_E_CHK_MEGA_CHECK,  LFC_E_CHK_SURFACE,  LFC_TANK, LFC_B_TROUGH_QTY, LFC_E_TROUGH_QTY) 
-				VALUES ('".date("YmdHis")."','".$_SESSION['uid']."','".$_SESSION['lid']."','".trim($lorry_no)."',".$remnant.",".$m3.",'Y','Y','Y','Y',".$qty.",".$flow_speed.",".$smp_cnt.",".$btk.",".$qty.",'".$bm3."','Y','Y','Y','Y','Y','Y','Y','".$_SESSION['uid']."',".$_POST['sti0'].",'".$_POST['sti1']."','".$_POST['sti2']."','".$mega_check."','Y','".$tank_no."','".$_POST['etq']."','".$_POST['em3']."')";
+				VALUES ('".date("YmdHis")."','".$_SESSION['uid']."','".$_SESSION['lid']."','".trim($lorry_no)."',".$remnant.",".$bm3.",'Y','Y','Y','Y',".$qty.",".$flow_speed.",".$smp_cnt.",".$btk.",".$qty.",'".$m3."','Y','Y','Y','Y','Y','Y','Y','".$_SESSION['uid']."',".$_POST['sti0'].",'".$_POST['sti1']."','".$_POST['sti2']."','".$mega_check."','Y','".$tank_no."','".$_POST['etq']."','".$_POST['em3']."')";
 //		echo $query."<BR>";
 
 		
 		$result1 = mssql_query($query);
 		
-		$query="INSERT INTO TLAQAFLOWSPEED (SerialNo, TestDate, LotNo, SampleNo, speed, Ok, Tester, AnalyzeTime) VALUES (1,CONVERT(DATETIME, '".date("Y-m-d H:i:s")."', 102), N'".trim($_SESSION['lid'])."', '".substr(trim($_SESSION['lid']),1,2)."', ".$flow_speed.", N'1', N'".$_SESSION['uid']."', N'".date("YmdHis")."')";
+		$query="INSERT INTO TLAQAFLOWSPEED (SerialNo, TestDate, LotNo, SampleNo, speed, Ok, Tester, AnalyzeTime) VALUES (1,CONVERT(DATETIME, '".
+		date("Y-m-d H:i:s")."', 102), N'".trim($_SESSION['lid'])."', '".substr(trim($_SESSION['lid']),1,2)."', ".$flow_speed.", N'1', N'".$_SESSION['uid']."', 
+		N'".date("YmdHis")."')";
 		$remnant=mssql_query($query);
 		
 		$query="INSERT INTO ani_result_group
@@ -258,7 +261,7 @@ VALUES     (N'".trim($_SESSION['lid'])."', N'FFR', '1', N'system', N'".date("Ymd
 	$pid=trim($jj->pid);
 	$cid=trim($jj->cid);
 		// 4. Update PRODUCT_STOCKS
-	$query="select count(*) as cnt where  (STK_LOT_NO = '".trim($_SESSION['lid'])."')";
+	$query="select count(*) as cnt from PRODUCT_STOCKS where  (STK_LOT_NO = '".trim($_SESSION['lid'])."')";
 	$result=mssql_query($query);
 	$row=mssql_fetch_row($result);
 	if($row[0]>0){
@@ -267,10 +270,8 @@ VALUES     (N'".trim($_SESSION['lid'])."', N'FFR', '1', N'system', N'".date("Ymd
 		$result4 = mssql_query($query);
 	}
 	else{
-		$query="INSERT INTO PRODUCT_STOCKS
-                   (STK_LOT_NO, PDD_PROD_NO, CTD_CUST_NO, STK_MAKE_DATE, STK_QTY, STK_DRUM_COUNT, 
-                   STK_PRE_OUT_QTY, STK_PRE_OUT_DRUM_COUNT, STK_DECI_OUT_QTY)
-VALUES  ('".trim($_SESSION['lid'])."', '".$pid."', '".$c."', '".date("Ymd")."', 100, 0, 0, 0, 0)";
+		$query="INSERT INTO PRODUCT_STOCKS (STK_LOT_NO, PDD_PROD_NO, CTD_CUST_NO, STK_MAKE_DATE, STK_QTY, STK_DRUM_COUNT, STK_PRE_OUT_QTY, STK_PRE_OUT_DRUM_COUNT, STK_DECI_OUT_QTY)
+ VALUES  ('".trim($_SESSION['lid'])."', '".$pid."', '".$c."', '".date("Ymd")."', 100, 0, 0, 0, 0)";
 		
 		
 	}
@@ -363,12 +364,12 @@ function enter($fid,$lorry_no1){
 	$query="SELECT  FILL_INDICATE.FID_FILL_BEGIN_DATE, FILL_INDICATE.FID_FILL_END_DATE, LORRY_FILL_CHECK.FDM_LOT_NO FROM LORRY_FILL_CHECK INNER JOIN
 		FILL_INDICATE ON LORRY_FILL_CHECK.FDM_LOT_NO = FILL_INDICATE.FDM_LOT_NO
 		WHERE   (LORRY_FILL_CHECK.FDM_LOT_NO = '".$_SESSION['lid']."')";
-//		echo $query."<BR>";
+//		echo $query."<BR>";break;
 	$result=mssql_query($query);
 	$num=mssql_num_rows($result);
 	if($row1[0]==2 and $num>0){
-		my_msg("此 LOT 已經充填完成","fill.php");
-		break;
+//		my_msg("此 LOT 已經充填完成","fill.php");
+	//	break;
 	}
 	$query="SELECT          A.FOD_UNI, A.CTD_CUST_NO, B.CTD_CUST_NAME, A.FDM_SERIAL_NO, A.PDD_PROD_NO, C.PDD_PROD_NAME, 
                             C.PDD_PROD_SHORT_NAME, A.FDM_SAM_BEFORE, A.FDM_SAM_BEF_CNT, A.FDM_SAM_CNT, 
@@ -378,6 +379,7 @@ FROM              FILLPLAN_OUT_DECIDE AS A LEFT OUTER JOIN
                             PRODUCT_DATA AS C ON A.PDD_PROD_NO = C.PDD_PROD_NO LEFT OUTER JOIN
                             CUSTOMER_PRODUCTS AS D ON A.CTD_CUST_NO = D.CTD_CUST_NO AND A.PDD_PROD_NO = D.PDD_PROD_NO
 WHERE          (A.FDM_LOT_NO = '".trim($_SESSION['lid'])."')";
+//echo $query."<BR>";break;
 $result = mssql_query($query);
 $numRows = mssql_num_rows($result);
 while($row = mssql_fetch_array($result))
@@ -533,7 +535,7 @@ function tank(){
 	echo '<input type="hidden" name="mega_check" id="mega_check" value="'.$_POST['mega_check'].'" />';
 	echo '<input type="hidden" name="purge_qty" id="qty" value="'.$_POST['purge_qty'].'" />';
 	echo '<input type="hidden" name="flow_speed" value="'.$_POST['flow_speed'].'" />';
-	echo '<BR>來源 LOT NO:<input type="text" style="font-size:20" size="15" name="source_lot" value="'.$_SESSION['source_lot'].'" /><BR>';
+	echo '<BR>來源 LOT NO:<input type="text" style="font-size:20" size="15" name="source_lot" value="'.$_SESSION['source_lot'].'"  onchange="set_date_session(this.name,this.value)"/><BR>';
 	echo '充填來源：<select name="tank_no" style="font-size:20" id="tank_no"><option value=""></option>';
 
 		$a= strripos($_SESSION['pidx'],"-");
@@ -711,8 +713,9 @@ VALUES  ('".trim($_SESSION['lid'])."', '".$pid."', '".$c."', '".date("Ymd")."', 
 	$result6 = mssql_query($query);
 	
 	// 7. 設定充填路徑
+	if(trim($_POST['flow'])==''){$_POST['flow']=$_SESSION['select_flow'];}
 	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date, pressure) VALUES ('".$_SESSION['lid']."','".$_POST['flow']."','".$_SESSION['uid']."','".date("YmdHis")."','".$pressure."')";	
-//	echo $query."<BR>SS";break;
+//	echo $query."<BR>";break;
 	$result=mssql_query($query);
 	
 // 8. 封槽管理項目
@@ -1035,16 +1038,10 @@ function select_Spot($pid){
 }
 
 if(isset($_POST['save'])){
-/*
-	$query="select count(*) FROM dbo.Fill_Flow_Chart where Lot_No='".$_GET['lot_no']."'";
-	$result=mssql_query($query);
-	$row=mssql_fetch_row($result);
-	$n=$row[0];
-*/
 $_SESSION['select_flow']=$_POST['flow'];
 	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date) VALUES ('".$_SESSION['lot_no']."','".$_SESSION['select_flow']."','".$_SESSION['uid']."','".date("YmdHis")."')";	
 	$result=mssql_query($query);
-//	echo $query."<BR>";break;
+	echo $query."<BR>";break;
 	echo "完成";
 	echo '<script type="text/javascript">window.close()</script>';
 }

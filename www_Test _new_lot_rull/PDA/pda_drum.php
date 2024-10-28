@@ -122,19 +122,22 @@ WHERE          OUT_DECISION.OTD_NO ='".$_SESSION['nono']."'";
 
 if(isset($_POST['next1']))
 {	
+		$query="SELECT SUM(OPD_QTY_DRUM) AS aa FROM OUT_PRODUCT  	WHERE (OPD_LOT_NO = '".trim($_POST['lot_id'])."') AND (OTD_NO = '".$_POST['nono']."')";
+		$result=mssql_query($query);
+		$row=mssql_fetch_row($result);
+		$drum_qty=trim($row[0]);
+//echo $query."<BR>";break;		                            
 	$query="SELECT          CUSTOMER_PRODUCTS.CTP_CUSTBAR1, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_CHECK, OP.OPD_LOT_NO, 
-                            SUM(OP.OPD_QTY_DRUM) AS asd, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_start_char AS sc, OP.PDD_PROD_NO, 
+                            OP.OPD_QTY_DRUM AS asd, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_start_char AS sc, OP.PDD_PROD_NO, 
                             PRODUCT_DATA.PDD_PROD_NAME
-FROM              OUT_PRODUCT AS OP INNER JOIN
-                            OUT_DECISION ON OP.OPM_ORDER_NO = OUT_DECISION.OPM_ORDER_NO INNER JOIN
-                            CUSTOMER_PRODUCTS ON OP.PDD_PROD_NO = CUSTOMER_PRODUCTS.PDD_PROD_NO AND 
-                            OUT_DECISION.CTD_CUST_NO = CUSTOMER_PRODUCTS.CTD_CUST_NO INNER JOIN
+FROM              OUT_DECISION RIGHT OUTER JOIN
+                            CUSTOMER_PRODUCTS ON 
+                            OUT_DECISION.CTD_CUST_NO = CUSTOMER_PRODUCTS.CTD_CUST_NO FULL OUTER JOIN
+                            OUT_PRODUCT AS OP ON OUT_DECISION.OPM_ORDER_NO = OP.OPM_ORDER_NO AND 
+                            CUSTOMER_PRODUCTS.PDD_PROD_NO = OP.PDD_PROD_NO LEFT OUTER JOIN
                             PRODUCT_DATA ON OP.PDD_PROD_NO = PRODUCT_DATA.PDD_PROD_NO
-	WHERE          (OP.OPD_LOT_NO = '".trim($_POST['lot_id'])."') AND (OP.OTD_NO = '".$_POST['nono']."')
-	GROUP BY   CUSTOMER_PRODUCTS.CTP_CUSTBAR1, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_CHECK, OP.OPD_LOT_NO, 
-                            OP.OPD_QTY_DRUM, CUSTOMER_PRODUCTS.CTP_CUSTBAR1_start_char, OP.PDD_PROD_NO, 
-                            PRODUCT_DATA.PDD_PROD_NAME ";
-
+	WHERE          (OP.OPD_LOT_NO = '".trim($_POST['lot_id'])."') AND (OP.OTD_NO = '".$_POST['nono']."')";
+//  echo $query."<BR>";
 	$result=mssql_query($query);
 	$numrow1=mssql_num_rows($result);
 	if($numrow1==0){
@@ -142,7 +145,7 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 	}
 	else{
 		$row=mssql_fetch_row($result);
-		$drum_qty=trim($row[3]);
+	//	$drum_qty=trim($row[3]);
 		if($row[1]==1){
 			if($row[4]==1){
 				$custbar1=$_SESSION['custbar1']=trim($row[0])." ";
@@ -161,7 +164,7 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 		}
 	}
 	$_SESSION['pidcname']=$row[6].":".$row[5];
-	$_SESSION['QTY']=$row[3];
+	$_SESSION['QTY']=$drum_qty;
 	$_SESSION['steps']=2;
 	$_SESSION['aa']=$aa=explode(",",$_POST['lot_id']);
 	$_SESSION['prod_id']=$aa[1];
@@ -215,7 +218,7 @@ FROM              OUT_PRODUCT AS OP INNER JOIN
 FROM              OUT_CHECK_DRUM_DETAIL INNER JOIN
                             OUT_CHECK_DRUM ON OUT_CHECK_DRUM_DETAIL.OTD_NO = OUT_CHECK_DRUM.OTD_NO
 WHERE          (OUT_CHECK_DRUM_DETAIL.OTD_NO = '".$_POST['nono']."' and OUT_CHECK_DRUM_DETAIL.OCD_LOT_NO='".$_POST['lot_id']."')";
-
+//echo $query."<BR>";
 	$result=mssql_query($query);
 	$all=mssql_num_rows($result);
 }

@@ -111,7 +111,7 @@ function date_cy_ny($ds){
 if($ds<>NULL){$dat=(1911+(int)substr($ds,0,-6)).substr($ds,-5,2).substr($ds,-2,2);}
 return $dat;		
 }
-function dds($ds){   //daytime-style  201509020102=>2015-09-02 01:02
+function dds($ds){   //daytime-style  201509020102=>2015/09/02
 if($ds<>NULL){$dat=substr($ds,6,+2)."/".substr($ds,0,+4)."/".substr($ds,4,+2);}
 return $dat;
 }

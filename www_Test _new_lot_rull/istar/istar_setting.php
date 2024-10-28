@@ -8,12 +8,12 @@ lasturl();
 $aa=array();
 
 echo iconv("utf-8","big5",'根元素');
-$query="SELECT [index], name, [value], [order], [level] FROM istar_default_setting WHERE  (active = 1) order by[level], [order],[index] ";
+$query="SELECT [index], name, printname, [value], [order], [level] FROM istar_default_setting WHERE  (active = 1) order by[level], [order],[index] ";
 $result=mssql_query($query);
-echo '<table width="512" border="1"><tr bgcolor="#F1F1F1"><td>ID</td><td>'.iconv("utf-8","big5",'項目名稱').'</td><td>'.iconv("utf-8","big5",'設定值').'</td><td>'.iconv("utf-8","big5",'排列順序').'</td><td>'.iconv("utf-8","big5",'層別').'</td></tr>';
+echo '<table width="512" border="1"><tr bgcolor="#F1F1F1"><td>ID</td><td>'.iconv("utf-8","big5",'項目名稱').'</td><td>'.iconv("utf-8","big5",'列印名稱').'</td><td>'.iconv("utf-8","big5",'設定值').'</td><td>'.iconv("utf-8","big5",'排列順序').'</td><td>'.iconv("utf-8","big5",'層別').'</td></tr>';
 while($row=mssql_fetch_array($result)){
-	echo '<tr><td>'.trim($row['index']).'</td><td>'.trim($row['name']).'</td><td>'.trim($row['value']).'</td><td>'.trim($row['order']).'</td><td>'.trim($row['level']).'</td></tr>';
-	array_push($aa,trim($row['index']).",".trim($row['name']).",".trim($row['value']).",".trim($row['order']).",".trim($row['level']));
+	echo '<tr><td>'.trim($row['index']).'</td><td>'.trim($row['name']).'</td><td>'.trim($row['printname']).'</td><td>'.trim($row['value']).'</td><td>'.trim($row['order']).'</td><td>'.trim($row['level']).'</td></tr>';
+	array_push($aa,trim($row['index']).",".trim($row['name']).",".trim($row['value']).",".trim($row['order']).",".trim($row['level']).",".trim($row['printname']));
 }
 echo '</table><BR><BR>';
 echo '<form action="" method="post">';
@@ -27,6 +27,7 @@ foreach($aa as $value) {
 echo '</select><BR>';
 $cc=explode(",",$_SESSION['id']);
 echo iconv("utf-8","big5",'項目名稱').'<input type="text" name="item" size="18" value="'.$cc[1].'"><input type="submit" name="sub1" value="'.iconv("utf-8","big5",'變更').'"><br>';
+echo iconv("utf-8","big5",'列印名稱').'<input type="text" name="printname" size="18" value="'.$cc[5].'"><input type="submit" name="sub5" value="'.iconv("utf-8","big5",'變更').'"><br>';
 echo iconv("utf-8","big5",'設定值').'<input type="text" name="value" value="'.$cc[2].'"><input type="submit" name="sub2" value="'.iconv("utf-8","big5",'變更').'"><br>';
 echo iconv("utf-8","big5",'排列順序').'<input type="text" name="order" size="18" value="'.$cc[3].'"><input type="submit" name="sub3" value="'.iconv("utf-8","big5",'變更').'"><br>';
 echo iconv("utf-8","big5",'層別 ').'<input type="text" name="level" size="18" value="'.$cc[4].'"><input type="submit" name="sub4" value="'.iconv("utf-8","big5",'變更').'"><br>';
@@ -44,6 +45,11 @@ if(isset($_POST['sub2'])){
 }
 if(isset($_POST['sub3'])){
 	$query="update istar_default_setting set [order]='".$_POST['order']."' where [index]=".$cc[0];
+	$result=mssql_query($query);
+	refresh();
+}
+if(isset($_POST['sub5'])){
+	$query="update istar_default_setting set printname='".$_POST['printname']."' where [index]=".$cc[0];
 	$result=mssql_query($query);
 	refresh();
 }

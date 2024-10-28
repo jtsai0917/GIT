@@ -232,7 +232,7 @@ if(isset($_POST['end']))
 		$query="Insert Into LORRY_FILL_CHECK 	(create_date, creator, FDM_LOT_NO,  LFC_W_LY_NO,  LFC_B_REMAIN_QTY,  LFC_B_TROUGH_TOP,  LFC_B_CHK_COUP_CLR,  LFC_B_CHK_COUP,  LFC_B_CHK_COUP_LINK,  LFC_B_CHK_EXHAUST,  
 				LFC_B_SET_FILL,  LFC_F_FLOW,  LFC_F_SAM_COUNT,  LFC_F_RESISTANCE,  LFC_E_OPER_FILL,  LFC_E_TROUGH_TOP,  LFC_E_CHK_AIR_SEAL,  LFC_E_CHK_FILL_CLOSE,  LFC_E_CHK_EXHAUST,  LFC_E_CHK_VALVE,  
 				LFC_E_CHK_COUP_CLR,  LFC_E_CHK_COUP,  LFC_E_CHK_PIPE_PICKUP,  LFC_FILLER,  LFC_AIR_SEAL,  LFC_AIR_SEAL_START,  LFC_AIR_SEAL_END,  LFC_E_CHK_MEGA_CHECK,  LFC_E_CHK_SURFACE,  LFC_TANK, LFC_B_TROUGH_QTY, LFC_E_TROUGH_QTY) 
-				VALUES ('".date("YmdHis")."','".$_SESSION['uid']."','".$_SESSION['lid']."','".trim($lorry_no)."',".$remnant.",".$m3.",'Y','Y','Y','Y',".$qty.",".$flow_speed.",".$smp_cnt.",".$btk.",".$qty.",'".$bm3."','Y','Y','Y','Y','Y','Y','Y','".$_SESSION['uid']."',".$_POST['sti0'].",'".$_POST['sti1']."','".$_POST['sti2']."','".$mega_check."','Y','".$tank_no."','".$_POST['etq']."','".$_POST['em3']."')";
+				VALUES ('".date("YmdHis")."','".$_SESSION['uid']."','".$_SESSION['lid']."','".trim($lorry_no)."',".$remnant.",".$bm3.",'Y','Y','Y','Y',".$qty.",".$flow_speed.",".$smp_cnt.",".$btk.",".$qty.",'".$m3."','Y','Y','Y','Y','Y','Y','Y','".$_SESSION['uid']."',".$_POST['sti0'].",'".$_POST['sti1']."','".$_POST['sti2']."','".$mega_check."','Y','".$tank_no."','".$_POST['etq']."','".$_POST['em3']."')";
 //		echo $query."<BR>";
 
 		

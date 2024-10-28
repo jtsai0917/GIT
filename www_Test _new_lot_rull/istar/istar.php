@@ -5,6 +5,7 @@ include("../connections/conn.php");
 datepick();
 session_start();
 	lasturl();
+	date_default_timezone_set('Asia/Taipei');
 $_SESSION['lasturl']=$_SERVER['REQUEST_URI'];
 if($_SESSION['datepicker1']==''){$_SESSION['datepicker1']=date("m/d/Y");}
 $select_date=dod($_SESSION['datepicker1']);
@@ -15,13 +16,13 @@ echo '<table width="768" border="1"><tr bgcolor="#F1F1F1"><td>Tag_No</td><td>Tag
 
 $query="SELECT          istar_default_setting.name AS Tag_No, UTT_TAGNO_DATA.project, UTT_record_spec.Data, UTT_record_spec.sn, 
                             UTT_record_spec.[Date] AS dd, UTT_record_spec.pass, UTT_TAGNO_DATA.spec, UTT_TAGNO_DATA.high, 
-                            UTT_TAGNO_DATA.low
+                            UTT_TAGNO_DATA.low, istar_default_setting.printname AS printname
 FROM              istar_default_setting INNER JOIN
                             UTT_TAGNO_DATA ON istar_default_setting.name = UTT_TAGNO_DATA.TAG_NO INNER JOIN
                             UTT_record_spec ON UTT_TAGNO_DATA.TAG_NO = UTT_record_spec.TAG_NO
 WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.active = 1) AND (UTT_record_spec.[Date] LIKE N'".$select_date."%')
 ORDER BY   UTT_record_spec.sn"; 
-//echo $query."<BR>";
+// echo $query."<BR>";
 $result=mssql_query($query);
 while($row=mssql_fetch_array($result)){
 	if($max < $row['sn']){
@@ -51,19 +52,31 @@ if(isset($_POST['print']))
 	 $root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
 	 $root->setAttribute('xsi:noNamespaceSchemaLocation', 'Inlinedata-1.0.xsd');
 	$query="SELECT name, [value] FROM istar_default_setting WHERE ([level] = 0) AND (active = 1) order by [order],[index] ";
-
+// echo $query."<BR>";
 	$result=mssql_query($query);
 	while($row=mssql_fetch_array($result)){
 		$root->setAttribute(trim($row['name']),trim($row['value']));
+//		echo "#".$row['name']."#:#".$row['value']."#<BR>";
+		if(trim($row['name'])=='SupplierID'){
+			$supplierID=trim($row['value']);
+		}
+		if(trim($row['name'])=='MaterialNo'){
+			$MaterialNo=trim($row['value']);
+		}
+		if(trim($row['name'])=='EqpID'){
+			$EqpID=trim($row['value']);
+		}
 	}
-
-	$root->setAttribute('FileGenTime', date("Y/m/d H:i:s").'+08:00');
-	echo 'CreateTime : '.date("Y/m/d H:i:s").'+08:00<BR>';
+	$now=date("Y/m/d H:i:s");
+	$now12="200000";
+	$root->setAttribute('FileGenTime', $now.'+08:00');
+	echo 'CreateTime : '.$now.'+08:00<BR>';
 	$root->setAttribute('FileTemplateVersion', '1.0');
 	$doc->appendChild($root);
 		
 	// 創建子元素
-	$query="SELECT  name, UNIT FROM istar_default_setting WHERE ([level] = 1) AND (active = 1)";
+	$query="SELECT  name, printname, UNIT FROM istar_default_setting WHERE ([level] = 1) AND (active = 1)";
+	// echo $query."<BR>";
 	$result=mssql_query($query);
 	while($row=mssql_fetch_array($result)){
 		list($value,$unit,$dat)=get_data(trim($row['name']),$select_date,$_POST['sn']);
@@ -71,20 +84,24 @@ if(isset($_POST['print']))
 		$value=round(sqrt($value)*3,4);
 //		echo "SS".$value,$unit,$dat."<BR>";
 		$data = $doc->createElement('DATA');
-		$data->setAttribute('Parameter', trim($row['name']));
+		$inputdatetime=std(trim($select_date))." 20:00:00"  ;
+		$now1=des($inputdatetime).$now12;
+		$data->setAttribute('Parameter', trim($row['printname']));
 		$data->setAttribute('ContainerID',"N/A");
-		$data->setAttribute('MeasureTime', sta(trim($dat)).'+08:00');
+		$data->setAttribute('MeasureTime', $inputdatetime.'+08:00');
 		$data->setAttribute('VALUE', $value);
 		$data->setAttribute('UNIT', iconv("big5","utf-8",trim($unit)));
-		$data->setAttribute('SupplierBatchID', '123456789');
-		$data->setAttribute('tsmcBatchID', '2023');
+		$data->setAttribute('SupplierBatchID', $now1);
+		$data->setAttribute('tsmcBatchID', $now1);
 		$data->setAttribute('Status', 'N/A');		
 		$root->appendChild($data);
 	}
 	
 	// 保存 XML 檔案
-	$doc->save('./tmp/catalog.xml');
-	echo '<a href="./tmp/catalog.xml" target="_blank">'.iconv("utf-8","big5","下載").'</a>';
+	$now2=date("YmdHis");
+	$filename="MID_".$supplierID."_".$MaterialNo."_".$EqpID."_".$now2.".xml";
+	$doc->save('./tmp/'.$filename);
+	echo '<a href="./tmp/'.$filename.'" target="_blank">'.iconv("utf-8","big5","下載").'</a>';
 }
 
 function get_data($parameter,$date,$sn){
@@ -104,23 +121,25 @@ FROM              istar_default_setting INNER JOIN
                             UTT_record_spec ON UTT_TAGNO_DATA.TAG_NO = UTT_record_spec.TAG_NO
 WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.active = 1) AND 
                             (UTT_record_spec.[Date] LIKE N'".$date."%') AND (istar_default_setting.name = '".$parameter."')";
-//                            echo $query."<BR>";
 	}
+ //     echo $query."<BR>";           
 	$result=mssql_query($query);
 	$row=mssql_fetch_row($result);
 	$a1=$row[1];
 	$a2=$row[2];
 	$value=$row[0];
 	if($sn==10){
-		$query="SELECT          AVG(CAST(UTT_record_spec.Data AS float)) AS A0
+		$query="SELECT          AVG(CAST(UTT_record_spec.Data AS float)) AS A0, UTT_TAGNO_DATA.unit
 		FROM              istar_default_setting INNER JOIN
 		                            UTT_TAGNO_DATA ON istar_default_setting.name = UTT_TAGNO_DATA.TAG_NO INNER JOIN
 		                            UTT_record_spec ON UTT_TAGNO_DATA.TAG_NO = UTT_record_spec.TAG_NO
 		WHERE          (istar_default_setting.[level] = 1) AND (istar_default_setting.active = 1) AND 
-                            (UTT_record_spec.[Date] LIKE N'".$date."%') AND (istar_default_setting.name = '".$parameter."')";
+                            (UTT_record_spec.[Date] LIKE N'".$date."%') AND (istar_default_setting.name = '".$parameter."') GROUP BY   UTT_TAGNO_DATA.unit";
+//      echo $query."<BR>";   
 		$result=mssql_query($query);
 		$row=mssql_fetch_row($result);
 		$value=$row[0];
+		$a1=$row[1];
 	}
 	return array($value,$a1,$a2);
 }

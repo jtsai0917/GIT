@@ -202,64 +202,105 @@ if(isset($_POST['save1'])){
 	$pid=trim($jj->pid);
 	$cid=trim($jj->cid);
 	$text=array('系別','TANK','Pump1','TANK1','Pump2','Filter1','Filter2','Filter3','充填站');
-	if($_POST['select_series']<>'')
-	{$flow.=trim($_POST['select_series'])."/";$flow1.=trim($_POST['select_series'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Tank']<>'')
-	{$flow.=trim($_POST['select_Tank'])."/";$flow1.=trim($_POST['select_Tank'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Pump']<>'')
-	{$flow.=trim($_POST['select_Pump'])."/";$flow1.=trim($_POST['select_Pump'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Tank1']<>'')
-	{$flow.=trim($_POST['select_Tank1'])."/";$flow1.=trim($_POST['select_Tank1'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Pump1']<>'')
-	{$flow.=trim($_POST['select_Pump1'])."/";$flow1.=trim($_POST['select_Pump1'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Filter1']<>'')
-	{$flow.=trim($_POST['select_Filter1'])."/";$flow1.=trim($_POST['select_Filter1'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Filter2']<>'')
-	{$flow.=trim($_POST['select_Filter2'])."/";$flow1.=trim($_POST['select_Filter2'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Filter3']<>'')
-	{$flow.=trim($_POST['select_Filter3'])."/";$flow1.=trim($_POST['select_Filter3'])."/";}else{$flow1.="NA/";}
-	if($_POST['select_Spot']<>'')
-	{$flow.=trim($_POST['select_Spot'])."/";$flow1.=trim($_POST['select_Spot'])."/";}else{$flow1.="NA/";}
+	if($_POST['select_series']<>'' and $_POST['select_series']<>'NA')
+	{
+		$flow.=trim($_POST['select_series'])."/";
+		$flow1.=trim($_POST['select_series'])."/";
+		$pressurex.="NA/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Tank']<>'' and $_POST['select_Tank']<>'NA')
+	{
+		$flow.=trim($_POST['select_Tank'])."/";
+		$flow1.=trim($_POST['select_Tank'])."/";
+		$pressurex.="NA/";	
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Pump']<>'' and $_POST['select_Pump']<>'NA')
+	{
+		$flow.=trim($_POST['select_Pump'])."/";
+		$flow1.=trim($_POST['select_Pump'])."/";
+		$pressurex.=trim($_POST['p0'])."/";	
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Tank1']<>'' and $_POST['select_Tank1']<>'NA')
+	{
+		$flow.=trim($_POST['select_Tank1'])."/";
+		$flow1.=trim($_POST['select_Tank1'])."/";
+		$pressurex.="NA/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Pump1']<>'' and $_POST['select_Pump1']<>'NA')
+	{
+		$flow.=trim($_POST['select_Pump1'])."/";
+		$flow1.=trim($_POST['select_Pump1'])."/";
+		$pressurex.=trim($_POST['p1'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Filter1']<>'' and $_POST['select_Filter1']<>'NA')
+	{
+		$flow.=trim($_POST['select_Filter1'])."/";
+		$flow1.=trim($_POST['select_Filter1'])."/";
+		$pressurex.=trim($_POST['f1'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Filter2']<>'' and $_POST['select_Filter2']<>'NA')
+	{
+		$flow.=trim($_POST['select_Filter2'])."/";
+		$flow1.=trim($_POST['select_Filter2'])."/";
+		$pressurex.=trim($_POST['f2'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Filter3']<>'' and $_POST['select_Filter3']<>'NA')
+	{
+		$flow.=trim($_POST['select_Filter3'])."/";
+		$flow1.=trim($_POST['select_Filter3'])."/";
+		$pressurex.=trim($_POST['f3'])."/";
+	}else{
+		$flow1.="NA/";
+	}
+	if($_POST['select_Spot']<>'' and $_POST['select_Spot']<>'NA')
+	{
+		$flow.=trim($_POST['select_Spot'])."/";
+		$flow1.=trim($_POST['select_Spot'])."/";
+		$pressurex.="NA/";
+	}else{
+		$flow1.="NA/";
+	}
 	
-	
-	if($_POST['select_series']<>'')
-	{$pressure.="NA/";}
-	if($_POST['select_Tank']<>'')
-	{$pressure.="NA/";}
-	if($_POST['select_Pump']<>'')
-	{$pressure.=trim($_POST['p0'])."/";}
-	if($_POST['select_Tank1']<>'')
-	{$pressure.="NA/";}
-	if($_POST['select_Pump1']<>'')
-	{$pressure.=trim($_POST['p1'])."/";}
-	if($_POST['select_Filter1']<>'')
-	{$pressure.=trim($_POST['f1'])."/";}
-	if($_POST['select_Filter2']<>'')
-	{$pressure.=trim($_POST['f2'])."/";}
-	if($_POST['select_Filter3']<>'')
-	{$pressure.=trim($_POST['f3'])."/";}
-	if($_POST['select_Spot']<>'')
-	{$pressure.=trim($_POST['select_Spot'])."/";}
 	
 	$flow=substr($flow,0,-1);
-	$pressure=substr($pressure,0,-1);
+	$pressurex=substr($pressurex,0,-1);
 	$flow1a=explode("/",$flow1);
-	$pressure1=explode("/",$pressure);
-	echo '充填流程：<br>';
+	$pressure1=explode("/",$pressurex);
+	echo '充填流程：'.$flow.'<br>';
+	echo '充填壓力：'.$pressurex.'<br>';
 	for($i=0;$i<9;$i++)
 	{
-		if($i==0){echo $text[$i].'：'.$flow1a[$i].'<br>';}
+		if($flow1a[$i]<>'' and $flow1a[$i]<>'NA'){
+			echo $flow1a[$i].'＝'.$pressure1[$i].'<br>';
+		}
+		/*
+		if($i==0 ){echo $text[$i].'：'.$flow1a[$i].'<br>';}
 		elseif($i==1){echo $text[$i].'：'.$flow1a[$i].'＝<br>';}
 		elseif($i==3){echo $text[$i].'：'.$flow1a[$i].'＝<br>';}
 		else
 		{
 		echo $text[$i].'：'.$flow1a[$i].'＝'.$pressure1[$i].'<br>';
 		}
+		*/
 	}
 	echo '<font size="+1">';
 	//echo $flow;
 	echo '<input type="hidden" name="flow" value="'.$flow.'" />';
-	echo '<input type="hidden" name="presure" value="'.$pressure.'" /></font>';
+	echo '<input type="hidden" name="presure" value="'.$pressurex.'" /></font>';
 	echo '<BR><input type="submit" name="save" value="    保存   " /><input type="submit" name="leave" value="    取消   " /><BR></form>';
 }
 
@@ -270,8 +311,10 @@ if(isset($_POST['save'])){
 	$row=mssql_fetch_row($result);
 	$n=$row[0];
 */
+	$query="delete from dbo.Fill_Flow_Chart where Lot_No='".$_GET['lot_no']."'";
+	$result=mssql_query($query);
+	
 	$query="INSERT INTO dbo.Fill_Flow_Chart (Lot_No, flow, creator, date, pressure) VALUES ('".$_GET['lot_no']."','".$_POST['flow']."','".$_SESSION['uid']."','".date("YmdHis")."','".$_POST['presure']."')";	
-	//echo $query;
 	$result=mssql_query($query);
 	echo "完成";
 }

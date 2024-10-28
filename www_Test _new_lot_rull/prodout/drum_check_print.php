@@ -42,7 +42,7 @@ if(isset($_POST['print']))
 	$cust_short_name=$row[1];
 	$objPHPExcel->getActiveSheet()->setCellValue("L2",iconv("big5","utf-8",$cust_short_name) );
 	$objPHPExcel->getActiveSheet()->setCellValue("S2",iconv("big5","utf-8",$_GET['id']) );
-		
+	
 /*		
 		
 		$query="SELECT          PD.PDD_TYPE, OP.OPM_ORDER_NO, OP.OPD_SERIAL_NO, OP.OTD_NO, OP.OTN_NO, OP.OTNP_SERIAL_NO, 
@@ -95,7 +95,7 @@ FROM              OUT_DECISION AS OD FULL OUTER JOIN
                             OUT_CHECK_DRUM_DETAIL.OTD_NO, OUT_CHECK_DRUM_DETAIL.OCD_LOT_NO, 
                             OUT_CHECK_DRUM_DETAIL.OCD_DRUM_NO, OUT_CHECK_DRUM_DETAIL.OCD_CUST_BAR, 
                             OUT_CHECK_DRUM_DETAIL.OCD_PLT_NO, OUT_PRODUCT.PDD_PROD_NO, OUT_PRODUCT.OPD_LOT_NO, 
-                            OUT_PRODUCT.OPD_QTY_DRUM, OUT_DECISION.CTD_CUST_NO, CUSTOMER_PRODUCTS.CTP_CUSTBAR1, 
+                             OUT_DECISION.CTD_CUST_NO, CUSTOMER_PRODUCTS.CTP_CUSTBAR1, 
                             OUT_CHECK_DRUM_DETAIL.OCD_CUSTBAR1 AS CPN
 FROM              OUT_CHECK_DRUM_DETAIL INNER JOIN
                             OUT_CHECK_DRUM ON OUT_CHECK_DRUM_DETAIL.OTD_NO = OUT_CHECK_DRUM.OTD_NO INNER JOIN
@@ -105,18 +105,17 @@ FROM              OUT_CHECK_DRUM_DETAIL INNER JOIN
                             CUSTOMER_PRODUCTS ON OUT_PRODUCT.PDD_PROD_NO = CUSTOMER_PRODUCTS.PDD_PROD_NO AND 
                             OUT_DECISION.CTD_CUST_NO = CUSTOMER_PRODUCTS.CTD_CUST_NO  
             where OUT_CHECK_DRUM_DETAIL.OTD_NO='".$_GET['id']."' 
-            ORDER BY   OUT_CHECK_DRUM_DETAIL.OCD_DRUM_NO ";	
+            ORDER BY   OUT_CHECK_DRUM_DETAIL.OCD_LOT_NO,OUT_CHECK_DRUM_DETAIL.OCD_DRUM_NO ";	
     
-//		echo $query."<BR>";
- 		$y=5;
+	//	echo $query."<BR>";
+ 		
+		$_SESSION['lottest']=$row['OCD_LOT_NO'];
 		$result = mssql_query($query);
 		while($row = mssql_fetch_array($result))
 		{
 			if($_SESSION['lottest']<>$row['OCD_LOT_NO']){
 		//		echo $row['OCD_LOT_NO']."<BR>";
-				upper($row['OCD_LOT_NO'],$_GET['id'],$y,$objPHPExcel);
-				$_SESSION['lottest']=$row['OCD_LOT_NO'];
-				$y++;
+				
 			}
 			if($i==0)
 			{
@@ -137,19 +136,29 @@ FROM              OUT_CHECK_DRUM_DETAIL INNER JOIN
 				$i=0;
 				$num1++;
 			}
-			if((($count)%32)==0)
+			if( $count==1)
 			{
+				$y=5;
+				upper($row['OCD_LOT_NO'],$_GET['id'],$y,$objPHPExcel);
+			}
+			if((($count)%32)==0 )
+			{
+				
+
 				$GLOBALS['num']++;
 				$objPHPExcel->setActiveSheetIndex($GLOBALS['num']);
 				$num1='12';
 				$i=0;
 				$count=0;
+				
 				$y=5;
 				upper($row['OCD_LOT_NO'],$_GET['id'],$y,$objPHPExcel);
 				$_SESSION['lottest']=$row['OCD_LOT_NO'];
-				$y++;
+	
+				
 				
 			}
+
 		}
 		$path_root=$_SERVER['HTTP_HOST'];
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,"Excel2007");
@@ -190,20 +199,20 @@ function upper($lotno,$otdno,$y,$objPHPExcel){
                             OP.OPD_SIGN_RECEIPT, OP.OPD_COA_RECEIPT, OP.OPD_MEMO, OP.OPD_REAL_QTY_KG, 
                             OP.OPD_INWARD_DATE, OP.OPD_COA_NO, OP.COA_INDEX, OP.OAF_ACC_ID, OP.OPD_SMP_DATETIME, 
                             OP.OPD_COA_DATETIME, PD.PDD_PROD_NAME, CD.CTD_CUST_SHORT_NAME, OD.OPM_ETA_DATE, 
-                            PD.PDD_STYLE, CD.CTD_CUST_NO, PD.PDD_CLASS 
+                            PD.PDD_STYLE as PDD_STYLE, CD.CTD_CUST_NO, PD.PDD_CLASS 
 FROM              OUT_DECISION AS OD FULL OUTER JOIN
                             OUT_PRODUCT AS OP INNER JOIN
                             PRODUCT_DATA AS PD ON PD.PDD_PROD_NO = OP.PDD_PROD_NO ON 
                             OD.OTD_NO = OP.OTD_NO FULL OUTER JOIN
                             CUSTOMER_DATA AS CD ON OD.CTD_CUST_NO = CD.CTD_CUST_NO  
-	 where OP.OTD_NO='".$otdno."' and OP.OPD_LOT_NO='".$lotno."'";
+	 where OP.OTD_NO='".$otdno."' ";
 //	echo $query."<BR>";
 	$result = mssql_query($query);
 	while($row = mssql_fetch_array($result))
 	{
 		$savedate=substr(valid($row['PDD_CLASS'],$row['PDD_PROD_NO'],$row['CTD_CUST_NO'],$row['OPD_LOT_NO']),0,10);
 		$objPHPExcel->getActiveSheet()->setCellValue("A".$y,iconv("big5","utf-8",$row['PDD_PROD_NAME']));			//
-		$objPHPExcel->getActiveSheet()->setCellValue("F".$y,iconv("big5","utf-8",$row['OAF_PACKAGE']));
+		$objPHPExcel->getActiveSheet()->setCellValue("F".$y,iconv("big5","utf-8",$row['PDD_STYLE']));
 		$objPHPExcel->getActiveSheet()->setCellValue("J".$y,iconv("big5","utf-8",$row['OPD_LOT_NO']));
 		$objPHPExcel->getActiveSheet()->setCellValue("O".$y,iconv("big5","utf-8",$savedate));
 		$objPHPExcel->getActiveSheet()->setCellValue("S".$y,iconv("big5","utf-8",$row['OPD_QTY_DRUM']));	
