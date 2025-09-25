@@ -3,7 +3,7 @@ session_start();
 include("../lib/fun.php");
 include("../PHPEXCEL/Classes/PHPExcel.php");
 include("../PHPEXCEL/Classes/PHPExcel/IOFactory.php");
-include("../lib/barcode.php");
+include("../lib/barcode_new.php");
 $path_root=$_SERVER['HTTP_HOST'];
 datepick();
 lasturl();
@@ -35,6 +35,43 @@ lasturl();
 <input type="submit" name="print" id="print" value=" 列  印 " />
 
 <?php 
+
+function get_fill_tank($lotno) {
+    $qq = "SELECT flow FROM Fill_Flow_Chart WHERE Lot_No = '" . trim($lotno) . "'";
+    $rr = mssql_query($qq);
+
+    if (!$rr) {
+        // 查詢失敗
+        return "NULL";
+    }
+
+    $row = mssql_fetch_row($rr);
+    if (!$row || !isset($row[0])) {
+        // 查無資料或欄位不存在
+        return "NULL";
+    }
+
+    return trim($row[0]);
+}
+
+function get_tsmc_prodno($cid, $tankno) {
+    $qq = "SELECT CUST_PROD_NO FROM TANK_CUST_PROD_NO WHERE CUST_NO = N'" . trim($cid) . "' AND TANK = N'" . trim($tankno) . "' AND active = 1";
+    $rr = mssql_query($qq);
+
+    if (!$rr) {
+        // 查詢失敗
+        return "NULL";
+    }
+
+    $row = mssql_fetch_row($rr);
+    if (!$row || !isset($row[0])) {
+        // 查無資料或欄位不存在
+        return "NULL";
+    }
+
+    return trim($row[0]);
+}
+
 $loginFormAction = $_SERVER['PHP_SELF'];
 if(isset($_POST['ck'])){if($_SESSION['ck']=='on'){$_SESSION['ck']='';}else{$_SESSION['ck']='on';}refresh();}
 if(isset($_POST["submit"])){
@@ -168,18 +205,17 @@ if(isset($_POST['print']))
 	include("../../lib/fun.php");
 	include("../../PHPEXCEL/Classes/PHPExcel.php");
 	include("../../PHPEXCEL/Classes/PHPExcel/IOFactory.php");
-					$dat=date("YmdHis");
-					$objPHPExcel = new PHPExcel();
-					$objPHPExcel->setActiveSheetIndex(0);
-					$objPHPExcel = PHPExcel_IOFactory::load("./formlist/lorrycheck_v1_all.xlsx");
-					$styleThinBlackBorderOutline = array(
-					'borders' => array(
-						'outline' => array(
-							'style' => PHPExcel_Style_Border::BORDER_THIN,
-							'color' => array('argb' => 'FF000000'),
-							),
-						),
-					);
+	$objPHPExcel = PHPExcel_IOFactory::load("./formlist/QSELPC2004-002A7.xlsx");
+	$objPHPExcel->setActiveSheetIndex(0);
+	$dat=date("YmdHis");				
+	$styleThinBlackBorderOutline = array(
+		'borders' => array(
+			'outline' => array(
+			'style' => PHPExcel_Style_Border::BORDER_THIN,
+			'color' => array('argb' => 'FF000000'),
+			),
+		),
+	);
 	$ck=$_POST['chkbox'];
 	$num=count($ck);
 	for($i=0;$i< $num;$i++)
@@ -191,7 +227,7 @@ if(isset($_POST['print']))
 	//	echo $ck.":".$otdno.":".$lno."<BR>";
 	
 		$query="Select PCN, PCN_NO from AnalyzeDesign where AND_LOT_NO='".trim($lno)."'";
-	//	echo $query; 
+//		echo $query; 
 		$result=mssql_query($query);
 		$row=mssql_fetch_row($result);
 		if($row[0]==1){
@@ -201,7 +237,8 @@ if(isset($_POST['print']))
 			$pcn_enable=0;$pcn_no=trim($row[1]);
 		}
 //		echo $query."<BR>";
-		$query="SELECT          OUT_CHECK_LORRY.OCL_LY_NO, OUT_CHECK_LORRY.OCL_LOT_NO, OUT_CHECK_LORRY.OCL_BACK_DATE, 
+		$query="SELECT DISTINCT 
+                            OUT_CHECK_LORRY.OCL_LY_NO, OUT_CHECK_LORRY.OCL_LOT_NO, OUT_CHECK_LORRY.OCL_BACK_DATE, 
                             OUT_CHECK_LORRY.OCL_CHK_DATE, OUT_CHECK_LORRY.OCL_CHK_BAR, 
                             OUT_CHECK_LORRY.OCL_CHK_SPEC_LINK, OUT_CHECK_LORRY.OCL_CHK_PIPE, 
                             OUT_CHECK_LORRY.OCL_CHK_LOT_PASTED, OUT_CHECK_LORRY.OCL_CF_MAN, 
@@ -212,26 +249,29 @@ if(isset($_POST['print']))
                             CUSTOMER_PRODUCTS.CTP_CUSTBAR1, CUSTOMER_PRODUCTS.CTP_CUSTBAR2, 
                             CUSTOMER_PRODUCTS.CTP_CUSTBAR3, FILLPLAN_OUT_DECIDE.FOD_O_DAY, 
                             FILLPLAN_OUT_DECIDE.FOD_O_YEAR_MONTH, OUT_DECISION.OTD_NO, OUT_DECISION.CTD_CUST_NO, 
-                            FILLPLAN_OUT_DECIDE.FDM_REAL_OUT_TIME, OUT_DECISION.OPM_ETA_DATE, 
-                            OUT_PRODUCT.PDD_PROD_NO
-FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
+                            FILLPLAN_OUT_DECIDE.FDM_REAL_OUT_TIME, OUT_DECISION.OPM_ETA_DATE, OUT_PRODUCT.PDD_PROD_NO, 
+                            Sinetics_Analyze_Level.Cust_Prod_NO as cpo
+FROM              FILLPLAN_OUT_DECIDE LEFT OUTER JOIN
+                            Sinetics_Analyze_Level ON 
+                            FILLPLAN_OUT_DECIDE.FDM_LOT_NO = Sinetics_Analyze_Level.Lot_NO RIGHT OUTER JOIN
                             CUSTOMER_PRODUCTS RIGHT OUTER JOIN
                             OUT_PRODUCT INNER JOIN
                             OUT_CHECK_LORRY ON OUT_PRODUCT.OTD_NO = OUT_CHECK_LORRY.OTD_NO INNER JOIN
                             OUT_DECISION ON OUT_CHECK_LORRY.OTD_NO = OUT_DECISION.OTD_NO ON 
                             CUSTOMER_PRODUCTS.PDD_PROD_NO = OUT_PRODUCT.PDD_PROD_NO AND 
                             CUSTOMER_PRODUCTS.CTD_CUST_NO = OUT_DECISION.CTD_CUST_NO ON 
-                            FILLPLAN_OUT_DECIDE.FDM_LOT_NO = OUT_CHECK_LORRY.OCL_LOT_NO   
+                            FILLPLAN_OUT_DECIDE.FDM_LOT_NO = OUT_CHECK_LORRY.OCL_LOT_NO    
 	WHERE          (OUT_CHECK_LORRY.OTD_NO = '".trim($otdno)."')";
-	
-	
-//		$_SESSION['dsddt']= $query."<BR>";
-
-
-	
+//	echo $query."<BR>";
 		$result = mssql_query($query);
 		while($row = mssql_fetch_array($result))
 			{
+				if(trim($row['cpo'])<>""){
+					$CTP_CUSTBAR1=$row['cpo'];
+				}
+				else{
+					$CTP_CUSTBAR1=$row['CTP_CUSTBAR1'];
+				}
 				$OTD_NO=$row['OTD_NO'];
 				$OCL_LY_NO=$row['OCL_LY_NO'];
 				$OCL_LOT_NO=$row['OCL_LOT_NO'];
@@ -246,9 +286,7 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 				$OCL_CHK_UPCAP=$row['OCL_CHK_UPCAP'];
 				$OCL_CHK_HOSE=$row['OCL_CHK_HOSE'];
 				$produce_date=$row['FOD_YEAR_MONTH'].$row['FOD_DAY'];
-				
 				$barcode=$row['CTP_BIGHOSEBAR'];
-				$CTP_CUSTBAR1=$row['CTP_CUSTBAR1'];
 				$CTP_CUSTBAR2=$row['CTP_CUSTBAR2'];
 				$CTP_CUSTBAR3=$row['CTP_CUSTBAR3'];
 				$pid=$row['PDD_PROD_NO']; 
@@ -269,7 +307,7 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 				$str4 = '力積';
 				if (false !== ($rst = strpos($str1, $str2))) {
 					$order=1;
-					} 
+				} 
 					/*
 				elseif(false !== ($rst = strpos($str1, $str3)))  {
 					$order=3;
@@ -283,9 +321,6 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 
 				if ($order==2) ///其它
 				{
-					//// Starting excel
-
-				//	echo "其它<BR>";
 					$subject=$barcode;
 					$pattern='\[LotNo\]';
 					$replacement=$OCL_LOT_NO;
@@ -483,21 +518,26 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 								->setCellValue('X'.($n+33),"(QSELPC2004-002A7)")
 								->setCellValue('A'.($n+28),iconv("big5","utf-8","MCTW出荷之地磅用條碼"))
 								
-								->setCellValue('A'.($n+29),iconv("big5","utf-8","客戶及代碼"))
-								->setCellValue('A'.($n+30),iconv("big5","utf-8","藥品及代碼"))
+								->setCellValue('A'.($n+32),iconv("big5","utf-8","客戶及代碼"))
+								->setCellValue('A'.($n+29),iconv("big5","utf-8","藥品及代碼"))
 								->setCellValue('A'.($n+31),iconv("big5","utf-8","Lorry No"))
-								->setCellValue('A'.($n+32),iconv("big5","utf-8","Lot NO"))
-								->setCellValue('G'.($n+29),iconv("big5","utf-8",$cname))
-								->setCellValue('G'.($n+30),iconv("big5","utf-8",get_prod_name($pid)))
+								->setCellValue('A'.($n+30),iconv("big5","utf-8","Lot NO"))
+								->setCellValue('G'.($n+32),iconv("big5","utf-8",$cname))
+								->setCellValue('G'.($n+29),iconv("big5","utf-8",get_prod_name($pid)))
 								->setCellValue('G'.($n+31),iconv("big5","utf-8",substr($OCL_LY_NO,2)))
-								->setCellValue('G'.($n+32),iconv("big5","utf-8",$OCL_LOT_NO))
-								->setCellValue('M'.($n+29),iconv("big5","utf-8","*4".$cid."*"))
-								->setCellValue('M'.($n+30),iconv("big5","utf-8","*2".$pid."*"))
+								->setCellValue('G'.($n+30),iconv("big5","utf-8",$OCL_LOT_NO))
+								->setCellValue('M'.($n+32),iconv("big5","utf-8","*4".$cid."*"))
+								->setCellValue('M'.($n+29),iconv("big5","utf-8","*2".$pid."*"))
 								->setCellValue('M'.($n+31),iconv("big5","utf-8","*3".substr($OCL_LY_NO,2)."*"))
-								->setCellValue('M'.($n+32),iconv("big5","utf-8","*1".$OCL_LOT_NO."*"))
-								
-								
+								->setCellValue('M'.($n+30),iconv("big5","utf-8","*1".$OCL_LOT_NO."*"))
 								;
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+29))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+30))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+31))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+32))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getStyle('M'.($n+29).':M'.($n+32))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					$objPHPExcel->setActiveSheetIndex(0)->getStyle('M'.($n+29).':M'.($n+32))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);	
+					
 					$objPHPExcel->getActiveSheet(0)->getStyle('B'.($n+23))->getFont()->setName('C39HrP48DmTt' );
 					$objPHPExcel->getActiveSheet(0)->getStyle('K'.($n+2))->getFont()->setName('3 of 9 Barcode' );
 					$objPHPExcel->getActiveSheet(0)->getStyle('M'.($n+29))->getFont()->setName('3 of 9 Barcode' );
@@ -525,209 +565,7 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 //					for($i=$n;$i<=$n+28;$i++){$objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25.5);}
 				} // end if order=2	
 				
-				if ($order==4)  ///力積電
-				{
-				//	echo "力積電<BR>";
-					$subject=$barcode;
-					$pattern='\[LotNo\]';
-					$replacement=$OCL_LOT_NO;
-					$barcode=preg_replace("/$pattern/i",$replacement,$subject);
-					
-					//// replace barcode 字串 [MakeDate]
-					$subject=$barcode;
-					$pattern='\[MakeDate\]';
-					$replacement=$OCL_CHK_DATE;
-					$barcode=preg_replace("/$pattern/i",$replacement,$subject);	
-					$barcodes="*".$barcode."*";
-					$fileurl="../tmp/".$OCL_LOT_NO.$n.date("YmdHis");
-					$new_barcode=replace($CTP_CUSTBAR3,$OCL_LOT_NO);
-					$opq="*".$OCL_LOT_NO."*";
-					$objPHPExcel->setActiveSheetIndex(0)
-								->mergeCells('B'.($n+23).':T'.($n+25))
-								->setCellValue('B'.($n+23),$barcodes)
-								
-								->mergeCells('A'.($n+3).':G'.($n+4))
-								->mergeCells('A'.($n+5).':G'.($n+5))
-								->mergeCells('A'.($n+6).':G'.($n+6))
-								->mergeCells('A'.($n+7).':G'.($n+7))
-								->mergeCells('A'.($n+8).':G'.($n+8))
-								->mergeCells('A'.($n+9).':G'.($n+9))
-								->mergeCells('A'.($n+10).':G'.($n+10))
-								->mergeCells('A'.($n+11).':G'.($n+11))
-								->mergeCells('A'.($n+12).':G'.($n+12))	
-															
-								->mergeCells('H'.($n+3).':S'.($n+3))
-								->mergeCells('H'.($n+4).':M'.($n+4))
-								->mergeCells('H'.($n+5).':M'.($n+5))
-								->mergeCells('H'.($n+6).':M'.($n+6))
-								->mergeCells('H'.($n+7).':M'.($n+7))
-								->mergeCells('H'.($n+8).':M'.($n+8))
-								->mergeCells('H'.($n+9).':M'.($n+9))
-								->mergeCells('H'.($n+10).':M'.($n+10))
-								->mergeCells('H'.($n+11).':M'.($n+11))
-								->mergeCells('H'.($n+12).':M'.($n+12))
-								
-								->mergeCells('N'.($n+4).':S'.($n+4))
-								->mergeCells('N'.($n+5).':S'.($n+5))
-								->mergeCells('N'.($n+6).':S'.($n+6))
-								->mergeCells('N'.($n+7).':S'.($n+7))
-								->mergeCells('N'.($n+8).':S'.($n+8))
-								->mergeCells('N'.($n+9).':S'.($n+9))
-								->mergeCells('N'.($n+10).':S'.($n+10))
-								->mergeCells('N'.($n+11).':S'.($n+11))
-								->mergeCells('N'.($n+12).':S'.($n+12))
-								
-								->mergeCells('T'.($n+3).':AE'.($n+3))
-								->mergeCells('T'.($n+4).':Y'.($n+4))
-								->mergeCells('T'.($n+5).':Y'.($n+5))
-								->mergeCells('T'.($n+6).':Y'.($n+6))
-								->mergeCells('T'.($n+7).':Y'.($n+7))
-								->mergeCells('T'.($n+8).':Y'.($n+8))
-								->mergeCells('T'.($n+9).':Y'.($n+9))
-								->mergeCells('T'.($n+10).':Y'.($n+10))
-								->mergeCells('T'.($n+11).':Y'.($n+11))
-								->mergeCells('T'.($n+12).':Y'.($n+12))
-								
-								->mergeCells('Z'.($n+4).':AE'.($n+4))
-								->mergeCells('Z'.($n+5).':AE'.($n+5))
-								->mergeCells('Z'.($n+6).':AE'.($n+6))
-								->mergeCells('Z'.($n+7).':AE'.($n+7))
-								->mergeCells('Z'.($n+8).':AE'.($n+8))
-								->mergeCells('Z'.($n+9).':AE'.($n+9))
-								->mergeCells('Z'.($n+10).':AE'.($n+10))
-								->mergeCells('Z'.($n+11).':AE'.($n+11))
-								->mergeCells('Z'.($n+12).':AE'.($n+12))
-								
-								->mergeCells('A'.($n+13).':AE'.($n+13))
-								->mergeCells('A'.($n+14).':AE'.($n+14))
-								->mergeCells('A'.($n+15).':F'.($n+15))
-								->mergeCells('H'.($n+15).':N'.($n+15))
-								->mergeCells('P'.($n+15).':V'.($n+15))
-								->mergeCells('X'.($n+15).':AD'.($n+15))
-								->mergeCells('A'.($n+16).':AE'.($n+16))
-								->mergeCells('A'.($n+17).':K'.($n+17))
-								
-								->mergeCells('A'.($n+18).':F'.($n+18))
-								->mergeCells('G'.($n+18).':K'.($n+18))
-								->mergeCells('A'.($n+19).':F'.($n+19))
-								->mergeCells('G'.($n+19).':K'.($n+19))
-								->mergeCells('A'.($n+18).':F'.($n+18))
-								
-								->mergeCells('L'.($n+17).':U'.($n+18))
-								->mergeCells('V'.($n+17).':AE'.($n+18))
-								->mergeCells('L'.($n+19).':U'.($n+19))
-								->mergeCells('V'.($n+19).':AE'.($n+19))
-								
-								->setCellValue('A'.($n+3),iconv("big5","utf-8","檢查項目"))
-								->setCellValue('A'.($n+5),iconv("big5","utf-8","Barcode 確認"))
-								->setCellValue('A'.($n+6),iconv("big5","utf-8","Lot NO 是否貼上"))
-								->setCellValue('A'.($n+7),iconv("big5","utf-8","出荷客戶接頭確認"))
-								->setCellValue('A'.($n+8),iconv("big5","utf-8","管子確認(是否殘餘或變形)"))
-								->setCellValue('A'.($n+9),iconv("big5","utf-8","Lorry 外觀檢查"))
-								->setCellValue('A'.($n+10),iconv("big5","utf-8","Lorry 上蓋密合"))
-								->setCellValue('A'.($n+11),iconv("big5","utf-8","Hose 外觀檢查"))
-								->setCellValue('A'.($n+12),iconv("big5","utf-8","Sample 瓶數確認\r\n(掃描樣品號、Lot NO)"))
-								->setCellValue('H'.($n+3),iconv("big5","utf-8","MCTW 檢查日期:"))
-								->setCellValue('T'.($n+3),iconv("big5","utf-8","全順檢查日期    月    日"))
-								
-								->setCellValue('H'.($n+4),iconv("big5","utf-8","(V)"))
-								->setCellValue('T'.($n+4),iconv("big5","utf-8","(V)"))
-								->setCellValue('N'.($n+4),iconv("big5","utf-8","(X)"))
-								->setCellValue('Z'.($n+4),iconv("big5","utf-8","(X)"))
-								
-								->setCellValue('A'.($n+13),iconv("big5","utf-8","TFA       瓶，    PE     瓶"))
-								->setCellValue('A'.($n+14),iconv("big5","utf-8","全順司機自行點檢項目"))
-								->setCellValue('A'.($n+15),iconv("big5","utf-8","1.行車前檢查，有無異狀"))
-								->setCellValue('H'.($n+15),iconv("big5","utf-8","2.出貨單(COA)是否攜帶"))
-								->setCellValue('P'.($n+15),iconv("big5","utf-8","3.安全裝備是否攜帶"))
-								->setCellValue('X'.($n+15),iconv("big5","utf-8","4.槽體插銷是否固定"))
-								->setCellValue('A'.($n+16),iconv("big5","utf-8","二次以上出荷檢查表"))
-								->setCellValue('A'.($n+17),iconv("big5","utf-8","氣密測試"))
-								->setCellValue('L'.($n+17),iconv("big5","utf-8","檢查壓力表"))
-								->setCellValue('V'.($n+17),iconv("big5","utf-8","檢量"))
-								->setCellValue('A'.($n+18),iconv("big5","utf-8","開始時間"))
-								->setCellValue('G'.($n+18),iconv("big5","utf-8","結束時間"))
-								
-								->setCellValue('B'.$n,iconv("big5","utf-8","藥品:"))
-								->setCellValue('B'.($n+2),iconv("big5","utf-8","Lot NO:"))
-								->setCellValue('B'.($n+1),iconv("big5","utf-8","Lorry NO:"))
-								->setCellValue('T'.$n,iconv("big5","utf-8","出荷先:"))
-								->setCellValue('T'.($n+2),iconv("big5","utf-8","出荷決定書:"))
-								->setCellValue('K'.($n+2),$opq)
-								->setCellValue('T'.($n+1),iconv("big5","utf-8","出荷日期:"))
-								->setCellValue('F'.$n,iconv("big5","utf-8",get_prod_name($pid)))   // Product_name
-								->setCellValue("Y".$n,iconv("big5","utf-8",$cname))
-								->setCellValue('F'.($n+1),$OCL_LY_NO)						// Lorry No  TEXT
-	//							->setCellValue('I'.($n+1),'*'.$OCL_LY_NO.'*')						// Lorry No  Barcode
-								->setCellValue('Y'.($n+1),ddd($OCL_OUT_DATE))
-								->setCellValue('Y'.($n+2),"(".$OTD_NO.")")
-								->setCellValue('F'.($n+2),$OCL_LOT_NO)
-								->setCellValue('H'.($n+5),"V")
-								->setCellValue("H".($n+6),"V")
-								->setCellValue('H'.($n+7),"V")
-								->setCellValue('H'.($n+8),"V")
-								->setCellValue('H'.($n+9),"V")
-								->setCellValue('H'.($n+10),"V")
-								->setCellValue('H'.($n+11),"V")
-								->setCellValue('H'.($n+12),"V")
-								->setCellValue('A'.($n+19),substr($start,0,2).":".substr($start,2,2))
-								->setCellValue('G'.($n+19),substr($end,0,2).":".substr($end,2,2))
-								//->setCellValue('E28',$barcode)
-								
-								->mergeCells('V'.($n+22).':Y'.($n+22))
-								->mergeCells('V'.($n+23).':Y'.($n+23))
-								->mergeCells('V'.($n+24).':Y'.($n+24))
-								->mergeCells('V'.($n+25).':Y'.($n+25))
-								->mergeCells('V'.($n+26).':Y'.($n+26))
-								->mergeCells('V'.($n+27).':Y'.($n+27))
-								->mergeCells('V'.($n+28).':Y'.($n+28))
-								->mergeCells('Z'.($n+22).':AE'.($n+22))
-								->mergeCells('Z'.($n+23).':AE'.($n+23))	
-								->mergeCells('Z'.($n+24).':AE'.($n+24))
-								->mergeCells('Z'.($n+25).':AE'.($n+25))
-								->mergeCells('Z'.($n+26).':AE'.($n+26))
-								->mergeCells('Z'.($n+27).':AE'.($n+27))
-								->mergeCells('Z'.($n+28).':AE'.($n+28))
-								->setCellValue('A'.($n+21),iconv("big5","utf-8","客戶要求 Barcode :".$barcode))
-								
-								->setCellValue('v'.($n+22),iconv("big5","utf-8","班長"))
-								->setCellValue('v'.($n+23),iconv("big5","utf-8","主任"))
-								->setCellValue('v'.($n+24),iconv("big5","utf-8","MCTW主管"))
-								->setCellValue('v'.($n+25),iconv("big5","utf-8","全順技服"))
-								->setCellValue('v'.($n+26),iconv("big5","utf-8","全順主管"))
-								->setCellValue('v'.($n+27),iconv("big5","utf-8","全順主管"))
-								->setCellValue('v'.($n+28),iconv("big5","utf-8","MCTW主管"))
-								
-								->setCellValue('z'.($n+22),iconv("big5","utf-8","*充填終了時記入"))
-								->setCellValue('z'.($n+23),iconv("big5","utf-8","*Barcode/Lot Label確認"))
-								->setCellValue('z'.($n+24),iconv("big5","utf-8","*檢查表內容確認"))
-								->setCellValue('z'.($n+25),iconv("big5","utf-8","*出荷前確認記入全順，C/L，出荷單一起放置File"))
-								->setCellValue('z'.($n+26),iconv("big5","utf-8","*客先，再次確認"))
-								->setCellValue('z'.($n+27),iconv("big5","utf-8","終了確認後，再將檢查表收回"))
-								->setCellValue('z'.($n+28),iconv("big5","utf-8","*全部流程確認"))
-								->setCellValue('H'.($n+40),$new_barcode)
-								->setCellValue('X'.($n+29),"(QSELPC2004-002A6)")
-								
-								;
-					$objPHPExcel->getActiveSheet(0)->getStyle('B'.($n+23))->getFont()->setName('C39HrP48DmTt' );
-					$objPHPExcel->getActiveSheet(0)->getStyle('K'.($n+2))->getFont()->setName('3 of 9 Barcode' );
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('K'.($n+2))->getFont()->setSize(20);
-					$objPHPExcel->getActiveSheet(0)->getStyle('I'.($n+1))->getFont()->setName('3 of 9 Barcode' );
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('I'.($n+1))->getFont()->setSize(24);
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('B'.($n+23))->getFont()->setSize(35);
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('V'.($n+22).':AE'.($n+28))->getBorders()->getAllborders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);		
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('V'.($n+22).':AE'.($n+28))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_LEFT);
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('V'.($n+22).':AE'.($n+28))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);	
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.($n+3).':AE'.($n+19))->getBorders()->getAllborders()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);		
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.($n+3).':AE'.($n+19))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.($n+3).':AE'.($n+19))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);	
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.($n+5).':A'.($n+12))->getFont()->setSize(9);
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('Z'.($n+22).':Z'.($n+28))->getFont()->setSize(8);
-					$objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.($n+15).':AE'.($n+15))->getFont()->setSize(9);
-					$objPHPExcel->setActiveSheetIndex(0)->setBreak('AE'.($n+40), PHPExcel_Worksheet::BREAK_ROW);
-					$n=$n+41;
-//					for($i=$n;$i<=$n+28;$i++){$objPHPExcel->getActiveSheet()->getRowDimension($i)->setRowHeight(25.5);}
-				} // end if order=4
+
 				
 				
 				if ($order==1)   //台積
@@ -932,21 +770,26 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 								->setCellValue('X'.($n+33),"(QSELPC2004-002A7)")
 								->setCellValue('A'.($n+28),iconv("big5","utf-8","MCTW出荷之地磅用條碼"))
 								
-								->setCellValue('A'.($n+29),iconv("big5","utf-8","客戶及代碼"))
-								->setCellValue('A'.($n+30),iconv("big5","utf-8","藥品及代碼"))
+								->setCellValue('A'.($n+32),iconv("big5","utf-8","客戶及代碼"))
+								->setCellValue('A'.($n+29),iconv("big5","utf-8","藥品及代碼"))
 								->setCellValue('A'.($n+31),iconv("big5","utf-8","Lorry No"))
-								->setCellValue('A'.($n+32),iconv("big5","utf-8","Lot NO"))
-								->setCellValue('G'.($n+29),iconv("big5","utf-8",$cname))
-								->setCellValue('G'.($n+30),iconv("big5","utf-8",get_prod_name($pid)))
+								->setCellValue('A'.($n+30),iconv("big5","utf-8","Lot NO"))
+								->setCellValue('G'.($n+32),iconv("big5","utf-8",$cname))
+								->setCellValue('G'.($n+29),iconv("big5","utf-8",get_prod_name($pid)))
 								->setCellValue('G'.($n+31),iconv("big5","utf-8",substr($OCL_LY_NO,2)))
-								->setCellValue('G'.($n+32),iconv("big5","utf-8",$OCL_LOT_NO))
-								->setCellValue('M'.($n+29),iconv("big5","utf-8","*4".$cid."*"))
-								->setCellValue('M'.($n+30),iconv("big5","utf-8","*2".$pid."*"))
+								->setCellValue('G'.($n+30),iconv("big5","utf-8",$OCL_LOT_NO))
+								->setCellValue('M'.($n+32),iconv("big5","utf-8","*4".$cid."*"))
+								->setCellValue('M'.($n+29),iconv("big5","utf-8","*2".$pid."*"))
 								->setCellValue('M'.($n+31),iconv("big5","utf-8","*3".substr($OCL_LY_NO,2)."*"))
-								->setCellValue('M'.($n+32),iconv("big5","utf-8","*1".$OCL_LOT_NO."*"))
-								
-								
+								->setCellValue('M'.($n+30),iconv("big5","utf-8","*1".$OCL_LOT_NO."*"))					
 								;
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+29))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+30))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+31))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getRowDimension(($n+32))->setRowHeight(25);
+					$objPHPExcel->setActiveSheetIndex(0)->getStyle('M'.($n+29).':M'.($n+32))->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					$objPHPExcel->setActiveSheetIndex(0)->getStyle('M'.($n+29).':M'.($n+32))->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);	
+					
 					$objPHPExcel->setActiveSheetIndex(0)->getStyle('V'.($n+26).':Z'.($n+32))->getFont()->setSize(9);
 					$objPHPExcel->setActiveSheetIndex(0)->getStyle('A'.($n+26).':M'.($n+32))->getFont()->setSize(12);
 					$objPHPExcel->getActiveSheet(0)->getStyle('B'.($n+23))->getFont()->setName('C39HrP48DmTt' );
@@ -987,8 +830,13 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 					$barcode=preg_replace("/$pattern/i",$replacement,$subject);	
 					$fileurl="../tmp/".$barcode.$n.date("YmdHis");
 					if($barcode<>''){
-					barcode($barcode,$fileurl.$n.".png",25);}
-					else{barcode($barcode,$fileurl.$n.".png",5);}
+						barcode($barcode,$fileurl.$n.".png",25);
+
+					}
+					else{
+						barcode($barcode,$fileurl.$n.".png",5);
+						
+					}
 
 					$fileur0="../tmp/0".$barcode.date("YmdHis");
 					$fileur1="../tmp/1".$barcode.date("YmdHis");
@@ -1016,6 +864,16 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 
 			 		}
 					$CTP_CUSTBAR1=trim($CTP_CUSTBAR1);
+					$fillflow = get_fill_tank($OCL_LOT_NO);
+					$aa=explode("/",$fillflow);
+					$filltank=$aa[1];
+				//	echo "Fill Tank = ".$filltank."<BR>";
+					$tsmc_prodno=get_tsmc_prodno($cid,$filltank);
+				//	echo "TSMC_Prod_NO = ".$tsmc_prodno."<BR>";				
+					if($tsmc_prodno<>"NULL"){
+						$CTP_CUSTBAR1=$tsmc_prodno;
+					}
+				
 					$lum='';				
 					$n0='*'.$barcode.'*';
 					
@@ -1040,7 +898,7 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 					}
 					else{
 						
-						echo $FDM_LOT_NO."PCN : disable<BR>";
+					//	echo $FDM_LOT_NO."PCN : disable<BR>";
 						$lent=12-strlen($CTP_CUSTBAR1);
 						for($i2=0;$i2<$lent;$i2++){
 							$lum.=" ";
@@ -1064,6 +922,9 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 					$n4="*375514419*";
 					$n5="*E".$CTP_CUSTBAR3."*";
 					$OPQ="*".$OCL_LOT_NO."*";
+					barcode128($np1,$fileurl.$n."128.png",10);
+								
+					
 					$objPHPExcel->setActiveSheetIndex(0)							
 
 								
@@ -1103,8 +964,8 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 								->setCellValue('A'.($n+25),iconv("big5","utf-8","批號"))
 								->setCellValue('A'.($n+27),iconv("big5","utf-8","供應商"))
 								->setCellValue('A'.($n+29),iconv("big5","utf-8","廠別"))
-								
-								->mergeCells('E'.($n+21).':T'.($n+21))
+								->mergeCells('E'.($n+21).':L'.($n+21))
+								->mergeCells('M'.($n+21).':T'.($n+21))
 								->mergeCells('E'.($n+23).':T'.($n+23))
 								->mergeCells('E'.($n+25).':T'.($n+25))
 								->mergeCells('E'.($n+27).':T'.($n+27))
@@ -1115,7 +976,7 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 								->mergeCells('E'.($n+28).':T'.($n+28))
 								->mergeCells('E'.($n+30).':T'.($n+30))
 								
-								->setCellValue('E'.($n+21),$n1)
+						//		->setCellValue('E'.($n+21),$n1)
 								->setCellValue('E'.($n+22),$n1)
 								->setCellValue('E'.($n+23),$n2)
 								->setCellValue('E'.($n+24),$n2)
@@ -1127,6 +988,28 @@ FROM              FILLPLAN_OUT_DECIDE RIGHT OUTER JOIN
 								->setCellValue('E'.($n+30),$n5)
 //								->setCellValue('V'.($n+21),$n0)						
 								;
+								
+								// 給儲存格中放入圖片, 將資料圖片放在J1儲存格內
+								$objPHPExcel->setActiveSheetIndex(0);
+								$sheet = $objPHPExcel->getActiveSheet(); // 獲取當前活動工作表
+								$drawing = new PHPExcel_Worksheet_Drawing();
+								$drawing->setName('Logo');
+								$drawing->setDescription('Logo');
+								$drawing->setPath($fileurl.$n."128.png"); // 圖片路徑，只能是相對路徑
+								$drawing->setWidth(100); // 圖片寬度
+								$drawing->setHeight(22); // 圖片高度
+
+								$drawing->setCoordinates('M'.($n+21));//儲存格
+								
+								$cellWidth = $sheet->getColumnDimension('M')->getWidth();
+
+								$drawing->setOffsetX($cellWidth - 140 ); // 設定 X 偏移量
+								$drawing->setOffsetY(2);
+
+
+								$drawing->setWorksheet($objPHPExcel->getActiveSheet());	
+					
+					
 								$objPHPExcel->getActiveSheet(0)->getStyle('K'.($n+2))->getFont()->setName('3 of 9 Barcode' );
 								$objPHPExcel->setActiveSheetIndex(0)->getStyle('K'.($n+2))->getFont()->setSize(20);
 								$objPHPExcel->getActiveSheet(0)->getStyle('I'.($n+1))->getFont()->setName('3 of 9 Barcode' );
