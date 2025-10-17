@@ -84,7 +84,6 @@ FROM           LORRY_FILL_CHECK INNER JOIN
                             FILLPLAN_OUT_DECIDE.PDD_PROD_NO = PRODUCT_DATA.PDD_PROD_NO LEFT OUTER JOIN
                             Fill_Flow_Chart ON FILLPLAN_OUT_DECIDE.FDM_LOT_NO = Fill_Flow_Chart.Lot_No 
 WHERE       (LORRY_FILL_CHECK.FDM_LOT_NO = '".$this->lid."') ORDER BY Fill_Flow_Chart.[index] DESC" ; 
-//echo $query."<BR>";
 $result = mssql_query($query);
 $numRows = mssql_num_rows($result);	
 $p=0;
@@ -142,17 +141,21 @@ $p=0;
 			$an=count($ac);
 			for($n=0;$n<$an;$n++){
 				if(substr($ac[$n],0,1)=='P'){
-					$j20=trim($ac[$n]).'出口壓力 X1：'.trim($pc[$n]).'Kg/cm2';
+					$j19=trim($ac[$n]).'出口壓力 X1：'.trim($pc[$n]).'Kg/cm2';
 					$pc0=$pc[$n];
 				}
 				if(substr($ac[$n],0,1)=='S'){
 					if($p==0){
-						$j21=trim($ac[$n]).'出口壓力 X2：'.trim($pc[$n]).'Kg/cm2';
+						$j20=trim($ac[$n]).'出口壓力 X2：'.trim($pc[$n]).'Kg/cm2';
 						$pc1=$pc[$n];
 					}
 					if($p==1){
-						$j22=trim($ac[$n]).'出口壓力 X3：'.trim($pc[$n]).'Kg/cm2';
+						$j21=trim($ac[$n]).'出口壓力 X3：'.trim($pc[$n]).'Kg/cm2';
 						$pc2=$pc[$n];
+					}
+					if($p==2){
+						$j22=trim($ac[$n]).'出口壓力 X4：'.trim($pc[$n]).'Kg/cm2';
+						$pc3=$pc[$n];
 					}
 					$p++;
 				}
@@ -162,9 +165,8 @@ $p=0;
 			$j23='總壓差1=X1-X2 = '.trim($pd1).' Kg/cm2';
 			$j24='總壓差2=X1-X3 = '.trim($pd2).' Kg/cm2';
 		}
-$query="SELECT          SMA_LOT , SMA_ID
-FROM              Sample_All
-WHERE          (SMA_LOT = '".$this->lid."')  AND (ISREWORK <> '0')";
+		$query="SELECT Sample_All.SMA_LOT, Sample_All.SMA_ID FROM Sample_All INNER JOIN EMPLOYEE_DATA ON Sample_All.SMA_SMP = EMPLOYEE_DATA.EMP_NO 
+WHERE          (Sample_All.SMA_LOT = '".$this->lid."') AND (EMPLOYEE_DATA.DEP_NO <> 'QA' AND EMPLOYEE_DATA.DEP_NO <> 'AN')";
 $result = mssql_query($query);
 $i=6;
 while($row = mssql_fetch_array($result)){
@@ -211,6 +213,7 @@ $i=$i+1;
 							->setCellValue('f38',$f38)
 							->setCellValue('f39',$f39)
 							->setCellValue('h18',$h18)
+							->setCellValue('j19',iconv("big5","utf-8",$j19))
 							->setCellValue('j20',iconv("big5","utf-8",$j20))
 							->setCellValue('j21',iconv("big5","utf-8",$j21))
 							->setCellValue('j22',iconv("big5","utf-8",$j22))
@@ -229,9 +232,9 @@ $styleThinBlackBorderOutline = array(
 	$objPHPExcel->getActiveSheet(0)->getStyle('H6')->getFont()->setName('C39HrP48DmTt' );
 	$objPHPExcel->getActiveSheet(0)->getStyle('H9')->getFont()->setName('C39HrP48DmTt' );
 	$objPHPExcel->getActiveSheet(0)->getStyle('H12')->getFont()->setName('C39HrP48DmTt' );
-	$objPHPExcel->getActiveSheet(0)->getStyle('H6')->getFont()->setSize(18);
-	$objPHPExcel->getActiveSheet(0)->getStyle('H9')->getFont()->setSize(18);
-	$objPHPExcel->getActiveSheet(0)->getStyle('H12')->getFont()->setSize(18);
+	$objPHPExcel->getActiveSheet(0)->getStyle('H6')->getFont()->setSize(22);
+	$objPHPExcel->getActiveSheet(0)->getStyle('H9')->getFont()->setSize(22);
+	$objPHPExcel->getActiveSheet(0)->getStyle('H12')->getFont()->setSize(22);
 	
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f6')->applyFromArray($styleThinBlackBorderOutline);
 	$objPHPExcel->setActiveSheetIndex(0)->getStyle('f7')->applyFromArray($styleThinBlackBorderOutline);

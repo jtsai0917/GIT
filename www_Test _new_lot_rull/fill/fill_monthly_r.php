@@ -77,7 +77,7 @@ unset($_SESSION['lorry_str']);
               <label for="disc"></label>
               <input type="submit" name="upload" id="upload" value="上傳" />
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </p>
-            <p class="left">範例</p></td>
+             <a href="TMP_Sample.xlsx">範例(暫不包括分次出貨)</a></td>
         </tr>
       </table></td>
     </tr>

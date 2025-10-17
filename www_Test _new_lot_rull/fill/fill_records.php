@@ -87,8 +87,8 @@ echo '<tr class="GridviewScrollHeader"><td>藥品名</td>'.$CUST.'<td>荷姿 NO</td><
                             LFC.LFC_B_REMAIN_QTY AS F9, FOD.FDM_QTY AS F10, '< 1.9kg/cm2 10分鐘' AS F11, QC.TestDate AS F12, 
                             LEFT(FOD.FDM_OUT_DATE, 8) AS F13, FOD.FDM_REAL_OUT_TIME AS F14, FOD.FDM_REAL_RETURN_TIME AS F15, 
                             CTD.CTD_CUST_NO AS CUSTACCOUNT, FID.FID_FILL_BEGIN_DATE, PDD.PDD_UNIT AS UNITP, 
-                            PDD.PDD_LITER_KG AS LKG, FOD.LY_SN AS lysn, FID.FID_OPERATOR AS fill_operator, FILLREC_AX.fill_left as AL, 
-                            FILLREC_AX.fill_full as AF, LFC.LFC_F_FLOW as FF 
+                            PDD.PDD_LITER_KG AS LKG, FOD.LY_SN AS lysn, FID.FID_OPERATOR AS fill_operator1, FILLREC_AX.fill_left as AL, 
+                            FILLREC_AX.fill_full as AF, LFC.LFC_F_FLOW as FF, LFC.LFC_FILLER AS fill_operator
 FROM              FILLPLAN_OUT_DECIDE AS FOD LEFT OUTER JOIN
                             FILLREC_AX ON FOD.FDM_LOT_NO = FILLREC_AX.LotNo LEFT OUTER JOIN
                             PRODUCT_DATA AS PDD ON FOD.PDD_PROD_NO = PDD.PDD_PROD_NO LEFT OUTER JOIN
@@ -99,25 +99,27 @@ FROM              FILLPLAN_OUT_DECIDE AS FOD LEFT OUTER JOIN
                                   FROM               QC_LotData
                                   GROUP BY    LotNo) AS QC ON FOD.FDM_LOT_NO = QC.LotNo  
 			WHERE          (FOD.FDM_LOT_NO <> '' )	";
+			
 	if($_SESSION['lid']<>''){$query.= "AND (FOD.FDM_LOT_NO like '%".$_SESSION['lid']."%') ";}	
 	else{
-	if($_SESSION['datepicker1']<>''){$query.= "AND (LEFT(FOD.FDM_EXPECT_DATE, 8) >= '".dod($_SESSION['datepicker1'])."') ";}
-	if($_SESSION['datepicker2']<>''){$query.= "AND (LEFT(FOD.FDM_EXPECT_DATE, 8) <= '".dod($_SESSION['datepicker2'])."') ";}
-	if($_SESSION['datepicker3']<>''){$query.= "AND (LEFT(FOD.FDM_REAL_OUT_TIME, 8) >= '".dod($_SESSION['datepicker3'])."') ";}
-	if($_SESSION['datepicker4']<>''){$query.= "AND (LEFT(FOD.FDM_REAL_OUT_TIME, 8) <= '".dod($_SESSION['datepicker4'])."') ";}
-	if($_SESSION['pid']<>''){$query.= "AND (FOD.PDD_PROD_NO = '".$_SESSION['pid']."') ";}
-	if($_SESSION['cid']<>''){$query.= "AND (FOD.CTD_CUST_NO = '".$_SESSION['cid']."') ";}	
+		if($_SESSION['datepicker1']<>''){$query.= "AND (LEFT(FOD.FDM_EXPECT_DATE, 8) >= '".dod($_SESSION['datepicker1'])."') ";}
+		if($_SESSION['datepicker2']<>''){$query.= "AND (LEFT(FOD.FDM_EXPECT_DATE, 8) <= '".dod($_SESSION['datepicker2'])."') ";}
+		if($_SESSION['datepicker3']<>''){$query.= "AND (LEFT(FOD.FDM_REAL_OUT_TIME, 8) >= '".dod($_SESSION['datepicker3'])."') ";}
+		if($_SESSION['datepicker4']<>''){$query.= "AND (LEFT(FOD.FDM_REAL_OUT_TIME, 8) <= '".dod($_SESSION['datepicker4'])."') ";}
+		if($_SESSION['pid']<>''){$query.= "AND (FOD.PDD_PROD_NO = '".$_SESSION['pid']."') ";}
+		if($_SESSION['cid']<>''){$query.= "AND (FOD.CTD_CUST_NO = '".$_SESSION['cid']."') ";}	
 	}
 	$query.="order by PTYPE, PNO ";
-	
-//	 echo	$query."<BR>";
-//	 echo  '<BR>'.$query.'<br>'; /// NOT OK
+//	echo $query."<BR>";
 	$j=0;
 	$result = mssql_query($query);
 	$numRows = mssql_num_rows($result);
 	while($row = mssql_fetch_array($result))
 	{   
 //		echo "AL=". $row['AL']; 
+		if(trim($row['fill_operator'])==''){
+			$row['fill_operator']=$row['fill_operator1'];
+		}
 		$lst=new last_LEL;
 		$lst->lotno=trim($row['F4']);
 		$lst->run();
@@ -126,26 +128,36 @@ FROM              FILLPLAN_OUT_DECIDE AS FOD LEFT OUTER JOIN
 		if($row['TYSQTY1']=='' and $row['TYSQTY']=='' and (trim($row['AL'])!='' or trim($row['AF'])!='')){$row['TYSQTY1']=$row['AL'];$row['TYSQTY']=$row['AF'];}
 		$pra_out_count=$lst->out_count;
 		$source_lot=chk_source($row['F4']);
-		if($row['AL']<>''){$tysqty1='<input size="5" type="text" name="remnant'.$j.'"value="'.$row['AL'].'">';}
-		else{ $tysqty1='<input type="text" size="5" name="remnant'.$j.'" value="'.$row['TYSQTY1'].'">';}
-		
-		if($row['AF']<>''){$tysqty='<input size="5" type="text" name="tysqty'.$j.'"value="'.$row['AF'].'">';}
-		else{ $tysqty='<input type="text" size="5" name="tysqty'.$j.'" value="'.$row['TYSQTY'].'">';}
-		echo '<input type="text" name="lot_no'.$j.'" hidden="hidden" value="'.$row['F4'].'">';
-		if($row['PTYPE']<>'LY'){$tysqty=$tysqty1='';}
-		if($row['lysn']==1 or $row['lysn']==2 or $row['lysn']==3 or $row['lysn']==4)
-		{
-			$tysqty1='<input type="text" size="5" name="remnant'.$j.'" value="0">';
-			$tysqty='<input type="text" size="5" name="tysqty'.$j.'" value="'.LEL_remnant($row['F4']).'">';
-			if(LEL_remnant($row['F4'])!=''){
-			$row['TYSQTY']=LEL_remnant($row['F4']);}
-			else{$row['TYSQTY']=0;}
+		if($row['lysn']<>''){
+			$tysqty1='<input type="text" size="5" name="remnant'.$j.'" value="0" readonly="readonly">';
+			$row['TYSQTY1']=0;
+			$row['TYSQTY']=$row['AF']-$row['AL'];
+			$tysqty='<input size="5" type="text" name="tysqty'.$j.'"value="'.$row['TYSQTY'].'" readonly="readonly">';
 		}
-		elseif($row['F1']=='CAL3'){
+		else{
+			$tysqty1='<input type="text" size="5" name="remnant'.$j.'" value="'.$row['TYSQTY1'].'">';
+			if($row['AF']<>''){$tysqty='<input size="5" type="text" name="tysqty'.$j.'"value="'.$row['TYSQTY'].'">';}
+			else{ $tysqty='<input type="text" size="5" name="tysqty'.$j.'" value="'.$row['TYSQTY'].'">';}
+		}
+//		$tysqty1='<input type="text" size="5" name="remnant'.$j.'" value="'.$row['TYSQTY1'].'">';
+//		if($row['AF']<>''){$tysqty='<input size="5" type="text" name="tysqty'.$j.'"value="'.$row['TYSQTY'].'">';}
+//		else{ $tysqty='<input type="text" size="5" name="tysqty'.$j.'" value="'.$row['TYSQTY'].'">';}
+		echo '<input type="text" name="lot_no'.$j.'" hidden="hidden" value="'.$row['F4'].'">';
+		
+		if($row['PTYPE']<>'LY'){$tysqty=$tysqty1='';}
+		/*
+		$tysqty1='<input type="text" size="5" name="remnant'.$j.'" value="'.$row['F9'].'" disabled="disabled">';
+		$tysqty='<input type="text" size="5" name="tysqty'.$j.'" value="'.LEL_remnant($row['F4']).'"  disabled="disabled">';
+		if(LEL_remnant($row['F4'])!=''){
+		$row['TYSQTY']=LEL_remnant($row['F4']);}
+		else{$row['TYSQTY']=0;}
+		*/
+		if($row['F1']=='CAL3'){
 			$tysqty1='<input type="text" size="5" name="remnant'.$j.'" value="0">';
 			$tysqty='<input type="text" size="5" name="tysqty'.$j.'" value="'.round($row['F10'],0).'">';
 			$row['TYSQTY']=round($row['F10'],0);
 		}
+		
 		$Value1=$_POST['remnant'.$j];
 		$Value2=$_POST['tysqty'.$j];
 		$web[$j][1]=$row['PNO'];
@@ -158,9 +170,9 @@ FROM              FILLPLAN_OUT_DECIDE AS FOD LEFT OUTER JOIN
 		$web[$j][9]=stab($row['F6']);//充填日期
 		$web[$j][10]=substr($row['F7'],0,2).":".substr($row['F7'],2,2).":".substr($row['F7'],4,2); //開始時間
 		$web[$j][11]=substr($row['F8'],0,2).":".substr($row['F8'],2,2).":".substr($row['F8'],4,2);//結束時間
-		$web[$j][12]=LEL_remnant($row['F4']); //實際出庫輛
-		$web[$j][7]=$Value1;// 充填殘單
-		$web[$j][8]=$Value2;//充填滿單
+		$web[$j][12]=($row['AF']-$row['F9']); //實際出庫輛
+		$web[$j][7]=$row['TYSQTY1'];// 充填殘單
+		$web[$j][8]=$row['TYSQTY'];//充填滿單
 		$web[$j][13]=$row['充填作業.充填來源TANK']; //充填來源
 		$web[$j][14]=fill_flow1($row['F4']); //充填路徑
 		$web[$j][15]=chk_source($row['F4']); //來源LOTNO
@@ -190,7 +202,7 @@ FROM              FILLPLAN_OUT_DECIDE AS FOD LEFT OUTER JOIN
 			$isfilled=1;
 		}
 		if (strpos(($row['F2']), "台積") !== false) {
-			$aa=diff_days($dirdate,$lorryno,$isfilled);
+			$aa=diff_days($row['F4'],$lorryno);
 		}
 		else{
 			$aa="";
@@ -281,7 +293,7 @@ if(isset($_POST['webexcel'])){
 		
 		if($ENG=='I' and trim($web[$n][3])=='')
 		{
-			$query="SELECT * FROM FILLPLAN_OUT_DECIDE FD left join PRODUCT_DATA PA on FD.PDD_PROD_NO=PA.PDD_PROD_NO where FDM_LOT_NO='".$web[$n][5]."'";
+			$query="SELECT * FROM FILLPLAN_OUT_DECIDE FD left join PRODUCT_DATA PA on FD.PDD_PROD_NO=PA.PDD_PROD_NO where FDM_LOT_NO='".($web[$n][5])."'";
 			$result=mssql_query($query);
 			while($row=mssql_fetch_array($result))
 			{
@@ -625,34 +637,6 @@ if(isset($_POST['tys_qty']) or isset($_POST['remnant'])){
 			$result=mssql_query($query);
 		}
 	}
-	
-	for($i=0;$i<$num;$i++)  // FILLREC_AX
-	{
-		$sn='lysn'.$i;
-		$lotnox="lot_no".$i;
-		$remnantx="remnant".$i;
-		$tysqtyx="tysqty".$i;
-		
-		$_POST[$remnantx] ;
-		
-		if($_POST[$sn]==''){$a= "";$aaa='NULL';}
-		else{$a=" and SN=".trim($_POST[$sn]);$aaa=trim($_POST[$sn]);}
-		
-		$query="SELECT FILLREC_AX.* FROM FILLREC_AX where LotNo='".trim($_POST[$lotnox])."'".$a;
-		$result=mssql_query($query);
-		$numrow=mssql_num_rows($result);
-		
-		if($numrow>>0){
-			$query="UPDATE FILLREC_AX SET fill_left =".$_POST[$remnantx].", fill_full = ".$_POST[$tysqtyx]." WHERE (LotNo = '".trim($_POST[$lotnox])."') and SN=".$aaa;
-
-			$result=mssql_query($query);
-		}
-		else
-		{
-			$query="INSERT INTO FILLREC_AX (LotNo, SN, fill_left, fill_full) VALUES ('".trim($_POST[$lotnox])."',".$aaa.", ".$_POST[$remnantx].",".$_POST[$tysqtyx].")";
-			$result=mssql_query($query);
-		}
-	}
   refresh();
 }
 
@@ -675,28 +659,50 @@ function chk_source($lid){
 	
 }
 
-function diff_days($dirdate,$lorryno,$op){
+function diff_days($lotno,$lorryno){
 
-		$query="SELECT          TOP (1) OUT_DECISION.OPM_ETA_DATE
-FROM              FILLPLAN_OUT_DECIDE INNER JOIN
-                            OUT_PRODUCT ON FILLPLAN_OUT_DECIDE.FDM_LOT_NO = OUT_PRODUCT.OPD_LOT_NO INNER JOIN
-                            OUT_DECISION ON OUT_PRODUCT.OPM_ORDER_NO = OUT_DECISION.OPM_ORDER_NO INNER JOIN
-                            CUSTOMER_DATA ON OUT_DECISION.CTD_CUST_NO = CUSTOMER_DATA.CTD_CUST_NO 
-		WHERE          (FILLPLAN_OUT_DECIDE.FDM_LY_NO = '".$lorryno."') and FILLPLAN_OUT_DECIDE.FDM_EXPECT_DATE < '".$dirdate."'  AND (CUSTOMER_DATA.CTD_CUST_NAME LIKE '%台積%') 
-		ORDER BY   OUT_DECISION.OPM_ETA_DATE DESC";
+		$query="SELECT TOP (2)
+    LEFT(OUT_DECISION.OPM_ETA_DATE, 8) AS 出荷日期,
+    OUT_PRODUCT.OPD_LOT_NO
+FROM
+    CUSTOMER_DATA
+    INNER JOIN OUT_DECISION
+        ON CUSTOMER_DATA.CTD_CUST_NO = OUT_DECISION.CTD_CUST_NO
+    INNER JOIN OUT_PRODUCT
+        ON OUT_DECISION.OPM_ORDER_NO = OUT_PRODUCT.OPM_ORDER_NO
+    INNER JOIN PRODUCT_DATA
+        ON OUT_PRODUCT.PDD_PROD_NO = PRODUCT_DATA.PDD_PROD_NO
+    LEFT OUTER JOIN (
+        CUSTOMER_PRODUCTS
+        INNER JOIN LORRY_EXAMINE_LIST
+            ON CUSTOMER_PRODUCTS.PDD_PROD_NO = LORRY_EXAMINE_LIST.PDD_PROD_NO
+    )
+        ON OUT_DECISION.CTD_CUST_NO = CUSTOMER_PRODUCTS.CTD_CUST_NO
+        AND OUT_PRODUCT.OPD_LOT_NO = LORRY_EXAMINE_LIST.LEL_LOT_NO
+WHERE
+    PRODUCT_DATA.PDD_TYPE <> 'DM'
+    AND PRODUCT_DATA.PDD_PROD_SHORT_NAME + SUBSTRING(OUT_PRODUCT.OPD_LOT_NO, 8, 4) = '".$lorryno."'
+    AND OUT_PRODUCT.OPD_LOT_NO <= '".$lotno."'
+    AND LEFT(OUT_DECISION.OPM_ETA_DATE, 8) <= (
+        SELECT TOP 1 LEFT(D2.OPM_ETA_DATE, 8)
+        FROM OUT_DECISION D2
+        INNER JOIN OUT_PRODUCT P2 ON D2.OPM_ORDER_NO = P2.OPM_ORDER_NO
+        INNER JOIN PRODUCT_DATA PD2 ON P2.PDD_PROD_NO = PD2.PDD_PROD_NO
+        WHERE
+            PD2.PDD_TYPE <> 'DM'
+            AND PD2.PDD_PROD_SHORT_NAME + SUBSTRING(P2.OPD_LOT_NO, 8, 4) = '".$lorryno."'
+            AND P2.OPD_LOT_NO = '".$lotno."'
+    )
+ORDER BY 出荷日期 DESC ";
 // echo $query."<BR>";
 	$result=mssql_query($query);
-	$row=mssql_fetch_row($result);
-	$d1=ddd($row[0]);
-	$timestamp1 = strtotime($d1);
-	$timestamp2 = strtotime($dirdate);
-	if ($timestamp1 !== false && $timestamp2 !== false) {
-	    $difference = $timestamp2 - $timestamp1;
-	    $daysDifference = floor($difference / (60 * 60 * 24));
-	  return $daysDifference;
-	} else {
-	    return "";
+	$k=1;
+	while($row=mssql_fetch_array($result)){
+		$aa[$k]=$row['出荷日期'];
+		$k=$k+1;
 	}
+	$d1 = floor(abs(strtotime(ddd($aa[1])) - strtotime(ddd($aa[2]))) / 86400);
+	return $d1;
 }
 function fod($lotno){
 	$query="SELECT FOD_YEAR_MONTH, FOD_DAY, FDM_LY_NO FROM FILLPLAN_OUT_DECIDE WHERE (FDM_LOT_NO = '".$lotno."')";

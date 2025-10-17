@@ -18,11 +18,9 @@ echo '<tr><td>項目</td><td>出貨日期</td><td>客戶</td><td>藥品</td><td>LORRY NO</
 		echo '<tr>';
 		for($y=0;$y<$_SESSION["c"];$y++)
 		{
-			
 			echo '<td>';
 			echo  strtoupper($_SESSION["array1"][$i][$y]);
 			echo '</td>';
-			
 		}
 		echo '</tr>';
 	}
@@ -66,11 +64,8 @@ if(isset($_POST["sql"]))
 			if(stripos($newchk,$_SESSION["lo"][$i])<>false){//比對LO是否存在資料庫 如果有
 			$query1="INSERT INTO			 FILLPLAN_LORRY_MONTH(FLM_YEAR_MONTH,CTD_CUST_NO,PDD_PROD_NO,".$day1.") 
 			VALUES ( '".$time4."', '".$_SESSION["cn"][$i]."', '".$_SESSION["pn"][$i]."','".$_SESSION["lo"][$i]."')";	
-			echo $query1;
+//			echo $query1;
 			$result1 = mssql_query($query1);
-		
-			echo "插入";
-			echo "</br>";
 			}
 			else{echo "沒有此LORRY:".$_SESSION["lo"][$i];
 			}
@@ -106,7 +101,7 @@ if(isset($_POST["sql"]))
 			
 			
 			$result = mssql_query($query);	
-			if($result){echo "insert ok";	}	
+	//		if($result){echo "insert ok";	}	
 				
 		$query="SELECT 		FLM_YEAR_MONTH,CTD_CUST_NO,PDD_PROD_NO,".$day1."
 		FROM 		FILLPLAN_LORRY_MONTH
@@ -133,7 +128,7 @@ if(isset($_POST["sql"]))
 		echo "</br>";
 	}
 //	echo '<script>document.location.href="'.$_SESSION['lasturl'].'";</script>';
-	
+	echo "完成";
 }
 if(isset($_POST["exit"]))
 {

@@ -82,7 +82,8 @@ $editFormAction = $_SERVER['PHP_SELF'];
                             FDM.FOD_O_DAY, FDM.PDD_PROD_NO, PDD.PDD_UNIT, PDD.PDD_PROD_SHORT_NAME, PDD.PDD_DRUM_KG, 
                             FDM.CTD_CUST_NO AS Expr1, FDM.CTD_CUST_NO_GROUP, FDM.FDM_SPECIFIC, FDM.FDM_SAM_CNT, 
                             FDM.FDM_SAM_BEF_CNT, FDM.FDM_ATTACH_CNT, FDM.FDM_LY_NO, FDM.FOD_UNI, 
-                            AnalyzeDesign.AND_ITEM, AnalyzeDesign.AND_ITEM, FDM.LY_SN as lysn , PDD.PDD_LITER_KG 
+                            AnalyzeDesign.AND_ITEM, AnalyzeDesign.AND_ITEM, FDM.LY_SN as lysn , PDD.PDD_LITER_KG , AnalyzeDesign.sample_metal_f as p11, 
+                            AnalyzeDesign.sample_particle_f as p12
 				FROM              FILLPLAN_OUT_DECIDE AS FDM LEFT OUTER JOIN
                             AnalyzeDesign ON FDM.FDM_LOT_NO = AnalyzeDesign.AND_LOT_NO LEFT OUTER JOIN
                             EMPLOYEE_DATA AS EMP ON FDM.FDM_CREATOR = EMP.EMP_NO LEFT OUTER JOIN
@@ -95,7 +96,7 @@ $editFormAction = $_SERVER['PHP_SELF'];
 				if($_SESSION['pdd_chemical1']){$query.= " AND PDD.PDD_PROD_NO = '".$_SESSION['pdd_chemical1']."'";}
 				if($_SESSION['pdd_chemical3']){$query.= " AND CTD.CTD_CUST_NO = '".$_SESSION['pdd_chemical3']."'";}
 				$query.=" order by b1";
-//		echo "<BR>".$query."<BR>";
+
 		$result = mssql_query($query);
 		while ($row = mssql_fetch_array($result))
 		{
@@ -130,7 +131,8 @@ echo '<a target="_self" href="./index.php?url=edit_fill_out&AND_LOT_NO='.$row['L
 			echo '<td>'.$row['m1']."</td>";
 			echo '<td>'.$row['n1']."</td>";
 			echo '<td>'.$row['o1']."</td>";
-			echo '<td>'.$row['p1']."</td>";
+			$smpcnt=$row['p1']+$row['p12']+$row['p11'];
+			echo '<td>'.$smpcnt."</td>";
 			echo '</tr>';
 		}			
 ///end DM

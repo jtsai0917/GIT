@@ -69,11 +69,11 @@ if($_SESSION['prod_no']<>'')
 {
 $query=$query."and  dbo.FILLPLAN_OUT_DECIDE.PDD_PROD_NO='".$_SESSION['prod_no']."'";
 }
-if($_SESSION['datepicker1']<>''){$query.=" where ((FDM_EXPECT_DATE<='".dod($_SESSION['datepicker1'])."235959') and (FDM_EXPECT_DATE>='".dod($_SESSION['datepicker1'])."000000')) OR
-                            (FILLPLAN_OUT_DECIDE.WASH_DATE = '".dod($_SESSION['datepicker1'])."')
-
-order by dbo.FILLPLAN_OUT_DECIDE.FDM_CREATE_DATE";}
-else{$query.=" where (FDM_EXPECT_DATE<='".date("Ymd")."235959' and FDM_EXPECT_DATE>='".date("Ymd")."000000')  OR (FILLPLAN_OUT_DECIDE.WASH_DATE = '".dod($_SESSION['datepicker1'])."')
+if($_SESSION['datepicker1']<>''){
+	$query.=" where ((FDM_EXPECT_DATE<='".dod($_SESSION['datepicker1'])."235959') and (FDM_EXPECT_DATE>='".dod($_SESSION['datepicker1'])."000000')) OR
+                            (FILLPLAN_OUT_DECIDE.WASH_DATE = '".dod($_SESSION['datepicker1'])."') order by dbo.FILLPLAN_OUT_DECIDE.FDM_CREATE_DATE";
+}
+else{$query.=" where (FDM_EXPECT_DATE<='".date("Ymd")."235959' and FDM_EXPECT_DATE>='".date("Ymd")."000000')  OR (FILLPLAN_OUT_DECIDE.WASH_DATE = '".date("Ymd")."')
 order by dbo.FILLPLAN_OUT_DECIDE.FDM_CREATE_DATE";}
 // echo $query;
 $result=mssql_query($query);

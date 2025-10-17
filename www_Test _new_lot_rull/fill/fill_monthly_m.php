@@ -94,7 +94,7 @@ if($numRows==0){
 			FILLPLAN_DRUM_MONTH FDM ON PDD.PDD_PROD_NO = FDM.PDD_PROD_NO AND FDM.FDM_YEAR_MONTH = '".$_POST['ym']."' where not PDD.PDD_DRUM_KG is null  and PDD.PDD_PROD_NO IN 
 			(select PDD_PROD_NO from  CUSTOMER_PRODUCTS  where CTP_FILL = 'Y' )  AND (PDD.PDD_CLASS = 'жил~')  ";
 	$query.="order by PDD.PDD_PROD_NO";		
-//	echo $query."<BR>";
+	echo $query."<BR>";
 	$result = mssql_query($query);
 	$numRows = mssql_num_rows($result);
 	

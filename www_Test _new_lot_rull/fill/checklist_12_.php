@@ -42,9 +42,9 @@ $loginFormAction = $_SERVER['PHP_SELF'];
     <td>產品料號</td>
     <td>產品名稱</td>
     <td>充填日期</td>
-	<td>列印(舊)</td>
-	<td>列印(新)</td>
-	<td>現場主管簽核</td>
+	<td>列印</td>';
+//	echo '<td>列印(新)</td>';
+	echo '<td>現場主管簽核</td>
 	<td align="center">主管簽核<BR><input type="submit" name="sign_selected" value="簽核勾選項" '.$disable2.'></td>
   	</tr>';
 	
@@ -90,7 +90,7 @@ FROM              LORRY_FILL_CHECK INNER JOIN
 	echo '<td>'.$pname.'</td>';
 	echo '<td>'.$fym.$fd.'</td>';
 	echo '<td><a href="print_1_12m3.php?lid='.$lid.'" target="new">列印</a></td>';
-	echo '<td><a href="print_1_12m3_new.php?lid='.$lid.'" target="new">列印</a></td>';
+//	echo '<td><a href="print_1_12m3_new.php?lid='.$lid.'" target="new">列印</a></td>';
 	if($a1==1){ $n1='<td><a href="fill_chklsi_12m3.files/sheet001.php?lid='.$lid.'" target="new" '.$disable1.'>'.$sheet001.'</a></td>';}
 	else{$n1='<td>'.$sheet001.'</td>'; }
 	echo $n1;

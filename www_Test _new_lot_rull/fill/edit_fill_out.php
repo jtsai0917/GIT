@@ -395,7 +395,7 @@ if(isset($_POST["save"]))
 										  remark1='".$_POST['remark1']."'
 				WHERE         (FOD_UNI = '".$_GET['uni']."')";
 		sql_rec($_SERVER['PHP_SELF'],$query);
-		echo $query."<BR>";
+//		echo $query."<BR>";
 //		break;
 		$result = mssql_query($query);
 	
